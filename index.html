@@ -625,7 +625,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
       <div>
         <div class="sidebar-section-title">Status</div>
         <div class="filter-group">
-          <button class="filter-btn active" data-status="all" onclick="filterStatus('all',this)">All</button>
+          <button class="filter-btn" data-status="pending" onclick="filterStatus('pending',this)"><span style="color:var(--amber);">⏳</span> Pending Review <span class="f-count" id="fc-pending"></span></button>
+      <button class="filter-btn active" data-status="all" onclick="filterStatus('all',this)">All</button>
           <button class="filter-btn" data-status="active" onclick="filterStatus('active',this)">Active</button>
           <button class="filter-btn" data-status="paused" onclick="filterStatus('paused',this)">Paused</button>
           <button class="filter-btn" data-status="inactive" onclick="filterStatus('inactive',this)">Inactive</button>
@@ -994,60 +995,71 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 
 <script>
 // ══════════════════════════════════════════
-// CONFIG — update this after deploying your Cloudflare Worker
+// CONFIG
 // ══════════════════════════════════════════
-const API_PROXY = 'https://restless-wildflower-1f9falign-proxy.nick-0f0.workers.dev';
+const WORKER = 'https://restless-wildflower-1f9falign-proxy.nick-0f0.workers.dev';
+
+// ══════════════════════════════════════════
+// API HELPERS
+// ══════════════════════════════════════════
+let currentUser = null;
+
+async function api(method, path, body = null) {
+  const opts = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Username':   currentUser?.username || '',
+    },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res  = await fetch(WORKER + path, opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
 
 // ══════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════
-const USERS = [
-  { username:'nick',   display:'Nick Ayala', role:'admin', salt:'51e72cd04d3b299ed1ece6d22239d0ae', hash:'8be2510e8ab2b02ec084f5438ee4821ed1de9e3a4ef2b190204fd248a9f6311f' },
-  { username:'closer', display:'Closer',     role:'staff', salt:'df85f1104c81eb6ec907109700f1094d', hash:'27228d95060ad4d4beb2945ef9bd4305ccf2823c028a572ff6c8e607753433f7' }
-];
-// Default passwords (change these):
-// nick   → Align2024!
-// closer → Close2024!
-
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
 async function attemptLogin() {
   const username = document.getElementById('loginUser').value.trim().toLowerCase();
   const password = document.getElementById('loginPass').value;
   const errEl    = document.getElementById('loginError');
   errEl.style.display = 'none';
 
-  const user = USERS.find(u => u.username === username);
-  if (!user) { showLoginError(); return; }
-
-  const hash = await sha256(password + user.salt);
-  if (hash !== user.hash) { showLoginError(); return; }
-
-  // Auth success
-  sessionStorage.setItem('crm_user', JSON.stringify({ username: user.username, display: user.display, role: user.role }));
-  bootApp(user);
+  try {
+    const user = await api('POST', '/auth/login', { username, password });
+    sessionStorage.setItem('crm_user', JSON.stringify(user));
+    bootApp(user);
+  } catch(e) {
+    showLoginError();
+  }
 }
 
 function showLoginError() {
-  const errEl = document.getElementById('loginError');
-  errEl.style.display = 'block';
+  document.getElementById('loginError').style.display = 'block';
   document.getElementById('loginPass').value = '';
   document.getElementById('loginPass').focus();
-  // Shake animation
   const box = document.querySelector('.login-box');
   box.style.transform = 'translateX(-8px)';
   setTimeout(() => box.style.transform = 'translateX(8px)', 80);
   setTimeout(() => box.style.transform = 'translateX(0)', 160);
 }
 
-function bootApp(user) {
+async function bootApp(user) {
+  currentUser = user;
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appRoot').style.display     = 'block';
   document.getElementById('userPill').style.display    = 'flex';
   document.getElementById('userPillName').textContent  = user.display;
+
+  // Show loading state
+  document.getElementById('partnerGrid').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><h3>Loading...</h3></div>';
+
+  // Load data from backend
+  await loadData();
+
   switchTab('deals', document.getElementById('tab-deals'));
   setMobileNav('deals');
   renderAlerts();
@@ -1057,6 +1069,8 @@ function bootApp(user) {
 function doLogout() {
   if (!confirm('Sign out?')) return;
   sessionStorage.removeItem('crm_user');
+  currentUser = null;
+  partners = []; deals = [];
   document.getElementById('appRoot').style.display     = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('loginUser').value = '';
@@ -1074,67 +1088,71 @@ function doLogout() {
 })();
 
 // ══════════════════════════════════════════
-// STATE
+// DATA LAYER — Supabase via Worker
 // ══════════════════════════════════════════
-let partners = JSON.parse(localStorage.getItem('crm_partners') || '[]');
-let deals    = JSON.parse(localStorage.getItem('crm_deals')    || '[]');
+let partners = [];
+let deals    = [];
 
-// Seed example partners if empty
-if (partners.length === 0) {
-  partners = [
-    { id:1, name:"Marcus Webb", org:"Webb Family Office", phone:"(561) 888-2234", email:"marcus@webbfo.com",
-      capitalTypes:["equity","preferred","lp"], minCheck:"$500K", maxCheck:"$5M",
-      assetTypes:["Multifamily","Self Storage","Industrial"], geography:["Southeast","Florida","Texas"],
-      ltv:"", returnTarget:"14-18% IRR", status:"active", relationship:"Referral from David Lin",
-      compTypes:["Preferred Return","Carried Interest"], compDetails:"8% pref then 80/20 split",
-      notes:"Loves stabilized cash flow. Hates ground-up. Text first, then deck. 3-5 yr hold.", activity:[] },
-    { id:2, name:"David Chen", org:"Meridian Bridge Capital", phone:"(305) 441-9900", email:"dchen@meridianbridgecap.com",
-      capitalTypes:["bridge","hard-money","debt"], minCheck:"$1M", maxCheck:"$10M",
-      assetTypes:["Multifamily","Mixed Use","Retail"], geography:["Florida","Southeast","National"],
-      ltv:"70%", returnTarget:"10-13%", status:"active", relationship:"Nick personal connection",
-      compTypes:["Origination Points","Interest Rate"], compDetails:"2 pts up front + 11% interest",
-      notes:"Moves fast. Closes in 10 days if docs clean. No land, no ground-up.", activity:[] },
-    { id:3, name:"Susan Holloway", org:"Rockingham Equity Partners", phone:"(646) 774-3310", email:"s.holloway@rockinghamep.com",
-      capitalTypes:["mezz","preferred","equity"], minCheck:"$2M", maxCheck:"$15M",
-      assetTypes:["Multifamily","Office","Hotel"], geography:["Northeast","National"],
-      ltv:"", returnTarget:"15-20% IRR", status:"active", relationship:"Met at IMN conference",
-      compTypes:["Carried Interest","Management Fee"], compDetails:"20% carry above 8% pref, 1.5% mgmt",
-      notes:"Very institutional. Wants full data room before first call. 60+ day decision timeline.", activity:[] },
-    { id:4, name:"Tony Barrera", org:"Lone Star Private Lending", phone:"(214) 533-0088", email:"tony@lonestarpl.com",
-      capitalTypes:["hard-money","bridge","dscr"], minCheck:"$250K", maxCheck:"$3M",
-      assetTypes:["SFR","Multifamily","Land"], geography:["Texas","Southwest"],
-      ltv:"65%", returnTarget:"11-14%", status:"active", relationship:"Instagram DM, cold outreach",
-      compTypes:["Origination Points","Interest Rate"], compDetails:"1.5 pts + 12% interest, no prepay penalty",
-      notes:"Texas only, no exceptions. SFR fix-and-flip is his bread and butter.", activity:[] },
-    { id:5, name:"Patricia Moore", org:"Moore Capital Group", phone:"(407) 929-4422", email:"pmoore@moorecg.com",
-      capitalTypes:["lp","equity"], minCheck:"$100K", maxCheck:"$500K",
-      assetTypes:["Multifamily","Self Storage","NNN"], geography:["Florida","Southeast"],
-      ltv:"", returnTarget:"8-12% CoC", status:"paused", relationship:"TWC founding member",
-      compTypes:["Preferred Return"], compDetails:"",
-      notes:"Currently deployed. Check back Q3. Passive deals only.", activity:[], reminder:"2025-09-01" },
-    { id:6, name:"Raj Patel", org:"Patel Global Investments", phone:"(786) 344-7100", email:"raj@patelglobal.com",
-      capitalTypes:["debt","private-credit","mezz"], minCheck:"$3M", maxCheck:"$25M",
-      assetTypes:["Industrial","Mixed Use","Multifamily","Hotel"], geography:["National"],
-      ltv:"75%", returnTarget:"9-13%", status:"active", relationship:"US-UAE trade commissioner intro",
-      compTypes:["Origination Points","Interest Rate"], compDetails:"1 pt + 10-12% depending on LTV",
-      notes:"International family office. Needs $50M+ track record. Good for larger raises.", activity:[] }
-  ];
-  saveAll();
-}
-
-if (deals.length === 0) {
-  deals = [
-    { id:101, name:"Flex Space Direct Fund", sponsor:"Goran Mladen / Flex Space Direct Fund Inc", location:"Florida", assetType:"Commercial / Industrial", capital:"$5M+", structure:"Debt", returnTarget:"", timeline:"31-60 days", stage:"review", ghlLink:"", dataRoom:"https://flexspacedirectfundinc1.deal.tribexa.com/", member:"yes", notes:"Submitted via GHL form.", activity:[], createdAt: new Date().toISOString() },
-    { id:102, name:"Tanglewood MF Acquisition", sponsor:"Marcus Webb", location:"Boca Raton, FL", assetType:"Multifamily", capital:"$2,800,000", structure:"LP Equity", returnTarget:"16% IRR", timeline:"45 days", stage:"distributed", ghlLink:"", dataRoom:"", member:"yes", notes:"72 units, value-add.", activity:[], createdAt: new Date(Date.now()-7*86400000).toISOString() },
-    { id:103, name:"Dallas Self Storage Portfolio", sponsor:"TBD", location:"Dallas, TX", assetType:"Self Storage", capital:"$1,200,000", structure:"Bridge Loan", returnTarget:"12% CoC", timeline:"30 days", stage:"submitted", ghlLink:"", dataRoom:"", member:"no", notes:"3-property portfolio.", activity:[], createdAt: new Date(Date.now()-2*86400000).toISOString() }
-  ];
-  saveAll();
+async function loadData() {
+  try {
+    [partners, deals] = await Promise.all([
+      api('GET', '/partners'),
+      api('GET', '/deals'),
+    ]);
+    // Normalize IDs to strings for consistency
+    partners = partners.map(p => ({ ...p, id: p.id }));
+    deals    = deals.map(d => ({ ...d, id: d.id }));
+  } catch(e) {
+    console.error('Failed to load data:', e);
+    partners = []; deals = [];
+  }
 }
 
 function saveAll() {
-  localStorage.setItem('crm_partners', JSON.stringify(partners));
-  localStorage.setItem('crm_deals',    JSON.stringify(deals));
+  // No-op, saves happen individually via API calls now
 }
+
+async function syncPartner(p) {
+  try {
+    if (p._new) {
+      const { _new, ...data } = p;
+      const saved = await api('POST', '/partners', data);
+      // Replace temp object with saved one
+      const idx = partners.findIndex(x => x === p);
+      if (idx >= 0) partners[idx] = saved;
+      return saved;
+    } else {
+      const { id, user_id, created_at, ...data } = p;
+      await api('PUT', `/partners/${id}`, data);
+      return p;
+    }
+  } catch(e) {
+    console.error('Sync partner failed:', e);
+    return p;
+  }
+}
+
+async function syncDeal(d) {
+  try {
+    if (d._new) {
+      const { _new, ...data } = d;
+      const saved = await api('POST', '/deals', data);
+      const idx = deals.findIndex(x => x === d);
+      if (idx >= 0) deals[idx] = saved;
+      return saved;
+    } else {
+      const { id, user_id, created_at, ...data } = d;
+      await api('PUT', `/deals/${id}`, data);
+      return d;
+    }
+  } catch(e) {
+    console.error('Sync deal failed:', e);
+    return d;
+  }
+}
+
+// ══════════════════════════════════════════
+// STATE
 
 // ══════════════════════════════════════════
 // TABS
@@ -1191,7 +1209,7 @@ function toggleDF(btn, group) { btn.classList.toggle('selected'); }
 
 function getFilteredPartners() {
   return partners.filter(p => {
-    const t = activeType === 'all' || (p.capitalTypes||[]).includes(activeType);
+    const t = activeType === 'all' || (p.capital_types||[]).includes(activeType);
     const s = activeStatus === 'all' || p.status === activeStatus;
     const q = !searchQ || p.name.toLowerCase().includes(searchQ.toLowerCase()) || (p.org||'').toLowerCase().includes(searchQ.toLowerCase());
     return t && s && q;
@@ -1203,10 +1221,21 @@ function updateCounts() {
   document.getElementById('fc-all').textContent = partners.length;
   types.forEach(t => {
     const el = document.getElementById('fc-' + t);
-    if (el) el.textContent = partners.filter(p => (p.capitalTypes||[]).includes(t)).length;
+    if (el) el.textContent = partners.filter(p => (p.capital_types||[]).includes(t)).length;
   });
+  const pendingCount = partners.filter(p => p.status === 'pending').length;
+  const pendingEl = document.getElementById('fc-pending');
+  if (pendingEl) pendingEl.textContent = pendingCount;
   const badge = document.getElementById('badge-partners');
-  badge.textContent = partners.length;
+  if (pendingCount > 0) {
+    badge.textContent = pendingCount + ' new';
+    badge.style.background = 'var(--amber)';
+    badge.style.color = '#000';
+  } else {
+    badge.textContent = partners.length;
+    badge.style.background = '';
+    badge.style.color = '';
+  }
   document.getElementById('totalCount') && (document.getElementById('totalCount').textContent = partners.length);
 }
 
@@ -1235,7 +1264,7 @@ function renderPartners() {
     const lastActivity = (p.activity||[]).slice(-1)[0];
 
     return `
-    <div class="partner-card" style="--card-accent:${accentColor(p.capitalTypes)}" onclick="openPartnerDetail(${p.id})">
+    <div class="partner-card" style="--card-accent:${accentColor(p.capital_types)}" onclick="openPartnerDetail(${p.id})">
       <div class="card-header">
         <div>
           <div class="partner-name">${p.name}</div>
@@ -1246,24 +1275,24 @@ function renderPartners() {
         </div>
       </div>
       <div class="capital-types">
-        ${(p.capitalTypes||[]).map(t => `<span class="type-tag ${typeClass(t)}">${typeLabel(t)}</span>`).join('')}
+        ${(p.capital_types||[]).map(t => `<span class="type-tag ${typeClass(t)}">${typeLabel(t)}</span>`).join('')}
       </div>
       <div class="card-meta">
-        <div class="meta-item"><span class="meta-label">Check Range</span><span class="meta-value highlight">${p.minCheck||'—'} – ${p.maxCheck||'—'}</span></div>
-        <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${p.returnTarget||'—'}</span></div>
+        <div class="meta-item"><span class="meta-label">Check Range</span><span class="meta-value highlight">${p.min_check||'—'} – ${p.max_check||'—'}</span></div>
+        <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${p.return_target||'—'}</span></div>
         ${p.ltv ? `<div class="meta-item"><span class="meta-label">Max LTV</span><span class="meta-value">${p.ltv}</span></div>` : ''}
         <div class="meta-item"><span class="meta-label">Geography</span><span class="meta-value">${(p.geography||[]).slice(0,2).join(', ')}${(p.geography||[]).length>2?'...':''}</span></div>
       </div>
-      <div class="asset-tags">${(p.assetTypes||[]).map(a=>`<span class="asset-tag">${a}</span>`).join('')}</div>
-      ${(p.dealsSent && p.dealsSent.length) ? `
+      <div class="asset-tags">${(p.asset_types||[]).map(a=>`<span class="asset-tag">${a}</span>`).join('')}</div>
+      ${(p.deals_sent && p.deals_sent.length) ? `
       <div style="display:flex;align-items:center;gap:6px;padding:5px 9px;background:rgba(74,136,199,0.06);border:1px solid rgba(74,136,199,0.15);border-radius:4px;margin-bottom:8px;flex-wrap:wrap;">
-        <span style="font-size:10px;color:var(--blue);flex-shrink:0;">📤 ${p.dealsSent.length} deal${p.dealsSent.length>1?'s':''} sent</span>
-        <span style="font-size:9px;color:var(--muted);">${[...p.dealsSent].reverse().slice(0,2).map(d=>d.dealName).join(', ')}${p.dealsSent.length>2?' +more':''}</span>
+        <span style="font-size:10px;color:var(--blue);flex-shrink:0;">📤 ${p.deals_sent.length} deal${p.deals_sent.length>1?'s':''} sent</span>
+        <span style="font-size:9px;color:var(--muted);">${[...p.deals_sent].reverse().slice(0,2).map(d=>d.dealName).join(', ')}${p.deals_sent.length>2?' +more':''}</span>
       </div>` : ''}
-      ${(p.compTypes&&p.compTypes.length)||p.compDetails ? `
+      ${(p.comp_types&&p.comp_types.length)||p.comp_details ? `
       <div class="comp-bar"><span class="comp-bar-icon">💰</span><div>
-        ${p.compTypes&&p.compTypes.length?`<div class="comp-types-text">${p.compTypes.join(' · ')}</div>`:''}
-        ${p.compDetails?`<div class="comp-details-text">${p.compDetails}</div>`:''}
+        ${p.comp_types&&p.comp_types.length?`<div class="comp-types-text">${p.comp_types.join(' · ')}</div>`:''}
+        ${p.comp_details?`<div class="comp-details-text">${p.comp_details}</div>`:''}
       </div></div>` : ''}
       ${isOverdue  ? `<div class="reminder-bar overdue">⚠ Follow-up overdue, ${reminderLabel}</div>` : ''}
       ${isUpcoming ? `<div class="reminder-bar upcoming">🔔 Follow-up ${reminderLabel}</div>` : ''}
@@ -1300,30 +1329,30 @@ function openPartnerDetail(id) {
 
     <div class="detail-section">
       <div class="detail-section-title">Capital Types</div>
-      <div class="capital-types">${(p.capitalTypes||[]).map(t=>`<span class="type-tag ${typeClass(t)}">${typeLabel(t)}</span>`).join('')}</div>
+      <div class="capital-types">${(p.capital_types||[]).map(t=>`<span class="type-tag ${typeClass(t)}">${typeLabel(t)}</span>`).join('')}</div>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-      <div class="meta-item"><span class="meta-label">Min Check</span><span class="meta-value highlight">${p.minCheck||'—'}</span></div>
-      <div class="meta-item"><span class="meta-label">Max Check</span><span class="meta-value highlight">${p.maxCheck||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Min Check</span><span class="meta-value highlight">${p.min_check||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Max Check</span><span class="meta-value highlight">${p.max_check||'—'}</span></div>
       ${p.ltv?`<div class="meta-item"><span class="meta-label">Max LTV</span><span class="meta-value">${p.ltv}</span></div>`:''}
-      <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${p.returnTarget||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${p.return_target||'—'}</span></div>
     </div>
 
     <div class="detail-section">
       <div class="detail-section-title">Asset Types</div>
-      <div class="asset-tags">${(p.assetTypes||[]).map(a=>`<span class="asset-tag">${a}</span>`).join('')}</div>
+      <div class="asset-tags">${(p.asset_types||[]).map(a=>`<span class="asset-tag">${a}</span>`).join('')}</div>
     </div>
     <div class="detail-section" style="margin-top:10px;">
       <div class="detail-section-title">Geography</div>
       <div class="asset-tags">${(p.geography||[]).map(g=>`<span class="asset-tag">${g}</span>`).join('')}</div>
     </div>
 
-    ${(p.compTypes&&p.compTypes.length)||p.compDetails ? `
+    ${(p.comp_types&&p.comp_types.length)||p.comp_details ? `
     <div style="background:rgba(255,159,67,0.05);border:1px solid rgba(255,159,67,0.2);border-radius:4px;padding:12px;margin-bottom:12px;">
       <div class="detail-section-title" style="color:var(--amber);margin-bottom:6px;">How They Get Paid</div>
-      ${p.compTypes&&p.compTypes.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:${p.compDetails?'6px':'0'};">${p.compTypes.map(c=>`<span style="background:rgba(255,159,67,0.1);border:1px solid rgba(255,159,67,0.25);color:var(--amber);padding:2px 8px;border-radius:3px;font-size:10px;">${c}</span>`).join('')}</div>`:''}
-      ${p.compDetails?`<div style="font-size:12px;color:var(--text);">${p.compDetails}</div>`:''}
+      ${p.comp_types&&p.comp_types.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:${p.comp_details?'6px':'0'};">${p.comp_types.map(c=>`<span style="background:rgba(255,159,67,0.1);border:1px solid rgba(255,159,67,0.25);color:var(--amber);padding:2px 8px;border-radius:3px;font-size:10px;">${c}</span>`).join('')}</div>`:''}
+      ${p.comp_details?`<div style="font-size:12px;color:var(--text);">${p.comp_details}</div>`:''}
     </div>` : ''}
 
     ${p.relationship?`
@@ -1354,11 +1383,11 @@ function openPartnerDetail(id) {
     <div style="margin-bottom:14px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <div class="detail-section-title" style="margin-bottom:0;">Deals Sent</div>
-        ${(p.dealsSent&&p.dealsSent.length) ? `<span style="font-size:10px;color:var(--blue);">${p.dealsSent.length} total</span>` : ''}
+        ${(p.deals_sent&&p.deals_sent.length) ? `<span style="font-size:10px;color:var(--blue);">${p.deals_sent.length} total</span>` : ''}
       </div>
-      ${!(p.dealsSent&&p.dealsSent.length) ? `<div class="activity-empty">No deals sent yet.</div>` :
+      ${!(p.deals_sent&&p.deals_sent.length) ? `<div class="activity-empty">No deals sent yet.</div>` :
         `<div style="display:flex;flex-direction:column;gap:4px;">
-          ${[...p.dealsSent].reverse().map(d => `
+          ${[...p.deals_sent].reverse().map(d => `
           <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;">
             <div style="font-size:11px;color:var(--text);font-weight:500;">📤 ${d.dealName}</div>
             <div style="font-size:10px;color:var(--muted);">${new Date(d.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
@@ -1425,16 +1454,16 @@ function editPartner(id) {
   document.getElementById('fOrg').value         = p.org || '';
   document.getElementById('fPhone').value       = p.phone || '';
   document.getElementById('fEmail').value       = p.email || '';
-  document.getElementById('fMinCheck').value    = p.minCheck || '';
-  document.getElementById('fMaxCheck').value    = p.maxCheck || '';
+  document.getElementById('fMinCheck').value    = p.min_check || '';
+  document.getElementById('fMaxCheck').value    = p.max_check || '';
   document.getElementById('fLtv').value         = p.ltv || '';
-  document.getElementById('fReturn').value      = p.returnTarget || '';
+  document.getElementById('fReturn').value      = p.return_target || '';
   document.getElementById('fRelationship').value= p.relationship || '';
-  document.getElementById('fCompDetails').value = p.compDetails || '';
+  document.getElementById('fCompDetails').value = p.comp_details || '';
   document.getElementById('fNotes').value       = p.notes || '';
   document.getElementById('fStatus').value      = p.status;
   document.querySelectorAll('.checkbox-option input[type=checkbox]').forEach(cb => {
-    cb.checked = (p.capitalTypes||[]).includes(cb.value)||(p.assetTypes||[]).includes(cb.value)||(p.geography||[]).includes(cb.value)||(p.compTypes||[]).includes(cb.value);
+    cb.checked = (p.capital_types||[]).includes(cb.value)||(p.asset_types||[]).includes(cb.value)||(p.geography||[]).includes(cb.value)||(p.comp_types||[]).includes(cb.value);
   });
   openModal('partnerModal');
 }
@@ -1445,7 +1474,7 @@ function clearPartnerForm() {
   document.querySelectorAll('.checkbox-option input[type=checkbox]').forEach(cb => cb.checked = false);
 }
 
-function savePartner() {
+async function savePartner() {
   const name = document.getElementById('fName').value.trim();
   if (!name) { alert('Name required.'); return; }
   const capitalTypes = qsa('#ct-debt,#ct-equity,#ct-hard-money,#ct-mezz,#ct-bridge,#ct-preferred,#ct-dscr,#ct-private-credit,#ct-lp');
@@ -1455,26 +1484,40 @@ function savePartner() {
 
   const data = {
     name, org:v('fOrg'), phone:v('fPhone'), email:v('fEmail'),
-    capitalTypes, minCheck:v('fMinCheck'), maxCheck:v('fMaxCheck'),
-    ltv:v('fLtv'), returnTarget:v('fReturn'), assetTypes, geography,
+    capital_types:capitalTypes, min_check:v('fMinCheck'), max_check:v('fMaxCheck'),
+    ltv:v('fLtv'), return_target:v('fReturn'), asset_types:assetTypes, geography,
     status:document.getElementById('fStatus').value,
-    relationship:v('fRelationship'), compTypes, compDetails:v('fCompDetails'), notes:v('fNotes')
+    relationship:v('fRelationship'), comp_types:compTypes, comp_details:v('fCompDetails'), notes:v('fNotes')
   };
 
-  if (editingPartnerId) {
-    const idx = partners.findIndex(p => p.id === editingPartnerId);
-    partners[idx] = { ...partners[idx], ...data };
-  } else {
-    data.id = Date.now(); data.activity = [];
-    partners.push(data);
+  const btn = document.getElementById('partnerSubmitBtn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+
+  try {
+    if (editingPartnerId) {
+      const saved = await api('PUT', `/partners/${editingPartnerId}`, data);
+      const idx = partners.findIndex(p => p.id === editingPartnerId);
+      if (idx >= 0) partners[idx] = { ...partners[idx], ...saved };
+    } else {
+      const saved = await api('POST', '/partners', data);
+      partners.push(saved);
+    }
+    renderPartners(); closeModal('partnerModal');
+  } catch(e) {
+    alert('Save failed. Check your connection.');
+  } finally {
+    btn.textContent = editingPartnerId ? 'Save Changes' : 'Add Partner';
+    btn.disabled = false;
   }
-  saveAll(); renderPartners(); closeModal('partnerModal');
 }
 
-function deletePartner(id) {
+async function deletePartner(id) {
   if (!confirm('Remove this partner?')) return;
-  partners = partners.filter(p => p.id !== id);
-  saveAll(); renderPartners();
+  try {
+    await api('DELETE', `/partners/${id}`);
+    partners = partners.filter(p => p.id !== id);
+    renderPartners();
+  } catch(e) { alert('Delete failed.'); }
 }
 
 // ══════════════════════════════════════════
@@ -1492,18 +1535,20 @@ function logActivity(id) {
   openModal('activityModal');
 }
 
-function saveActivity() {
+async function saveActivity() {
   const p = partners.find(x => x.id === activityPartnerId);
   if (!p) return;
   if (!p.activity) p.activity = [];
-  const type = document.querySelector('input[name="actType"]:checked')?.value || 'note';
-  const notes = document.getElementById('actNotes').value.trim();
+  const type     = document.querySelector('input[name="actType"]:checked')?.value || 'note';
+  const notes    = document.getElementById('actNotes').value.trim();
   const reminder = document.getElementById('actReminder').value;
   p.activity.push({ type, notes, date: new Date().toISOString() });
   if (reminder) p.reminder = reminder; else delete p.reminder;
-  saveAll(); renderPartners(); renderAlerts(); closeModal('activityModal');
-  // Refresh detail panel if open
-  if (document.getElementById('detailPanel').classList.contains('open')) openPartnerDetail(activityPartnerId);
+  try {
+    await api('PUT', `/partners/${p.id}`, { activity: p.activity, reminder: p.reminder || null });
+    renderPartners(); renderAlerts(); closeModal('activityModal');
+    if (document.getElementById('detailPanel').classList.contains('open')) openPartnerDetail(activityPartnerId);
+  } catch(e) { alert('Save failed.'); }
 }
 
 // ══════════════════════════════════════════
@@ -1543,8 +1588,8 @@ function runQuickMatch() {
 
   const scored = partners.map(p => {
     let score = 0;
-    const typeHit = !capTypes.length || capTypes.some(t => (p.capitalTypes||[]).includes(t));
-    const assetHit= !assetTypes.length || assetTypes.some(a => (p.assetTypes||[]).includes(a));
+    const typeHit = !capTypes.length || capTypes.some(t => (p.capital_types||[]).includes(t));
+    const assetHit= !assetTypes.length || assetTypes.some(a => (p.asset_types||[]).includes(a));
     if (typeHit && capTypes.length)   score += 4;
     if (assetHit && assetTypes.length) score += 3;
     if (geo && ((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))) score += 2;
@@ -1614,7 +1659,7 @@ function renderDeals(search='') {
           <div class="deal-card" onclick="openDealDetail(${d.id})">
             <div class="deal-card-name">${d.name}</div>
             <div class="deal-card-meta">${d.sponsor||''}</div>
-            <div class="deal-card-meta">${d.location||''} ${d.assetType?'· '+d.assetType:''}</div>
+            <div class="deal-card-meta">${d.location||''} ${d.asset_type?'· '+d.asset_type:''}</div>
             ${d.capital?`<div class="deal-card-amount">${d.capital}</div>`:''}
             ${flags.length?`<div class="deal-card-flags">${flags.join('')}</div>`:''}
           </div>`;
@@ -1645,42 +1690,51 @@ function editDeal(id) {
   document.getElementById('dName').value      = d.name;
   document.getElementById('dSponsor').value   = d.sponsor||'';
   document.getElementById('dLocation').value  = d.location||'';
-  document.getElementById('dAssetType').value = d.assetType||'';
+  document.getElementById('dAssetType').value = d.asset_type||'';
   document.getElementById('dCapital').value   = d.capital||'';
   document.getElementById('dStructure').value = d.structure||'';
-  document.getElementById('dReturn').value    = d.returnTarget||'';
+  document.getElementById('dReturn').value    = d.return_target||'';
   document.getElementById('dTimeline').value  = d.timeline||'';
   document.getElementById('dStage').value     = d.stage||'submitted';
-  document.getElementById('dGhlLink').value   = d.ghlLink||'';
-  document.getElementById('dDataRoom').value  = d.dataRoom||'';
+  document.getElementById('dGhlLink').value   = d.ghl_link||'';
+  document.getElementById('dDataRoom').value  = d.data_room||'';
   document.getElementById('dMember').value    = d.member||'';
   document.getElementById('dNotes').value     = d.notes||'';
   openModal('dealModal');
 }
 
-function saveDeal() {
+async function saveDeal() {
   const name = document.getElementById('dName').value.trim();
   if (!name) { alert('Deal name required.'); return; }
   const data = {
-    name, sponsor:v('dSponsor'), location:v('dLocation'), assetType:v('dAssetType'),
+    name, sponsor:v('dSponsor'), location:v('dLocation'), asset_type:v('dAssetType'),
     capital:v('dCapital'), structure:document.getElementById('dStructure').value,
-    returnTarget:v('dReturn'), timeline:v('dTimeline'), stage:document.getElementById('dStage').value,
-    ghlLink:v('dGhlLink'), dataRoom:v('dDataRoom'), member:document.getElementById('dMember').value, notes:v('dNotes')
+    return_target:v('dReturn'), timeline:v('dTimeline'), stage:document.getElementById('dStage').value,
+    ghl_link:v('dGhlLink'), data_room:v('dDataRoom'), member:document.getElementById('dMember').value, notes:v('dNotes')
   };
-  if (editingDealId) {
-    const idx = deals.findIndex(d => d.id === editingDealId);
-    deals[idx] = { ...deals[idx], ...data };
-  } else {
-    data.id = Date.now(); data.activity = []; data.createdAt = new Date().toISOString();
-    deals.push(data);
-  }
-  saveAll(); renderDeals(); closeModal('dealModal');
+  const btn = document.getElementById('dealSubmitBtn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  try {
+    if (editingDealId) {
+      const saved = await api('PUT', `/deals/${editingDealId}`, data);
+      const idx = deals.findIndex(d => d.id === editingDealId);
+      if (idx >= 0) deals[idx] = { ...deals[idx], ...saved };
+    } else {
+      const saved = await api('POST', '/deals', { ...data, activity: [] });
+      deals.push(saved);
+    }
+    renderDeals(); closeModal('dealModal');
+  } catch(e) { alert('Save failed.'); }
+  finally { btn.textContent = editingDealId ? 'Save Changes' : 'Add Deal'; btn.disabled = false; }
 }
 
-function deleteDeal(id) {
+async function deleteDeal(id) {
   if (!confirm('Remove this deal?')) return;
-  deals = deals.filter(d => d.id !== id);
-  saveAll(); renderDeals(); closeDealDetailPanel();
+  try {
+    await api('DELETE', `/deals/${id}`);
+    deals = deals.filter(d => d.id !== id);
+    renderDeals(); closeDealDetailPanel();
+  } catch(e) { alert('Delete failed.'); }
 }
 
 // ── DEAL DETAIL PANEL ──
@@ -1699,15 +1753,15 @@ function openDealDetail(id) {
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
       <div class="meta-item"><span class="meta-label">Location</span><span class="meta-value">${d.location||'—'}</span></div>
-      <div class="meta-item"><span class="meta-label">Asset Type</span><span class="meta-value">${d.assetType||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Asset Type</span><span class="meta-value">${d.asset_type||'—'}</span></div>
       <div class="meta-item"><span class="meta-label">Capital Needed</span><span class="meta-value highlight">${d.capital||'—'}</span></div>
       <div class="meta-item"><span class="meta-label">Structure</span><span class="meta-value">${d.structure||'—'}</span></div>
-      <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${d.returnTarget||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${d.return_target||'—'}</span></div>
       <div class="meta-item"><span class="meta-label">Timeline</span><span class="meta-value">${d.timeline||'—'}</span></div>
     </div>
 
-    ${d.dataRoom?`<div style="margin-bottom:12px;"><a href="${d.dataRoom}" target="_blank" style="color:var(--accent);font-size:11px;text-decoration:none;">🔗 Open Data Room</a></div>`:''}
-    ${d.ghlLink?`<div style="margin-bottom:12px;"><a href="${d.ghlLink}" target="_blank" style="color:var(--blue);font-size:11px;text-decoration:none;">↗ View in GHL</a></div>`:''}
+    ${d.data_room?`<div style="margin-bottom:12px;"><a href="${d.data_room}" target="_blank" style="color:var(--accent);font-size:11px;text-decoration:none;">🔗 Open Data Room</a></div>`:''}
+    ${d.ghl_link?`<div style="margin-bottom:12px;"><a href="${d.ghl_link}" target="_blank" style="color:var(--blue);font-size:11px;text-decoration:none;">↗ View in GHL</a></div>`:''}
     ${d.notes?`<div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--text);line-height:1.6;">${d.notes}</div>`:''}
 
     <div style="margin-bottom:14px;">
@@ -1733,9 +1787,14 @@ function closeDealDetailPanel() {
 }
 function maybeCloseDealDetail(e) { if (e.target===document.getElementById('dealDetailOverlay')) closeDealDetailPanel(); }
 
-function moveDealStage(id, stage) {
+async function moveDealStage(id, stage) {
   const d = deals.find(x => x.id === id);
-  if (d) { d.stage = stage; saveAll(); renderDeals(); openDealDetail(id); }
+  if (!d) return;
+  d.stage = stage;
+  try {
+    await api('PUT', `/deals/${id}`, { stage });
+    renderDeals(); openDealDetail(id);
+  } catch(e) { alert('Save failed.'); }
 }
 
 // ══════════════════════════════════════════
@@ -1752,7 +1811,7 @@ function renderGaps() {
   CAPITAL_TYPES.forEach(type => {
     matrix += `<tr><td style="font-size:10px;color:var(--text);font-weight:500;">${typeLabel(type)}</td>`;
     GEOS.forEach(geo => {
-      const count = partners.filter(p => p.status==='active' && (p.capitalTypes||[]).includes(type) && ((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))).length;
+      const count = partners.filter(p => p.status==='active' && (p.capital_types||[]).includes(type) && ((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))).length;
       let cls = count >= 3 ? 'strong' : count >= 1 ? 'weak' : 'none';
       matrix += `<td><span class="coverage-dot ${cls}" title="${count} partner(s)">${count||''}</span></td>`;
     });
@@ -1765,7 +1824,7 @@ function renderGaps() {
   const softGaps = [];
   CAPITAL_TYPES.forEach(type => {
     GEOS.filter(g=>g!=='National').forEach(geo => {
-      const count = partners.filter(p => p.status==='active'&&(p.capitalTypes||[]).includes(type)&&((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))).length;
+      const count = partners.filter(p => p.status==='active'&&(p.capital_types||[]).includes(type)&&((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))).length;
       if (count === 0) hardGaps.push(`${typeLabel(type)} in ${geo}`);
       else if (count === 1) softGaps.push(`${typeLabel(type)} in ${geo} (1 partner)`);
     });
@@ -1774,7 +1833,7 @@ function renderGaps() {
   // Asset coverage
   let assetCov = '';
   ASSETS.forEach(asset => {
-    const count = partners.filter(p => p.status==='active'&&(p.assetTypes||[]).includes(asset)).length;
+    const count = partners.filter(p => p.status==='active'&&(p.asset_types||[]).includes(asset)).length;
     const cls = count>=3?'strong':count>=1?'weak':'none';
     assetCov += `<tr><td style="font-size:11px;color:var(--text);">${asset}</td><td><span class="coverage-dot ${cls}">${count||''}</span></td><td style="font-size:10px;color:var(--muted);">${count===0?'No coverage':count===1?'Single partner':count+'partners'}</td></tr>`;
   });
@@ -1866,12 +1925,12 @@ async function generateSendEmail() {
   };
   const tone = document.querySelector('input[name="sdTone"]:checked')?.value||'direct';
   const pCtx = [
-    p.capitalTypes.length?`Capital: ${p.capitalTypes.join(', ')}` : '',
-    p.assetTypes.length?`Assets: ${p.assetTypes.join(', ')}` : '',
+    p.capital_types.length?`Capital: ${p.capital_types.join(', ')}` : '',
+    p.asset_types.length?`Assets: ${p.asset_types.join(', ')}` : '',
     p.geography.length?`Geo: ${p.geography.join(', ')}` : '',
     p.notes?`Notes: ${p.notes}` : '',
     p.relationship?`Relationship: ${p.relationship}` : '',
-    p.compDetails?`Comp: ${p.compDetails}` : ''
+    p.comp_details?`Comp: ${p.comp_details}` : ''
   ].filter(Boolean).join('\n');
 
   document.getElementById('sendStep1').style.display='none';
@@ -1891,7 +1950,7 @@ RULES: No em dashes. No guarantees. No fluff. Sign off as Nick Ayala, Align Equi
 First line: SUBJECT: [subject]. Then blank line. Then email body. No preamble.`;
 
   try {
-    const res  = await fetch(API_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const res  = await fetch(WORKER + '/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
     const data = await res.json();
     const raw  = data.content?.map(b=>b.text||'').join('').trim();
     const lines= raw.split('\n'); let subject='', bodyStart=0;
@@ -1905,17 +1964,18 @@ First line: SUBJECT: [subject]. Then blank line. Then email body. No preamble.`;
   } finally { document.getElementById('sdGenerating').style.display='none'; }
 }
 
-function logDealSent(partnerId, dealName) {
+async function logDealSent(partnerId, dealName) {
   const p = partners.find(x => x.id === partnerId);
   if (!p) return;
-  if (!p.dealsSent) p.dealsSent = [];
-  // Avoid duplicate if same deal sent within same day
+  if (!p.deals_sent) p.deals_sent = [];
   const today = new Date().toDateString();
-  const alreadyToday = p.dealsSent.some(d => d.dealName === dealName && new Date(d.date).toDateString() === today);
+  const alreadyToday = p.deals_sent.some(d => d.dealName === dealName && new Date(d.date).toDateString() === today);
   if (!alreadyToday) {
-    p.dealsSent.push({ dealName, date: new Date().toISOString() });
-    saveAll();
-    renderPartners();
+    p.deals_sent.push({ dealName, date: new Date().toISOString() });
+    try {
+      await api('PUT', `/partners/${partnerId}`, { deals_sent: p.deals_sent });
+      renderPartners();
+    } catch(e) { console.error('Failed to log deal sent:', e); }
   }
 }
 
@@ -1966,7 +2026,7 @@ async function handleMdPdf(input) {
   const base64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('fail'));r.readAsDataURL(file);});
 
   try {
-    const res=await fetch(API_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:'Extract deal info. Return ONLY JSON with keys: dealName, submitter, submitterEmail, organization, location, capitalNeeded, structure, assetType, strategy, timeline, useOfFunds, dataRoom. Empty string if not found. No markdown.'}]}]})});
+    const res=await fetch(WORKER + '/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:'Extract deal info. Return ONLY JSON with keys: dealName, submitter, submitterEmail, organization, location, capitalNeeded, structure, assetType, strategy, timeline, useOfFunds, dataRoom. Empty string if not found. No markdown.'}]}]})});
     const data=await res.json();
     const raw=data.content?.map(b=>b.text||'').join('').trim().replace(/```json|```/g,'').trim();
     const deal=JSON.parse(raw);
@@ -1996,9 +2056,9 @@ function scoreMdPartner(p, deal) {
   const al=(deal.assetType||'').toLowerCase();
   const gl=(deal.location||'').toLowerCase();
   const typeMap={debt:['debt','senior','loan'],bridge:['bridge'],'hard-money':['hard money','hard'],mezz:['mezz','mezzanine'],preferred:['preferred'],equity:['equity','lp','joint venture'],dscr:['dscr'],'private-credit':['private credit','credit facility'],lp:['lp','limited partner','family office']};
-  (p.capitalTypes||[]).forEach(ct=>{if((typeMap[ct]||[]).some(k=>sl.includes(k)))score+=4;});
+  (p.capital_types||[]).forEach(ct=>{if((typeMap[ct]||[]).some(k=>sl.includes(k)))score+=4;});
   const assetMap={Multifamily:['multifamily','apartment','units'],Industrial:['industrial','warehouse','flex'],'Mixed Use':['mixed'],'Self Storage':['storage'],Hotel:['hotel'],Land:['land'],SFR:['sfr','single family'],Business:['business']};
-  (p.assetTypes||[]).forEach(at=>{const kw=assetMap[at]||[at.toLowerCase()];if(kw.some(k=>al.includes(k)))score+=3;});
+  (p.asset_types||[]).forEach(at=>{const kw=assetMap[at]||[at.toLowerCase()];if(kw.some(k=>al.includes(k)))score+=3;});
   if((p.geography||[]).includes('National'))score+=1;
   const geoMap={Florida:['florida','fl'],Texas:['texas','tx'],Southeast:['southeast','georgia'],Northeast:['northeast','new york'],Southwest:['southwest','arizona'],Midwest:['midwest','chicago']};
   (p.geography||[]).forEach(geo=>{if((geoMap[geo]||[geo.toLowerCase()]).some(k=>gl.includes(k)))score+=2;});
@@ -2019,7 +2079,7 @@ function renderMdMatches() {
           <span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;">${p.name}</span>
           <span style="font-size:9px;padding:1px 6px;border-radius:8px;${p.score>=5?'background:rgba(57,255,133,0.1);color:var(--accent);border:1px solid rgba(57,255,133,0.2);':'background:rgba(201,169,110,0.1);color:#c9a96e;border:1px solid rgba(201,169,110,0.2);'}">${p.score>=5?'Strong':'Partial'}</span>
         </div>
-        <div style="font-size:10px;color:var(--muted);">${p.org||''} · ${(p.capitalTypes||[]).map(t=>typeLabel(t)).join(', ')}</div>
+        <div style="font-size:10px;color:var(--muted);">${p.org||''} · ${(p.capital_types||[]).map(t=>typeLabel(t)).join(', ')}</div>
       </div>
       <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:${p.score>=5?'var(--accent)':'#c9a96e'};">${p.score}</div>
     </div>`).join('');
@@ -2060,7 +2120,7 @@ async function mdGenerateEmails() {
     container.appendChild(block);
 
     try{
-      const pCtx=[p.capitalTypes.length?`Capital: ${p.capitalTypes.join(', ')}`:'',p.assetTypes.length?`Assets: ${p.assetTypes.join(', ')}`:'',p.geography.length?`Geo: ${p.geography.join(', ')}`:'',p.notes?`Notes: ${p.notes}`:'',p.relationship?`Relationship: ${p.relationship}`:'',p.compDetails?`Comp: ${p.compDetails}`:''].filter(Boolean).join('\n');
+      const pCtx=[p.capital_types.length?`Capital: ${p.capital_types.join(', ')}`:'',p.asset_types.length?`Assets: ${p.asset_types.join(', ')}`:'',p.geography.length?`Geo: ${p.geography.join(', ')}`:'',p.notes?`Notes: ${p.notes}`:'',p.relationship?`Relationship: ${p.relationship}`:'',p.comp_details?`Comp: ${p.comp_details}`:''].filter(Boolean).join('\n');
       const prompt=`Write a deal outreach email from Nick Ayala, Align Equity Group to ${p.name}, ${p.org||''}.
 PARTNER: ${pCtx}
 DEAL: ${deal.dealName} | ${deal.location} | ${deal.capital} | ${deal.structure} | ${deal.assetType} | Close: ${deal.timeline}
@@ -2068,7 +2128,7 @@ Use of funds: ${deal.notes}
 ${deal.dataRoom?'Data room: '+deal.dataRoom:''}
 RULES: No em dashes. No guarantees. Direct and confident. Drop data room link naturally if provided. End with low-friction CTA. Sign off Nick Ayala, Align Equity Group.
 First line SUBJECT: [subject]. Blank line. Email body. No preamble.`;
-      const res=await fetch(API_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:prompt}]})});
+      const res=await fetch(WORKER + '/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:prompt}]})});
       const data=await res.json();
       const raw=data.content?.map(b=>b.text||'').join('').trim();
       const lines=raw.split('\n');let subject='',bs=0;
@@ -2093,10 +2153,10 @@ function openMatchDealForExisting(dealId) {
     document.getElementById('mdLocation').value  = d.location||'';
     document.getElementById('mdCapital').value   = d.capital||'';
     document.getElementById('mdStructure').value = d.structure||'';
-    document.getElementById('mdAssetType').value = d.assetType||'';
+    document.getElementById('mdAssetType').value = d.asset_type||'';
     document.getElementById('mdTimeline').value  = d.timeline||'';
     document.getElementById('mdFunds').value     = d.notes||'';
-    document.getElementById('mdDataRoom').value  = d.dataRoom||'';
+    document.getElementById('mdDataRoom').value  = d.data_room||'';
     renderMdMatches();
     showMdStep(2);
   },100);
@@ -2164,8 +2224,8 @@ function runQuickMatchMobile() {
 
   const scored = partners.map(p => {
     let score = 0;
-    const typeHit  = !capTypes.length  || capTypes.some(t  => (p.capitalTypes||[]).includes(t));
-    const assetHit = !assetTypes.length || assetTypes.some(a => (p.assetTypes||[]).includes(a));
+    const typeHit  = !capTypes.length  || capTypes.some(t  => (p.capital_types||[]).includes(t));
+    const assetHit = !assetTypes.length || assetTypes.some(a => (p.asset_types||[]).includes(a));
     if (typeHit  && capTypes.length)   score += 4;
     if (assetHit && assetTypes.length) score += 3;
     if (geo && ((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))) score += 2;
@@ -2209,7 +2269,7 @@ function updateMobileFilterCounts() {
   types.forEach(t => {
     const el = document.getElementById('mfc-' + t);
     if (!el) return;
-    el.textContent = t === 'all' ? partners.length : partners.filter(p => (p.capitalTypes||[]).includes(t)).length;
+    el.textContent = t === 'all' ? partners.length : partners.filter(p => (p.capital_types||[]).includes(t)).length;
   });
   // Mobile nav badges
   const partnerBadge = document.getElementById('mnav-badge-partners');
