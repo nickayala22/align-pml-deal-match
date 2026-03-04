@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Partner Profile | Align Equity Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #181818;
+  --border: #222222;
+  --border2: #2a2a2a;
+  --text: #f0ede8;
+  --muted: #666;
+  --accent: #39ff85;
+  --accent2: #7affb2;
+  --red: #e05c4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;min-height:100vh;padding:0;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--border2);}
+
+/* ── PARTNER-FACING LAYOUT ── */
+.partner-wrap{max-width:560px;margin:0 auto;padding:40px 20px 60px;}
+.partner-header{margin-bottom:36px;}
+.partner-logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.partner-logo span{color:var(--accent);}
+.partner-tagline{font-size:11px;color:var(--muted);line-height:1.6;max-width:420px;}
+.partner-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.2;}
+.partner-sub{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:32px;}
+
+/* ── QUICK INTAKE LAYOUT ── */
+.quick-wrap{max-width:480px;margin:0 auto;padding:20px 16px 80px;}
+.quick-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.quick-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;}
+.quick-subtitle{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* ── SHARED FORM STYLES ── */
+.form-section{margin-bottom:28px;}
+.section-label{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-num{width:22px;height:22px;border-radius:50%;background:rgba(57,255,133,0.1);border:1px solid rgba(57,255,133,0.25);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.form-label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#888;margin-bottom:5px;font-weight:500;}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:10px 12px;border-radius:5px;font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color 0.15s;-webkit-appearance:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+.form-input::placeholder{color:var(--muted);}
+.form-textarea{resize:vertical;min-height:72px;line-height:1.6;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-group{margin-bottom:12px;}
+
+/* checkbox pills */
+.pill-group{display:flex;flex-wrap:wrap;gap:6px;}
+.pill-option{position:relative;}
+.pill-option input{position:absolute;opacity:0;width:0;height:0;}
+.pill-option label{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border:1px solid var(--border2);border-radius:20px;font-size:11px;cursor:pointer;color:#777;background:var(--surface);transition:all 0.12s;user-select:none;white-space:nowrap;}
+.pill-option label:hover{border-color:#444;color:var(--text);}
+.pill-option input:checked+label{background:rgba(57,255,133,0.08);border-color:var(--accent);color:var(--accent);font-weight:500;}
+
+/* submit */
+.submit-wrap{position:sticky;bottom:0;background:linear-gradient(to top, var(--bg) 70%, transparent);padding:20px 0 16px;}
+.submit-btn{width:100%;background:var(--accent);border:none;color:#000;padding:14px;border-radius:6px;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:background 0.15s;letter-spacing:0.2px;}
+.submit-btn:hover{background:var(--accent2);}
+.submit-btn:disabled{background:#333;color:#666;cursor:not-allowed;}
+
+/* success */
+.success-screen{display:none;text-align:center;padding:60px 20px;}
+.success-icon{font-size:48px;margin-bottom:16px;}
+.success-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;}
+.success-sub{font-size:12px;color:var(--muted);line-height:1.7;max-width:360px;margin:0 auto;}
+
+/* progress bar (partner form) */
+.progress-bar{height:2px;background:var(--border);border-radius:1px;margin-bottom:32px;}
+.progress-fill{height:100%;background:var(--accent);border-radius:1px;transition:width 0.3s ease;}
+
+/* error */
+.form-error{color:var(--red);font-size:10px;margin-top:4px;display:none;}
+.submit-error{color:var(--red);font-size:11px;text-align:center;margin-top:8px;display:none;}
+
+/* divider */
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0;}
+
+@media(max-width:480px){
+  .form-row{grid-template-columns:1fr;}
+  .partner-wrap{padding:24px 16px 60px;}
+}
+</style>
+</head>
+<body>
+
+<div id="partnerForm"><!-- content injected by JS --></div>
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✅</div>
+  <div class="success-title" id="successTitle">You're in the network.</div>
+  <div class="success-sub" id="successSub">Your profile has been submitted. Nick will review it and reach out shortly about relevant deal flow.</div>
+</div>
+
+<script>
+const WORKER = 'https://restless-wildflower-1f9falign-proxy.nick-0f0.workers.dev';
+const params = new URLSearchParams(window.location.search);
+const isQuick = params.get('quick') === 'true';
+
+// ── RENDER FORM ──────────────────────────────────────────
+document.getElementById('partnerForm').innerHTML = isQuick ? renderQuick() : renderPartner();
+
+function renderPartner() {
+  return `
+  <div class="partner-wrap">
+    <div class="partner-header">
+      <div class="partner-logo">Align<span>.</span>CRM</div>
+      <div class="partner-tagline">Private Capital Network | Align Equity Group</div>
+    </div>
+    <div class="partner-title">Join the Capital Network</div>
+    <div class="partner-sub">Tell us about your capital so we can match you with the right deals. Takes about 3 minutes. Your information is private and only shared with Nick Ayala's team.</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="form-section">
+      <div class="section-label"><span class="section-num">1</span> Your Info</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">First & Last Name *</label><input type="text" class="form-input" id="fName" placeholder="John Smith" oninput="updateProgress()"></div>
+        <div class="form-group"><label class="form-label">Organization</label><input type="text" class="form-input" id="fOrg" placeholder="Smith Capital Group"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" id="fEmail" placeholder="john@smithcapital.com" oninput="updateProgress()"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="fPhone" placeholder="(555) 000-0000"></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="form-section">
+      <div class="section-label"><span class="section-num">2</span> How You Deploy Capital</div>
+      <div class="form-group">
+        <label class="form-label">Capital Types *</label>
+        <div class="pill-group" id="capitalTypes">
+          <div class="pill-option"><input type="checkbox" id="ct-debt" value="debt"><label for="ct-debt">Debt</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-equity" value="equity"><label for="ct-equity">Equity</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-hard-money" value="hard-money"><label for="ct-hard-money">Hard Money</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-mezz" value="mezz"><label for="ct-mezz">Mezz</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-bridge" value="bridge"><label for="ct-bridge">Bridge</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-preferred" value="preferred"><label for="ct-preferred">Preferred Equity</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-dscr" value="dscr"><label for="ct-dscr">DSCR</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-private-credit" value="private-credit"><label for="ct-private-credit">Private Credit</label></div>
+          <div class="pill-option"><input type="checkbox" id="ct-lp" value="lp"><label for="ct-lp">LP / Family Office</label></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Minimum Check Size</label><input type="text" class="form-input" id="fMinCheck" placeholder="$250,000"></div>
+        <div class="form-group"><label class="form-label">Maximum Check Size</label><input type="text" class="form-input" id="fMaxCheck" placeholder="$5,000,000"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Max LTV (if debt)</label><input type="text" class="form-input" id="fLtv" placeholder="70%"></div>
+        <div class="form-group"><label class="form-label">Target Return</label><input type="text" class="form-input" id="fReturn" placeholder="12% / 18% IRR"></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="form-section">
+      <div class="section-label"><span class="section-num">3</span> What You Invest In</div>
+      <div class="form-group">
+        <label class="form-label">Asset Types</label>
+        <div class="pill-group">
+          <div class="pill-option"><input type="checkbox" id="at-mf" value="Multifamily"><label for="at-mf">Multifamily</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-ind" value="Industrial"><label for="at-ind">Industrial</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-ret" value="Retail"><label for="at-ret">Retail</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-off" value="Office"><label for="at-off">Office</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-mix" value="Mixed Use"><label for="at-mix">Mixed Use</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-ss" value="Self Storage"><label for="at-ss">Self Storage</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-hot" value="Hotel"><label for="at-hot">Hotel</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-land" value="Land"><label for="at-land">Land</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-nnn" value="NNN"><label for="at-nnn">NNN</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-sfr" value="SFR"><label for="at-sfr">SFR</label></div>
+          <div class="pill-option"><input type="checkbox" id="at-biz" value="Business"><label for="at-biz">Business (non-RE)</label></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Geography</label>
+        <div class="pill-group">
+          <div class="pill-option"><input type="checkbox" id="geo-nat" value="National"><label for="geo-nat">National</label></div>
+          <div class="pill-option"><input type="checkbox" id="geo-fl" value="Florida"><label for="geo-fl">Florida</label></div>
+          <div class="pill-option"><input type="checkbox" id="geo-tx" value="Texas"><label for="geo-tx">Texas</label></div>
+          <div class="pill-option"><input type="checkbox" id="geo-se" value="Southeast"><label for="geo-se">Southeast</label></div>
+          <div class="pill-option"><input type="checkbox" id="geo-sw" value="Southwest"><label for="geo-sw">Southwest</label></div>
+          <div class="pill-option"><input type="checkbox" id="geo-ne" value="Northeast"><label for="geo-ne">Northeast</label></div>
+          <div class="pill-option"><input type="checkbox" id="geo-mw" value="Midwest"><label for="geo-mw">Midwest</label></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="form-section">
+      <div class="section-label"><span class="section-num">4</span> How You Get Paid</div>
+      <div class="form-group">
+        <div class="pill-group">
+          <div class="pill-option"><input type="checkbox" id="comp-success" value="Success Fee"><label for="comp-success">Success Fee</label></div>
+          <div class="pill-option"><input type="checkbox" id="comp-points" value="Origination Points"><label for="comp-points">Origination Points</label></div>
+          <div class="pill-option"><input type="checkbox" id="comp-interest" value="Interest Rate"><label for="comp-interest">Interest Rate</label></div>
+          <div class="pill-option"><input type="checkbox" id="comp-equity" value="Equity Participation"><label for="comp-equity">Equity Participation</label></div>
+          <div class="pill-option"><input type="checkbox" id="comp-pref" value="Preferred Return"><label for="comp-pref">Preferred Return</label></div>
+          <div class="pill-option"><input type="checkbox" id="comp-carry" value="Carried Interest"><label for="comp-carry">Carried Interest</label></div>
+          <div class="pill-option"><input type="checkbox" id="comp-mgmt" value="Management Fee"><label for="comp-mgmt">Management Fee</label></div>
+          <div class="pill-option"><input type="checkbox" id="comp-referral" value="Referral Fee"><label for="comp-referral">Referral Fee</label></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Comp Details</label>
+        <input type="text" class="form-input" id="fCompDetails" placeholder="e.g. 2 pts + 11% interest, 8% pref then 80/20...">
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="form-section">
+      <div class="section-label"><span class="section-num">5</span> Anything Else</div>
+      <div class="form-group">
+        <label class="form-label">What makes a deal right for you? What do you avoid?</label>
+        <textarea class="form-textarea" id="fNotes" placeholder="Stabilized assets only, no ground-up. Prefer 3-5 year holds. Text before sending deck..."></textarea>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="submit-btn" id="submitBtn" onclick="submitForm()">Submit My Capital Profile</button>
+      <div class="submit-error" id="submitError">Something went wrong. Please try again.</div>
+    </div>
+  </div>`;
+}
+
+function renderQuick() {
+  return `
+  <div class="quick-wrap">
+    <div class="quick-header">
+      <div>
+        <div class="quick-title">Quick Intake</div>
+        <div class="quick-subtitle">New capital partner · goes straight into CRM as Pending Review</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--accent);">Align<span style="color:var(--text);">.</span>CRM</div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:10px;">
+      <div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-input" id="fName" placeholder="Full name"></div>
+      <div class="form-group"><label class="form-label">Organization</label><input type="text" class="form-input" id="fOrg" placeholder="Firm name"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:10px;">
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="fEmail" placeholder="email@firm.com"></div>
+      <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="fPhone" placeholder="(555) 000-0000"></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="form-group" style="margin-bottom:12px;">
+      <label class="form-label">Capital Types</label>
+      <div class="pill-group" id="capitalTypes">
+        <div class="pill-option"><input type="checkbox" id="ct-debt" value="debt"><label for="ct-debt">Debt</label></div>
+        <div class="pill-option"><input type="checkbox" id="ct-equity" value="equity"><label for="ct-equity">Equity</label></div>
+        <div class="pill-option"><input type="checkbox" id="ct-hard-money" value="hard-money"><label for="ct-hard-money">Hard $</label></div>
+        <div class="pill-option"><input type="checkbox" id="ct-mezz" value="mezz"><label for="ct-mezz">Mezz</label></div>
+        <div class="pill-option"><input type="checkbox" id="ct-bridge" value="bridge"><label for="ct-bridge">Bridge</label></div>
+        <div class="pill-option"><input type="checkbox" id="ct-preferred" value="preferred"><label for="ct-preferred">Pref</label></div>
+        <div class="pill-option"><input type="checkbox" id="ct-dscr" value="dscr"><label for="ct-dscr">DSCR</label></div>
+        <div class="pill-option"><input type="checkbox" id="ct-lp" value="lp"><label for="ct-lp">LP/FO</label></div>
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:10px;">
+      <div class="form-group"><label class="form-label">Min Check</label><input type="text" class="form-input" id="fMinCheck" placeholder="$250K"></div>
+      <div class="form-group"><label class="form-label">Max Check</label><input type="text" class="form-input" id="fMaxCheck" placeholder="$5M"></div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:12px;">
+      <label class="form-label">Asset Types</label>
+      <div class="pill-group">
+        <div class="pill-option"><input type="checkbox" id="at-mf" value="Multifamily"><label for="at-mf">MF</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-ind" value="Industrial"><label for="at-ind">Ind</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-ss" value="Self Storage"><label for="at-ss">SS</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-sfr" value="SFR"><label for="at-sfr">SFR</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-mix" value="Mixed Use"><label for="at-mix">Mix</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-hot" value="Hotel"><label for="at-hot">Hotel</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-land" value="Land"><label for="at-land">Land</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-nnn" value="NNN"><label for="at-nnn">NNN</label></div>
+        <div class="pill-option"><input type="checkbox" id="at-biz" value="Business"><label for="at-biz">Biz</label></div>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:12px;">
+      <label class="form-label">Geography</label>
+      <div class="pill-group">
+        <div class="pill-option"><input type="checkbox" id="geo-nat" value="National"><label for="geo-nat">National</label></div>
+        <div class="pill-option"><input type="checkbox" id="geo-fl" value="Florida"><label for="geo-fl">Florida</label></div>
+        <div class="pill-option"><input type="checkbox" id="geo-tx" value="Texas"><label for="geo-tx">Texas</label></div>
+        <div class="pill-option"><input type="checkbox" id="geo-se" value="Southeast"><label for="geo-se">Southeast</label></div>
+        <div class="pill-option"><input type="checkbox" id="geo-sw" value="Southwest"><label for="geo-sw">Southwest</label></div>
+        <div class="pill-option"><input type="checkbox" id="geo-ne" value="Northeast"><label for="geo-ne">Northeast</label></div>
+        <div class="pill-option"><input type="checkbox" id="geo-mw" value="Midwest"><label for="geo-mw">Midwest</label></div>
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-bottom:10px;">
+      <div class="form-group"><label class="form-label">Target Return</label><input type="text" class="form-input" id="fReturn" placeholder="12% / 18% IRR"></div>
+      <div class="form-group"><label class="form-label">How We Know Them</label><input type="text" class="form-input" id="fRelationship" placeholder="Conference, referral..."></div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:16px;">
+      <label class="form-label">Notes</label>
+      <textarea class="form-textarea" id="fNotes" style="min-height:56px;" placeholder="What they invest in, what to know..."></textarea>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="submit-btn" id="submitBtn" onclick="submitForm()">Add to CRM as Pending Review</button>
+      <div class="submit-error" id="submitError">Something went wrong. Please try again.</div>
+    </div>
+  </div>`;
+}
+
+// ── PROGRESS BAR (partner form only) ──────────────────
+function updateProgress() {
+  if (isQuick) return;
+  const name  = document.getElementById('fName')?.value.trim();
+  const email = document.getElementById('fEmail')?.value.trim();
+  const types = document.querySelectorAll('#capitalTypes input:checked').length;
+  let pct = 0;
+  if (name)  pct += 30;
+  if (email) pct += 20;
+  if (types) pct += 50;
+  const fill = document.getElementById('progressFill');
+  if (fill) fill.style.width = pct + '%';
+}
+
+// ── SUBMIT ─────────────────────────────────────────────
+async function submitForm() {
+  const name = document.getElementById('fName')?.value.trim();
+  if (!name) { alert('Name is required.'); return; }
+
+  const capitalTypes = checked('#ct-debt,#ct-equity,#ct-hard-money,#ct-mezz,#ct-bridge,#ct-preferred,#ct-dscr,#ct-private-credit,#ct-lp,#ct-dscr');
+  const assetTypes   = checked('#at-mf,#at-ind,#at-ret,#at-off,#at-mix,#at-ss,#at-hot,#at-land,#at-nnn,#at-sfr,#at-biz');
+  const geography    = checked('#geo-nat,#geo-fl,#geo-tx,#geo-se,#geo-sw,#geo-ne,#geo-mw');
+  const compTypes    = checked('#comp-success,#comp-points,#comp-interest,#comp-equity,#comp-pref,#comp-carry,#comp-mgmt,#comp-referral');
+
+  const data = {
+    name,
+    org:          val('fOrg'),
+    email:        val('fEmail'),
+    phone:        val('fPhone'),
+    capital_types: capitalTypes,
+    min_check:    val('fMinCheck'),
+    max_check:    val('fMaxCheck'),
+    ltv:          val('fLtv'),
+    return_target: val('fReturn'),
+    asset_types:  assetTypes,
+    geography,
+    comp_types:   compTypes,
+    comp_details: val('fCompDetails'),
+    relationship: val('fRelationship'),
+    notes:        val('fNotes'),
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Submitting...';
+  btn.disabled    = true;
+  document.getElementById('submitError').style.display = 'none';
+
+  try {
+    const res  = await fetch(WORKER + '/onboard', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(data),
+    });
+    const result = await res.json();
+    if (!res.ok || !result.success) throw new Error(result.error || 'Failed');
+
+    // Show success
+    document.getElementById('partnerForm').style.display = 'none';
+    const s = document.getElementById('successScreen');
+    s.style.display = 'block';
+    if (isQuick) {
+      document.getElementById('successTitle').textContent = 'Added to CRM.';
+      document.getElementById('successSub').textContent   = name + ' has been added as Pending Review. Review and activate in the Partners tab.';
+    }
+  } catch(e) {
+    document.getElementById('submitError').style.display = 'block';
+    btn.textContent = isQuick ? 'Add to CRM as Pending Review' : 'Submit My Capital Profile';
+    btn.disabled    = false;
+  }
+}
+
+function val(id) { return document.getElementById(id)?.value.trim() || ''; }
+function checked(sel) {
+  return Array.from(document.querySelectorAll(sel))
+    .filter(el => el.checked)
+    .map(el => el.value);
+}
+</script>
+</body>
+</html>
