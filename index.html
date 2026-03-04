@@ -1,0 +1,2235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Partner Network, Nick Ayala</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #181818;
+  --border: #222222;
+  --border2: #2a2a2a;
+  --text: #f0ede8;
+  --muted: #555;
+  --accent: #39ff85;
+  --accent2: #7affb2;
+  --red: #e05c4a;
+  --green: #4aad8a;
+  --blue: #4a88c7;
+  --purple: #8a6ac7;
+  --orange: #d4834a;
+  --teal: #4ab5a0;
+  --yellow: #f0c040;
+  --amber: #ff9f43;
+  --pink: #c47aff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;min-height:100vh;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* ── HEADER ── */
+.app-header{padding:16px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:50;background:var(--bg);}
+.app-logo{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
+.app-logo span{color:var(--accent);}
+.header-center{display:flex;gap:4px;}
+.tab-btn{background:transparent;border:1px solid transparent;color:var(--muted);padding:7px 16px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;transition:all 0.15s;display:flex;align-items:center;gap:6px;position:relative;}
+.tab-btn:hover{color:var(--text);background:var(--surface);}
+.tab-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--text);}
+.tab-btn .tab-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;}
+.tab-btn .tab-badge.green{background:var(--accent);color:#000;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.hdr-btn{background:var(--accent);border:none;color:#000;padding:8px 16px;border-radius:6px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:background 0.15s;white-space:nowrap;}
+.hdr-btn:hover{background:var(--accent2);}
+.hdr-btn.secondary{background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'DM Mono',monospace;font-weight:400;}
+.hdr-btn.secondary:hover{color:var(--text);border-color:var(--border2);}
+.alert-bell{position:relative;cursor:pointer;padding:6px;border-radius:4px;color:var(--muted);transition:color 0.15s;font-size:16px;background:transparent;border:none;}
+.alert-bell:hover{color:var(--text);}
+.alert-bell .bell-badge{position:absolute;top:2px;right:2px;width:8px;height:8px;background:var(--red);border-radius:50%;display:none;}
+.alert-bell .bell-badge.show{display:block;}
+
+/* ── TABS CONTENT ── */
+.tab-content{display:none;}
+.tab-content.active{display:flex;flex-direction:column;}
+
+/* ── PARTNERS TAB ── */
+.partners-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 57px);}
+.sidebar{border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;}
+.sidebar-section-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.filter-group{display:flex;flex-direction:column;gap:4px;}
+.filter-btn{background:transparent;border:1px solid transparent;color:var(--muted);padding:7px 10px;border-radius:4px;cursor:pointer;text-align:left;font-family:'DM Mono',monospace;font-size:11px;transition:all 0.15s;display:flex;align-items:center;gap:7px;}
+.filter-btn:hover{color:var(--text);background:var(--surface);}
+.filter-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--accent);}
+.filter-btn .tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.filter-btn .f-count{font-size:10px;color:var(--muted);margin-left:auto;}
+.filter-btn.active .f-count{color:var(--accent);}
+.add-partner-btn{width:100%;background:transparent;border:1px solid var(--border2);color:var(--muted);padding:9px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;transition:all 0.15s;text-align:center;}
+.add-partner-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* deal finder */
+.deal-finder-box{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:14px;}
+.df-title{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px;font-weight:500;}
+.multi-toggle{display:flex;flex-wrap:wrap;gap:4px;}
+.toggle-btn{background:var(--bg);border:1px solid var(--border2);color:#777;padding:5px 9px;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;transition:all 0.12s;line-height:1;}
+.toggle-btn:hover{border-color:#444;color:var(--text);}
+.toggle-btn.selected{background:rgba(57,255,133,0.1);border-color:var(--accent);color:var(--accent);font-weight:500;}
+.df-select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:11px;outline:none;margin-bottom:6px;}
+.df-btn{width:100%;background:var(--accent);border:none;color:#000;padding:8px;border-radius:4px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;margin-top:2px;}
+.match-result-item{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;background:var(--bg);border:1px solid var(--border);border-radius:3px;margin-top:5px;cursor:pointer;}
+.match-result-item:hover{border-color:var(--border2);}
+.score-pill{padding:2px 7px;border-radius:10px;font-size:9px;font-weight:600;background:rgba(74,173,138,0.15);color:var(--green);border:1px solid rgba(74,173,138,0.3);}
+.score-pill.partial{background:rgba(201,169,110,0.1);color:#c9a96e;border-color:rgba(201,169,110,0.25);}
+
+/* partner grid */
+.partners-content{padding:20px 24px;overflow-y:auto;}
+.content-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;}
+.search-wrap{position:relative;}
+.search-input{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:7px 10px 7px 30px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px;outline:none;width:200px;}
+.search-input:focus{border-color:var(--border2);}
+.search-input::placeholder{color:var(--muted);}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;}
+.view-toggle{display:flex;gap:3px;}
+.view-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 7px;border-radius:3px;cursor:pointer;font-size:12px;transition:all 0.15s;}
+.view-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--text);}
+.partner-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+.partner-grid.list-view{grid-template-columns:1fr;}
+
+/* partner card */
+.partner-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.partner-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-accent,var(--border));}
+.partner-card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px);}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px;}
+.partner-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
+.partner-org{font-size:10px;color:var(--muted);margin-top:2px;}
+.partner-status{flex-shrink:0;display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:9px;letter-spacing:0.5px;text-transform:uppercase;font-weight:500;}
+.partner-status.active{background:rgba(74,173,138,0.12);color:var(--green);border:1px solid rgba(74,173,138,0.25);}
+.partner-status.paused{background:rgba(57,255,133,0.08);color:var(--accent);border:1px solid rgba(57,255,133,0.2);}
+.partner-status.inactive{background:rgba(102,102,102,0.12);color:var(--muted);border:1px solid rgba(102,102,102,0.2);}
+.status-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.capital-types{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.type-tag{padding:2px 7px;border-radius:3px;font-size:9px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;border:1px solid transparent;}
+.type-debt{background:rgba(74,136,199,0.12);color:var(--blue);border-color:rgba(74,136,199,0.25);}
+.type-equity{background:rgba(138,106,199,0.12);color:var(--purple);border-color:rgba(138,106,199,0.25);}
+.type-hard-money{background:rgba(224,92,74,0.12);color:var(--red);border-color:rgba(224,92,74,0.25);}
+.type-mezz{background:rgba(212,131,74,0.12);color:var(--orange);border-color:rgba(212,131,74,0.25);}
+.type-bridge{background:rgba(74,181,160,0.12);color:var(--teal);border-color:rgba(74,181,160,0.25);}
+.type-preferred{background:rgba(57,255,133,0.08);color:var(--accent);border-color:rgba(57,255,133,0.2);}
+.type-lp{background:rgba(74,173,138,0.12);color:var(--green);border-color:rgba(74,173,138,0.25);}
+.type-private-credit{background:rgba(196,122,255,0.12);color:var(--pink);border-color:rgba(196,122,255,0.25);}
+.type-dscr{background:rgba(255,159,67,0.12);color:var(--amber);border-color:rgba(255,159,67,0.25);}
+.card-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;}
+.meta-item{display:flex;flex-direction:column;gap:1px;}
+.meta-label{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.meta-value{font-size:11px;color:var(--text);}
+.meta-value.highlight{color:var(--accent);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;}
+.asset-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px;}
+.asset-tag{background:var(--bg);border:1px solid var(--border);color:var(--muted);padding:2px 6px;border-radius:2px;font-size:9px;}
+.comp-bar{display:flex;align-items:flex-start;gap:6px;padding:6px 9px;background:rgba(255,159,67,0.05);border:1px solid rgba(255,159,67,0.15);border-radius:4px;margin-bottom:8px;}
+.comp-bar-icon{font-size:10px;flex-shrink:0;margin-top:1px;}
+.comp-types-text{font-size:10px;color:var(--amber);font-weight:500;}
+.comp-details-text{font-size:10px;color:var(--muted);margin-top:1px;}
+.reminder-bar{display:flex;align-items:center;gap:6px;padding:5px 9px;border-radius:4px;margin-bottom:8px;font-size:10px;}
+.reminder-bar.overdue{background:rgba(224,92,74,0.1);border:1px solid rgba(224,92,74,0.2);color:var(--red);}
+.reminder-bar.upcoming{background:rgba(240,192,64,0.08);border:1px solid rgba(240,192,64,0.2);color:var(--yellow);}
+.card-notes{font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:8px;line-height:1.6;font-style:italic;margin-bottom:8px;}
+.card-actions{display:flex;gap:5px;}
+.action-btn{flex:1;padding:6px 8px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.15s;}
+.action-btn:hover{border-color:var(--accent);color:var(--accent);}
+.action-btn.primary{background:rgba(57,255,133,0.08);border-color:rgba(57,255,133,0.25);color:var(--accent);}
+
+/* ── DEALS TAB ── */
+.deals-layout{padding:24px 28px;}
+.deals-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:16px;}
+.pipeline-stages{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:start;}
+.stage-col{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.stage-header{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.stage-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+.stage-count{font-size:10px;color:var(--muted);background:var(--bg);padding:1px 6px;border-radius:10px;}
+.stage-submitted .stage-title{color:var(--muted);}
+.stage-review .stage-title{color:var(--blue);}
+.stage-distributed .stage-title{color:var(--purple);}
+.stage-discussion .stage-title{color:var(--yellow);}
+.stage-funded .stage-title{color:var(--accent);}
+.stage-dead .stage-title{color:var(--red);}
+.stage-body{padding:10px;display:flex;flex-direction:column;gap:6px;min-height:80px;}
+.deal-card{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:10px 12px;cursor:pointer;transition:all 0.15s;position:relative;}
+.deal-card:hover{border-color:var(--border2);background:var(--surface2);}
+.deal-card-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.deal-card-meta{font-size:10px;color:var(--muted);line-height:1.5;}
+.deal-card-amount{font-size:11px;color:var(--accent);font-weight:600;margin-top:4px;}
+.deal-card-flags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;}
+.deal-flag{font-size:9px;padding:1px 5px;border-radius:2px;border:1px solid transparent;}
+.deal-flag.overdue{background:rgba(224,92,74,0.1);color:var(--red);border-color:rgba(224,92,74,0.2);}
+.deal-flag.hot{background:rgba(255,159,67,0.1);color:var(--amber);border-color:rgba(255,159,67,0.2);}
+.deal-flag.member{background:rgba(57,255,133,0.08);color:var(--accent);border-color:rgba(57,255,133,0.2);}
+.add-deal-card{border:1px dashed var(--border);border-radius:4px;padding:10px;text-align:center;font-size:10px;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.add-deal-card:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── GAPS TAB ── */
+.gaps-layout{padding:24px 28px;}
+.gaps-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+.gap-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px;}
+.gap-card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.coverage-table{width:100%;border-collapse:collapse;}
+.coverage-table th{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:left;padding:4px 8px;border-bottom:1px solid var(--border);}
+.coverage-table td{padding:6px 8px;border-bottom:1px solid var(--border);font-size:11px;}
+.coverage-table tr:last-child td{border-bottom:none;}
+.coverage-dot{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:9px;font-weight:700;}
+.coverage-dot.strong{background:rgba(57,255,133,0.15);color:var(--accent);border:1px solid rgba(57,255,133,0.3);}
+.coverage-dot.weak{background:rgba(240,192,64,0.1);color:var(--yellow);border:1px solid rgba(240,192,64,0.25);}
+.coverage-dot.none{background:rgba(224,92,74,0.1);color:var(--red);border:1px solid rgba(224,92,74,0.2);}
+.gap-insight{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-top:10px;font-size:11px;color:var(--muted);line-height:1.7;}
+.gap-insight strong{color:var(--text);}
+.partner-activity-list{display:flex;flex-direction:column;gap:6px;}
+.activity-rank-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;}
+.activity-rank-num{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--border2);width:24px;flex-shrink:0;}
+.activity-rank-name{font-size:12px;font-weight:500;color:var(--text);}
+.activity-rank-stat{margin-left:auto;font-size:10px;color:var(--muted);}
+.activity-rank-stat span{color:var(--accent);}
+
+/* ── MODALS ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:8px;width:90%;max-width:560px;max-height:88vh;overflow-y:auto;padding:24px;}
+.modal.wide{max-width:680px;}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.modal-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;}
+.modal-subtitle{font-size:11px;color:var(--muted);margin-top:3px;}
+.modal-close{background:transparent;border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.modal-close:hover{border-color:var(--border2);color:var(--text);}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:#999;margin-bottom:6px;font-weight:500;}
+.group-heading{display:block;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 11px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color 0.15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+.form-select option{background:var(--surface);}
+.form-textarea{resize:vertical;min-height:64px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.checkbox-group-wrap{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:11px;margin-bottom:4px;}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:6px;}
+.checkbox-option{position:relative;}
+.checkbox-option input{position:absolute;opacity:0;width:0;height:0;}
+.checkbox-option label{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid var(--border2);border-radius:5px;font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;color:#777;background:var(--bg);transition:all 0.15s;user-select:none;}
+.checkbox-option label::before{content:'';width:13px;height:13px;border:1px solid var(--border2);border-radius:3px;background:transparent;flex-shrink:0;transition:all 0.15s;display:inline-block;}
+.checkbox-option label:hover{border-color:#444;color:var(--text);}
+.checkbox-option input:checked+label{background:var(--surface2);border-color:var(--accent);color:var(--text);font-weight:500;}
+.checkbox-option input:checked+label::before{background:var(--accent);border-color:var(--accent);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4l3 3 5-6' stroke='%23000' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:9px 7px;background-repeat:no-repeat;background-position:center;}
+.checkbox-option input[type=radio]+label::before{border-radius:50%;}
+.checkbox-option input[type=radio]:checked+label::before{background:var(--accent);border-color:var(--accent);background-image:none;box-shadow:inset 0 0 0 3px var(--surface2);}
+.submit-btn{width:100%;background:var(--accent);border:none;color:#000;padding:11px;border-radius:4px;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;cursor:pointer;margin-top:6px;transition:background 0.15s;}
+.submit-btn:hover{background:var(--accent2);}
+
+/* activity log */
+.activity-log{display:flex;flex-direction:column;gap:2px;margin-top:4px;}
+.activity-entry{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.activity-entry:last-child{border-bottom:none;}
+.activity-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);flex-shrink:0;margin-top:5px;}
+.activity-dot.call{background:var(--blue);}
+.activity-dot.email{background:var(--purple);}
+.activity-dot.meeting{background:var(--accent);}
+.activity-dot.note{background:var(--muted);}
+.activity-dot.passed{background:var(--red);}
+.activity-dot.funded{background:var(--green);}
+.activity-meta{font-size:10px;color:var(--muted);margin-top:1px;}
+.activity-text{font-size:11px;color:var(--text);line-height:1.5;}
+.activity-empty{font-size:11px;color:var(--muted);text-align:center;padding:16px;font-style:italic;}
+
+/* detail panel */
+.detail-overlay{display:none;position:fixed;inset:0;z-index:150;}
+.detail-overlay.open{display:block;}
+.detail-panel{position:fixed;top:0;right:0;bottom:0;width:440px;background:var(--surface);border-left:1px solid var(--border2);overflow-y:auto;z-index:155;transform:translateX(100%);transition:transform 0.25s ease;}
+.detail-panel.open{transform:translateX(0);}
+.detail-panel-inner{padding:24px 20px;}
+.detail-section{margin-bottom:16px;}
+.detail-section-title{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;font-weight:500;}
+.detail-panel-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;}
+
+/* step indicator */
+.step-indicator{display:flex;align-items:center;gap:0;margin-bottom:20px;}
+.step-ind{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;border:2px solid var(--border2);color:var(--muted);background:var(--bg);transition:all 0.2s;}
+.step-ind.active .step-num{border-color:var(--accent);color:#000;background:var(--accent);}
+.step-ind.done .step-num{border-color:var(--accent);color:var(--accent);background:transparent;}
+.step-label{font-size:9px;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);white-space:nowrap;}
+.step-ind.active .step-label{color:var(--accent);}
+.step-line{flex:1;height:1px;background:var(--border2);margin:0 6px;margin-bottom:14px;}
+
+/* send deal */
+.email-block{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:12px;}
+.email-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.email-partner-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;}
+
+/* match deal */
+.md-partner-card{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:5px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.md-partner-card:hover{border-color:var(--border2);}
+.md-partner-card.selected{border-color:var(--accent);background:rgba(57,255,133,0.03);}
+.md-checkbox{width:16px;height:16px;border:2px solid var(--border2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all 0.15s;}
+.md-partner-card.selected .md-checkbox{background:var(--accent);border-color:var(--accent);color:#000;}
+
+/* alerts panel */
+.alerts-panel{position:fixed;top:57px;right:0;width:320px;background:var(--surface);border-left:1px solid var(--border2);border-bottom:1px solid var(--border2);border-radius:0 0 0 8px;z-index:100;display:none;max-height:70vh;overflow-y:auto;}
+.alerts-panel.open{display:block;}
+.alerts-header{padding:12px 16px;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
+.alert-item{padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;}
+.alert-item:hover{background:var(--surface2);}
+.alert-item:last-child{border-bottom:none;}
+.alert-item-title{font-size:11px;color:var(--text);font-weight:500;}
+.alert-item-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.alert-item.overdue .alert-item-title{color:var(--red);}
+.alerts-empty{padding:20px;text-align:center;font-size:11px;color:var(--muted);}
+
+/* pdf dropzone */
+.pdf-dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--border2);border-radius:8px;padding:32px 20px;cursor:pointer;transition:all 0.2s;background:var(--bg);}
+.pdf-dropzone:hover{border-color:var(--accent);}
+
+/* misc */
+.empty-state{text-align:center;padding:50px 20px;color:var(--muted);}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 16px;}
+.stat-num{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent);line-height:1;}
+.stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-top:4px;}
+.copy-confirm{display:none;text-align:center;font-size:10px;color:var(--accent);margin-top:5px;}
+
+/* ── BOTTOM NAV (mobile only) ── */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border2);z-index:80;padding:8px 0 env(safe-area-inset-bottom,8px);}
+.mobile-nav-inner{display:flex;align-items:center;justify-content:space-around;}
+.mobile-nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;background:transparent;border:none;color:var(--muted);cursor:pointer;font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.5px;transition:color 0.15s;position:relative;min-width:60px;}
+.mobile-nav-btn.active{color:var(--accent);}
+.mobile-nav-btn .nav-icon{font-size:20px;line-height:1;}
+.mobile-nav-badge{position:absolute;top:4px;right:10px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:1px 4px;border-radius:8px;min-width:14px;text-align:center;display:none;}
+.mobile-nav-badge.show{display:block;}
+
+/* ── MOBILE FAB ── */
+.mobile-fab{display:none;position:fixed;bottom:76px;right:16px;z-index:79;background:var(--accent);border:none;color:#000;width:52px;height:52px;border-radius:50%;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(57,255,133,0.35);align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;transition:transform 0.15s;}
+.mobile-fab:active{transform:scale(0.94);}
+
+/* ── MOBILE SIDEBAR DRAWER ── */
+.sidebar-drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:120;backdrop-filter:blur(2px);}
+.sidebar-drawer-overlay.open{display:block;}
+.sidebar-drawer{position:fixed;left:0;top:0;bottom:0;width:88vw;max-width:320px;background:var(--surface);z-index:125;transform:translateX(-100%);transition:transform 0.25s ease;overflow-y:auto;padding:20px 16px;padding-bottom:env(safe-area-inset-bottom,20px);}
+.sidebar-drawer.open{transform:translateX(0);}
+.sidebar-drawer-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+
+@media(max-width:768px){
+  /* header collapses to logo + bell only */
+  .app-header{padding:12px 16px;}
+  .header-center{display:none;}
+  .hdr-btn{display:none;}
+  .alert-bell{font-size:20px;}
+
+  /* show mobile nav + fab */
+  .mobile-nav{display:block;}
+  .mobile-fab{display:flex;}
+
+  /* partners layout: no sidebar, full width */
+  .partners-layout{grid-template-columns:1fr;min-height:unset;}
+  .sidebar{display:none;}
+  .partners-content{padding:14px 14px 90px;}
+  .content-toolbar{flex-wrap:wrap;gap:8px;}
+  .search-input{width:160px;}
+  .partner-grid{grid-template-columns:1fr;}
+
+  /* deals */
+  .deals-layout{padding:14px 14px 90px;}
+  .deals-toolbar{flex-wrap:wrap;gap:8px;}
+  .deals-toolbar input{width:100%;}
+  .stat-row{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+  /* pipeline scrolls horizontally */
+  .pipeline-stages{display:flex;overflow-x:auto;gap:10px;padding-bottom:10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+  .stage-col{min-width:200px;flex-shrink:0;scroll-snap-align:start;}
+
+  /* gaps */
+  .gaps-layout{padding:14px 14px 90px;}
+  .gaps-grid{grid-template-columns:1fr;gap:14px;}
+  .coverage-table{font-size:9px;}
+  .coverage-table th,.coverage-table td{padding:4px 4px;}
+  .coverage-dot{width:18px;height:18px;font-size:8px;}
+
+  /* modals full-screen-ish */
+  .modal{width:100%;max-width:100%;max-height:92vh;border-radius:16px 16px 0 0;margin-top:auto;padding:20px 16px;}
+  .modal-overlay{align-items:flex-end;}
+  .modal.wide{max-width:100%;}
+
+  /* detail panel full width */
+  .detail-panel{width:100%;border-left:none;border-top:1px solid var(--border2);}
+
+  /* alerts panel full width */
+  .alerts-panel{width:100%;border-left:none;border-radius:0 0 8px 8px;}
+
+  /* form rows stack */
+  .form-row{grid-template-columns:1fr;}
+
+  /* checkbox groups easier to tap */
+  .checkbox-option label{padding:8px 13px;font-size:12px;}
+  .toggle-btn{padding:7px 10px;font-size:11px;}
+
+  /* pdf dropzone smaller */
+  .pdf-dropzone{padding:22px 16px;}
+
+  /* match deal step indicator compact */
+  .step-label{display:none;}
+  .step-line{margin:0 4px;margin-bottom:0;}
+}
+/* ── LOGIN SCREEN ── */
+.login-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{width:100%;max-width:380px;}
+.login-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.login-logo span{color:var(--accent);}
+.login-sub{font-size:11px;color:var(--muted);margin-bottom:36px;letter-spacing:0.3px;}
+.login-label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;font-weight:500;}
+.login-input{width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:12px 14px;border-radius:6px;font-family:'DM Mono',monospace;font-size:13px;outline:none;margin-bottom:14px;transition:border-color 0.15s;}
+.login-input:focus{border-color:var(--accent);}
+.login-btn{width:100%;background:var(--accent);border:none;color:#000;padding:13px;border-radius:6px;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;cursor:pointer;margin-top:4px;transition:background 0.15s;letter-spacing:0.2px;}
+.login-btn:hover{background:var(--accent2);}
+.login-error{color:var(--red);font-size:11px;margin-top:10px;display:none;text-align:center;}
+.login-footer{font-size:10px;color:var(--muted);margin-top:28px;text-align:center;line-height:1.6;}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;transition:all 0.15s;}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+.user-pill{display:flex;align-items:center;gap:8px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;font-size:10px;color:var(--muted);}
+.user-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Align<span>.</span>CRM</div>
+    <div class="login-sub">Capital Partner Network &mdash; Private Access</div>
+    <label class="login-label">Username</label>
+    <input type="text" class="login-input" id="loginUser" placeholder="username" autocomplete="username" autocapitalize="none" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+    <label class="login-label">Password</label>
+    <input type="password" class="login-input" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')attemptLogin()">
+    <button class="login-btn" onclick="attemptLogin()">Sign In</button>
+    <div class="login-error" id="loginError">Invalid username or password.</div>
+    <div class="login-footer">Private access only. Do not share credentials.</div>
+  </div>
+</div>
+
+<!-- ── APP (hidden until logged in) ── -->
+<div id="appRoot" style="display:none;">
+
+<!-- ── APP HEADER ── -->
+<header class="app-header">
+  <div class="app-logo">Align<span>.</span>CRM</div>
+  <div class="header-center">
+    <button class="tab-btn active" onclick="switchTab('partners',this)" id="tab-partners">
+      👥 Partners
+      <span class="tab-badge green" id="badge-partners">0</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('deals',this)" id="tab-deals">
+      📋 Deals
+      <span class="tab-badge" id="badge-deals" style="display:none;"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('gaps',this)" id="tab-gaps">
+      🗺 Network Gaps
+    </button>
+  </div>
+  <div class="header-right">
+    <div class="user-pill" id="userPill" style="display:none;">
+      <span class="user-pill-dot"></span>
+      <span id="userPillName"></span>
+    </div>
+    <button class="hdr-btn" onclick="openMatchDealModal()">⚡ Match a Deal</button>
+    <button class="hdr-btn secondary" onclick="openAddPartnerModal()">+ Partner</button>
+    <button class="logout-btn" onclick="doLogout()" title="Sign out">Sign Out</button>
+    <button class="alert-bell" onclick="toggleAlertsPanel()" id="bellBtn" title="Reminders">
+      🔔
+      <span class="bell-badge" id="bellBadge"></span>
+    </button>
+  </div>
+</header>
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-btn active" id="mnav-partners" onclick="switchTab('partners',document.getElementById('tab-partners'));setMobileNav('partners')">
+      <span class="nav-icon">👥</span>Partners
+      <span class="mobile-nav-badge green" id="mnav-badge-partners"></span>
+    </button>
+    <button class="mobile-nav-btn" id="mnav-deals" onclick="switchTab('deals',document.getElementById('tab-deals'));setMobileNav('deals')">
+      <span class="nav-icon">📋</span>Deals
+      <span class="mobile-nav-badge" id="mnav-badge-deals"></span>
+    </button>
+    <button class="mobile-nav-btn" id="mnav-gaps" onclick="switchTab('gaps',document.getElementById('tab-gaps'));setMobileNav('gaps')">
+      <span class="nav-icon">🗺</span>Gaps
+    </button>
+    <button class="mobile-nav-btn" id="mnav-filter" onclick="openSidebarDrawer()">
+      <span class="nav-icon">⚙</span>Filter
+    </button>
+    <button class="mobile-nav-btn" id="mnav-bell" onclick="toggleAlertsPanel()">
+      <span class="nav-icon">🔔</span>Alerts
+      <span class="mobile-nav-badge" id="mnav-badge-bell"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── MOBILE FAB ── -->
+<button class="mobile-fab" onclick="openMatchDealModal()" title="Match a Deal">⚡</button>
+
+<!-- ── SIDEBAR DRAWER (mobile) ── -->
+<div class="sidebar-drawer-overlay" id="sidebarDrawerOverlay" onclick="closeSidebarDrawer()"></div>
+<div class="sidebar-drawer" id="sidebarDrawer">
+  <div class="sidebar-drawer-header">
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;">Filters & Match</div>
+    <button class="modal-close" onclick="closeSidebarDrawer()">✕</button>
+  </div>
+
+  <!-- Quick Match -->
+  <div style="margin-bottom:22px;">
+    <div class="sidebar-section-title">Quick Match</div>
+    <div class="deal-finder-box">
+      <div class="df-title">Capital Type</div>
+      <div class="multi-toggle" id="dfCapTypeMobile" style="margin-bottom:10px;">
+        <button class="toggle-btn" data-value="debt" onclick="toggleDFMobile(this,'dfCapTypeMobile')">Debt</button>
+        <button class="toggle-btn" data-value="equity" onclick="toggleDFMobile(this,'dfCapTypeMobile')">Equity</button>
+        <button class="toggle-btn" data-value="hard-money" onclick="toggleDFMobile(this,'dfCapTypeMobile')">Hard $</button>
+        <button class="toggle-btn" data-value="mezz" onclick="toggleDFMobile(this,'dfCapTypeMobile')">Mezz</button>
+        <button class="toggle-btn" data-value="bridge" onclick="toggleDFMobile(this,'dfCapTypeMobile')">Bridge</button>
+        <button class="toggle-btn" data-value="preferred" onclick="toggleDFMobile(this,'dfCapTypeMobile')">Pref</button>
+        <button class="toggle-btn" data-value="dscr" onclick="toggleDFMobile(this,'dfCapTypeMobile')">DSCR</button>
+        <button class="toggle-btn" data-value="private-credit" onclick="toggleDFMobile(this,'dfCapTypeMobile')">Priv Cr</button>
+        <button class="toggle-btn" data-value="lp" onclick="toggleDFMobile(this,'dfCapTypeMobile')">LP/FO</button>
+      </div>
+      <div class="df-title" style="margin-top:6px;">Asset Type</div>
+      <div class="multi-toggle" id="dfAssetTypeMobile" style="margin-bottom:10px;">
+        <button class="toggle-btn" data-value="Multifamily" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">MF</button>
+        <button class="toggle-btn" data-value="Industrial" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">Ind</button>
+        <button class="toggle-btn" data-value="Retail" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">Retail</button>
+        <button class="toggle-btn" data-value="Office" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">Office</button>
+        <button class="toggle-btn" data-value="Mixed Use" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">Mix</button>
+        <button class="toggle-btn" data-value="Self Storage" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">SS</button>
+        <button class="toggle-btn" data-value="SFR" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">SFR</button>
+        <button class="toggle-btn" data-value="Business" onclick="toggleDFMobile(this,'dfAssetTypeMobile')">Biz</button>
+      </div>
+      <select class="df-select" id="dfGeoMobile">
+        <option value="">Any Geography</option>
+        <option>Florida</option><option>Texas</option><option>Southeast</option>
+        <option>Southwest</option><option>Northeast</option><option>Midwest</option><option>National</option>
+      </select>
+      <button class="df-btn" onclick="runQuickMatchMobile()">Find Matches</button>
+      <div id="dfResultsMobile"></div>
+    </div>
+  </div>
+
+  <!-- Capital Type Filter -->
+  <div style="margin-bottom:22px;">
+    <div class="sidebar-section-title">Capital Type</div>
+    <div class="filter-group">
+      <button class="filter-btn active" data-mtype="all" onclick="filterTypeMobile('all',this)">All Partners <span class="f-count" id="mfc-all"></span></button>
+      <button class="filter-btn" data-mtype="debt" onclick="filterTypeMobile('debt',this)"><span class="tag-dot" style="background:var(--blue)"></span>Debt <span class="f-count" id="mfc-debt"></span></button>
+      <button class="filter-btn" data-mtype="equity" onclick="filterTypeMobile('equity',this)"><span class="tag-dot" style="background:var(--purple)"></span>Equity <span class="f-count" id="mfc-equity"></span></button>
+      <button class="filter-btn" data-mtype="hard-money" onclick="filterTypeMobile('hard-money',this)"><span class="tag-dot" style="background:var(--red)"></span>Hard Money <span class="f-count" id="mfc-hard-money"></span></button>
+      <button class="filter-btn" data-mtype="mezz" onclick="filterTypeMobile('mezz',this)"><span class="tag-dot" style="background:var(--orange)"></span>Mezz <span class="f-count" id="mfc-mezz"></span></button>
+      <button class="filter-btn" data-mtype="bridge" onclick="filterTypeMobile('bridge',this)"><span class="tag-dot" style="background:var(--teal)"></span>Bridge <span class="f-count" id="mfc-bridge"></span></button>
+      <button class="filter-btn" data-mtype="preferred" onclick="filterTypeMobile('preferred',this)"><span class="tag-dot" style="background:var(--accent)"></span>Preferred <span class="f-count" id="mfc-preferred"></span></button>
+      <button class="filter-btn" data-mtype="dscr" onclick="filterTypeMobile('dscr',this)"><span class="tag-dot" style="background:var(--amber)"></span>DSCR <span class="f-count" id="mfc-dscr"></span></button>
+      <button class="filter-btn" data-mtype="lp" onclick="filterTypeMobile('lp',this)"><span class="tag-dot" style="background:var(--green)"></span>LP / FO <span class="f-count" id="mfc-lp"></span></button>
+    </div>
+  </div>
+
+  <!-- Status Filter -->
+  <div style="margin-bottom:22px;">
+    <div class="sidebar-section-title">Status</div>
+    <div class="filter-group">
+      <button class="filter-btn active" data-mstatus="all" onclick="filterStatusMobile('all',this)">All</button>
+      <button class="filter-btn" data-mstatus="active" onclick="filterStatusMobile('active',this)">Active</button>
+      <button class="filter-btn" data-mstatus="paused" onclick="filterStatusMobile('paused',this)">Paused</button>
+      <button class="filter-btn" data-mstatus="inactive" onclick="filterStatusMobile('inactive',this)">Inactive</button>
+    </div>
+  </div>
+
+  <button class="submit-btn" onclick="openAddPartnerModal();closeSidebarDrawer()">+ Add Partner</button>
+</div>
+
+
+<div class="alerts-panel" id="alertsPanel">
+  <div class="alerts-header">Reminders & Follow-ups</div>
+  <div id="alertsList"><div class="alerts-empty">No reminders set.</div></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TAB: PARTNERS
+════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-content-partners">
+  <div class="partners-layout">
+    <aside class="sidebar">
+      <!-- Deal Finder -->
+      <div>
+        <div class="sidebar-section-title">Quick Match</div>
+        <div class="deal-finder-box">
+          <div class="df-title">Drop deal details, get matches</div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Capital Type</div>
+            <div class="multi-toggle" id="dfCapType">
+              <button class="toggle-btn" data-value="debt" onclick="toggleDF(this,'dfCapType')">Debt</button>
+              <button class="toggle-btn" data-value="equity" onclick="toggleDF(this,'dfCapType')">Equity</button>
+              <button class="toggle-btn" data-value="hard-money" onclick="toggleDF(this,'dfCapType')">Hard $</button>
+              <button class="toggle-btn" data-value="mezz" onclick="toggleDF(this,'dfCapType')">Mezz</button>
+              <button class="toggle-btn" data-value="bridge" onclick="toggleDF(this,'dfCapType')">Bridge</button>
+              <button class="toggle-btn" data-value="preferred" onclick="toggleDF(this,'dfCapType')">Pref</button>
+              <button class="toggle-btn" data-value="dscr" onclick="toggleDF(this,'dfCapType')">DSCR</button>
+              <button class="toggle-btn" data-value="private-credit" onclick="toggleDF(this,'dfCapType')">Priv Cr</button>
+              <button class="toggle-btn" data-value="lp" onclick="toggleDF(this,'dfCapType')">LP/FO</button>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Asset Type</div>
+            <div class="multi-toggle" id="dfAssetType">
+              <button class="toggle-btn" data-value="Multifamily" onclick="toggleDF(this,'dfAssetType')">MF</button>
+              <button class="toggle-btn" data-value="Industrial" onclick="toggleDF(this,'dfAssetType')">Ind</button>
+              <button class="toggle-btn" data-value="Retail" onclick="toggleDF(this,'dfAssetType')">Retail</button>
+              <button class="toggle-btn" data-value="Office" onclick="toggleDF(this,'dfAssetType')">Office</button>
+              <button class="toggle-btn" data-value="Mixed Use" onclick="toggleDF(this,'dfAssetType')">Mix</button>
+              <button class="toggle-btn" data-value="Self Storage" onclick="toggleDF(this,'dfAssetType')">SS</button>
+              <button class="toggle-btn" data-value="Hotel" onclick="toggleDF(this,'dfAssetType')">Hotel</button>
+              <button class="toggle-btn" data-value="Land" onclick="toggleDF(this,'dfAssetType')">Land</button>
+              <button class="toggle-btn" data-value="NNN" onclick="toggleDF(this,'dfAssetType')">NNN</button>
+              <button class="toggle-btn" data-value="SFR" onclick="toggleDF(this,'dfAssetType')">SFR</button>
+              <button class="toggle-btn" data-value="Business" onclick="toggleDF(this,'dfAssetType')">Biz</button>
+            </div>
+          </div>
+          <select class="df-select" id="dfGeo">
+            <option value="">Any Geography</option>
+            <option>Florida</option><option>Texas</option><option>Southeast</option>
+            <option>Southwest</option><option>Northeast</option><option>Midwest</option><option>National</option>
+          </select>
+          <button class="df-btn" onclick="runQuickMatch()">Find Matches</button>
+          <div id="dfResults"></div>
+        </div>
+      </div>
+
+      <!-- Filter by Type -->
+      <div>
+        <div class="sidebar-section-title">Capital Type</div>
+        <div class="filter-group">
+          <button class="filter-btn active" data-type="all" onclick="filterType('all',this)"><span>All Partners</span><span class="f-count" id="fc-all"></span></button>
+          <button class="filter-btn" data-type="debt" onclick="filterType('debt',this)"><span class="tag-dot" style="background:var(--blue)"></span><span>Debt</span><span class="f-count" id="fc-debt"></span></button>
+          <button class="filter-btn" data-type="equity" onclick="filterType('equity',this)"><span class="tag-dot" style="background:var(--purple)"></span><span>Equity</span><span class="f-count" id="fc-equity"></span></button>
+          <button class="filter-btn" data-type="hard-money" onclick="filterType('hard-money',this)"><span class="tag-dot" style="background:var(--red)"></span><span>Hard Money</span><span class="f-count" id="fc-hard-money"></span></button>
+          <button class="filter-btn" data-type="mezz" onclick="filterType('mezz',this)"><span class="tag-dot" style="background:var(--orange)"></span><span>Mezz</span><span class="f-count" id="fc-mezz"></span></button>
+          <button class="filter-btn" data-type="bridge" onclick="filterType('bridge',this)"><span class="tag-dot" style="background:var(--teal)"></span><span>Bridge</span><span class="f-count" id="fc-bridge"></span></button>
+          <button class="filter-btn" data-type="preferred" onclick="filterType('preferred',this)"><span class="tag-dot" style="background:var(--accent)"></span><span>Preferred</span><span class="f-count" id="fc-preferred"></span></button>
+          <button class="filter-btn" data-type="dscr" onclick="filterType('dscr',this)"><span class="tag-dot" style="background:var(--amber)"></span><span>DSCR</span><span class="f-count" id="fc-dscr"></span></button>
+          <button class="filter-btn" data-type="private-credit" onclick="filterType('private-credit',this)"><span class="tag-dot" style="background:var(--pink)"></span><span>Private Credit</span><span class="f-count" id="fc-private-credit"></span></button>
+          <button class="filter-btn" data-type="lp" onclick="filterType('lp',this)"><span class="tag-dot" style="background:var(--green)"></span><span>LP / Family Office</span><span class="f-count" id="fc-lp"></span></button>
+        </div>
+      </div>
+
+      <!-- Filter by Status -->
+      <div>
+        <div class="sidebar-section-title">Status</div>
+        <div class="filter-group">
+          <button class="filter-btn active" data-status="all" onclick="filterStatus('all',this)">All</button>
+          <button class="filter-btn" data-status="active" onclick="filterStatus('active',this)">Active</button>
+          <button class="filter-btn" data-status="paused" onclick="filterStatus('paused',this)">Paused</button>
+          <button class="filter-btn" data-status="inactive" onclick="filterStatus('inactive',this)">Inactive</button>
+        </div>
+      </div>
+
+      <button class="add-partner-btn" onclick="openAddPartnerModal()">+ Add Partner</button>
+    </aside>
+
+    <main class="partners-content">
+      <div class="content-toolbar">
+        <div style="font-size:11px;color:var(--muted);">Showing <span id="visibleCount" style="color:var(--text);">0</span> partners</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input type="text" class="search-input" placeholder="Search..." oninput="searchPartners(this.value)">
+          </div>
+          <div class="view-toggle">
+            <button class="view-btn active" onclick="setView('grid',this)" title="Grid">⊞</button>
+            <button class="view-btn" onclick="setView('list',this)" title="List">≡</button>
+          </div>
+        </div>
+      </div>
+      <div class="partner-grid" id="partnerGrid"></div>
+    </main>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TAB: DEALS
+════════════════════════════════════════ -->
+<div class="tab-content" id="tab-content-deals">
+  <div class="deals-layout">
+    <div class="stat-row" id="dealStats"></div>
+    <div class="deals-toolbar">
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;">Deal Pipeline</div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" class="form-input" style="width:200px;" placeholder="Search deals..." oninput="renderDeals(this.value)">
+        <button class="hdr-btn" onclick="openAddDealModal()">+ Add Deal</button>
+      </div>
+    </div>
+    <div class="pipeline-stages" id="pipelineStages"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TAB: GAPS
+════════════════════════════════════════ -->
+<div class="tab-content" id="tab-content-gaps">
+  <div class="gaps-layout">
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;">Network Coverage Map</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:20px;">Where your network is strong, where it's thin, where you have nothing.</div>
+    <div class="gaps-grid" id="gapsContent"></div>
+  </div>
+</div>
+
+<!-- ════════════════ MODALS ════════════════ -->
+
+<!-- ADD/EDIT PARTNER -->
+<div class="modal-overlay" id="partnerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="partnerModalTitle">Add Capital Partner</div></div>
+      <button class="modal-close" onclick="closeModal('partnerModal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-input" id="fName"></div>
+      <div class="form-group"><label class="form-label">Organization</label><input type="text" class="form-input" id="fOrg"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Phone</label><input type="text" class="form-input" id="fPhone"></div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="fEmail"></div>
+    </div>
+    <div class="form-group">
+      <label class="group-heading">Capital Types *</label>
+      <div class="checkbox-group-wrap"><div class="checkbox-group">
+        <div class="checkbox-option"><input type="checkbox" id="ct-debt" value="debt"><label for="ct-debt">Debt</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-equity" value="equity"><label for="ct-equity">Equity</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-hard-money" value="hard-money"><label for="ct-hard-money">Hard Money</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-mezz" value="mezz"><label for="ct-mezz">Mezz</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-bridge" value="bridge"><label for="ct-bridge">Bridge</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-preferred" value="preferred"><label for="ct-preferred">Preferred</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-dscr" value="dscr"><label for="ct-dscr">DSCR</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-private-credit" value="private-credit"><label for="ct-private-credit">Private Credit</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="ct-lp" value="lp"><label for="ct-lp">LP / Family Office</label></div>
+      </div></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Min Check</label><input type="text" class="form-input" id="fMinCheck" placeholder="$250,000"></div>
+      <div class="form-group"><label class="form-label">Max Check</label><input type="text" class="form-input" id="fMaxCheck" placeholder="$5,000,000"></div>
+    </div>
+    <div class="form-group">
+      <label class="group-heading">Asset Types</label>
+      <div class="checkbox-group-wrap"><div class="checkbox-group">
+        <div class="checkbox-option"><input type="checkbox" id="at-mf" value="Multifamily"><label for="at-mf">Multifamily</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-ind" value="Industrial"><label for="at-ind">Industrial</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-ret" value="Retail"><label for="at-ret">Retail</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-off" value="Office"><label for="at-off">Office</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-mix" value="Mixed Use"><label for="at-mix">Mixed Use</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-ss" value="Self Storage"><label for="at-ss">Self Storage</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-hot" value="Hotel"><label for="at-hot">Hotel</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-land" value="Land"><label for="at-land">Land</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-nnn" value="NNN"><label for="at-nnn">NNN</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-sfr" value="SFR"><label for="at-sfr">SFR</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="at-biz" value="Business"><label for="at-biz">Business (non-RE)</label></div>
+      </div></div>
+    </div>
+    <div class="form-group">
+      <label class="group-heading">Geography</label>
+      <div class="checkbox-group-wrap"><div class="checkbox-group">
+        <div class="checkbox-option"><input type="checkbox" id="geo-nat" value="National"><label for="geo-nat">National</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="geo-fl" value="Florida"><label for="geo-fl">Florida</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="geo-tx" value="Texas"><label for="geo-tx">Texas</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="geo-se" value="Southeast"><label for="geo-se">Southeast</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="geo-sw" value="Southwest"><label for="geo-sw">Southwest</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="geo-ne" value="Northeast"><label for="geo-ne">Northeast</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="geo-mw" value="Midwest"><label for="geo-mw">Midwest</label></div>
+      </div></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Max LTV</label><input type="text" class="form-input" id="fLtv" placeholder="75%"></div>
+      <div class="form-group"><label class="form-label">Target Return</label><input type="text" class="form-input" id="fReturn" placeholder="12% / 18% IRR"></div>
+    </div>
+    <div class="form-group">
+      <label class="group-heading">How They Get Paid</label>
+      <div class="checkbox-group-wrap" style="margin-bottom:8px;"><div class="checkbox-group">
+        <div class="checkbox-option"><input type="checkbox" id="comp-success" value="Success Fee"><label for="comp-success">Success Fee</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="comp-points" value="Origination Points"><label for="comp-points">Origination Points</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="comp-interest" value="Interest Rate"><label for="comp-interest">Interest Rate</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="comp-equity" value="Equity Participation"><label for="comp-equity">Equity Participation</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="comp-pref" value="Preferred Return"><label for="comp-pref">Preferred Return</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="comp-carry" value="Carried Interest"><label for="comp-carry">Carried Interest</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="comp-mgmt" value="Management Fee"><label for="comp-mgmt">Management Fee</label></div>
+        <div class="checkbox-option"><input type="checkbox" id="comp-referral" value="Referral Fee"><label for="comp-referral">Referral Fee</label></div>
+      </div></div>
+      <input type="text" class="form-input" id="fCompDetails" placeholder="e.g. 2% success fee at close, 2 pts + 10.5% interest...">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-select" id="fStatus">
+          <option value="active">Active</option><option value="paused">Paused</option><option value="inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">How We Know Them</label><input type="text" class="form-input" id="fRelationship" placeholder="Referral from Alex, met at conference..."></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes & Preferences</label><textarea class="form-textarea" id="fNotes" placeholder="What they love, what they hate, how to contact them..."></textarea></div>
+    <button class="submit-btn" onclick="savePartner()" id="partnerSubmitBtn">Add Partner</button>
+  </div>
+</div>
+
+<!-- ADD/EDIT DEAL -->
+<div class="modal-overlay" id="dealModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="dealModalTitle">Add Deal</div></div>
+      <button class="modal-close" onclick="closeModal('dealModal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Deal Name *</label><input type="text" class="form-input" id="dName"></div>
+      <div class="form-group"><label class="form-label">Sponsor / Submitter</label><input type="text" class="form-input" id="dSponsor"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Location</label><input type="text" class="form-input" id="dLocation"></div>
+      <div class="form-group"><label class="form-label">Asset Type</label><input type="text" class="form-input" id="dAssetType" placeholder="Multifamily, Industrial..."></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Capital Needed</label><input type="text" class="form-input" id="dCapital" placeholder="$2,500,000"></div>
+      <div class="form-group"><label class="form-label">Structure</label>
+        <select class="form-select" id="dStructure">
+          <option value="">Select...</option>
+          <option>Senior Debt</option><option>Bridge Loan</option><option>Hard Money</option>
+          <option>DSCR</option><option>Mezzanine</option><option>Preferred Equity</option>
+          <option>Private Credit</option><option>LP Equity</option><option>GP Co-Invest</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Projected Return</label><input type="text" class="form-input" id="dReturn" placeholder="14% CoC, 22% IRR"></div>
+      <div class="form-group"><label class="form-label">Timeline / Term</label><input type="text" class="form-input" id="dTimeline" placeholder="5 years, 18 months"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Stage</label>
+        <select class="form-select" id="dStage">
+          <option value="submitted">Submitted</option><option value="review">In Review</option>
+          <option value="distributed">Distributed</option><option value="discussion">In Discussion</option>
+          <option value="funded">Funded</option><option value="dead">Dead</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">GHL Reference Link</label><input type="text" class="form-input" id="dGhlLink" placeholder="https://..."></div>
+    </div>
+    <div class="form-group"><label class="form-label">Data Room Link</label><input type="text" class="form-input" id="dDataRoom" placeholder="https://..."></div>
+    <div class="form-group"><label class="form-label">TWC / Capital Unlocked Member?</label>
+      <select class="form-select" id="dMember"><option value="">Unknown</option><option value="yes">Yes</option><option value="no">No</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="dNotes"></textarea></div>
+    <button class="submit-btn" onclick="saveDeal()" id="dealSubmitBtn">Add Deal</button>
+  </div>
+</div>
+
+<!-- ADD ACTIVITY LOG ENTRY -->
+<div class="modal-overlay" id="activityModal">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-header">
+      <div><div class="modal-title">Log Activity</div><div class="modal-subtitle" id="activityModalSub"></div></div>
+      <button class="modal-close" onclick="closeModal('activityModal')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Type</label>
+      <div class="checkbox-group" style="gap:6px;">
+        <div class="checkbox-option"><input type="radio" name="actType" id="act-call" value="call" checked><label for="act-call">📞 Call</label></div>
+        <div class="checkbox-option"><input type="radio" name="actType" id="act-email" value="email"><label for="act-email">✉ Email</label></div>
+        <div class="checkbox-option"><input type="radio" name="actType" id="act-meeting" value="meeting"><label for="act-meeting">🤝 Meeting</label></div>
+        <div class="checkbox-option"><input type="radio" name="actType" id="act-passed" value="passed"><label for="act-passed">❌ Passed</label></div>
+        <div class="checkbox-option"><input type="radio" name="actType" id="act-funded" value="funded"><label for="act-funded">✅ Funded</label></div>
+        <div class="checkbox-option"><input type="radio" name="actType" id="act-note" value="note"><label for="act-note">📝 Note</label></div>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="actNotes" placeholder="What happened, what was said, next step..."></textarea></div>
+    <div class="form-group"><label class="form-label">Set Follow-up Reminder</label>
+      <input type="date" class="form-input" id="actReminder">
+    </div>
+    <button class="submit-btn" onclick="saveActivity()">Save</button>
+  </div>
+</div>
+
+<!-- SEND DEAL MODAL -->
+<div class="modal-overlay" id="sendDealModal">
+  <div class="modal wide">
+    <div class="modal-header">
+      <div><div class="modal-title">Send Deal</div><div class="modal-subtitle" id="sendDealSub"></div></div>
+      <button class="modal-close" onclick="closeModal('sendDealModal')">✕</button>
+    </div>
+    <div id="sendStep1">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:14px;">Deal Details</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Deal Name</label><input type="text" class="form-input" id="sdName"></div>
+        <div class="form-group"><label class="form-label">Location</label><input type="text" class="form-input" id="sdLocation"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Capital Needed</label><input type="text" class="form-input" id="sdAmount"></div>
+        <div class="form-group"><label class="form-label">Capital Type</label>
+          <select class="form-select" id="sdCapType">
+            <option value="">Select...</option>
+            <option>Senior Debt</option><option>Bridge Loan</option><option>Hard Money</option>
+            <option>DSCR</option><option>Mezzanine</option><option>Preferred Equity</option>
+            <option>Private Credit</option><option>LP Equity</option><option>GP Co-Invest</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Projected Return</label><input type="text" class="form-input" id="sdReturn"></div>
+        <div class="form-group"><label class="form-label">Hold / Term</label><input type="text" class="form-input" id="sdTerm"></div>
+      </div>
+      <div class="form-group"><label class="form-label">One-Line Summary</label><input type="text" class="form-input" id="sdSummary"></div>
+      <div class="form-group"><label class="form-label">Key Strengths</label><textarea class="form-textarea" id="sdStrengths"></textarea></div>
+      <div class="form-group"><label class="form-label">Tone</label>
+        <div class="checkbox-group" style="gap:6px;">
+          <div class="checkbox-option"><input type="radio" name="sdTone" id="tone-direct" value="direct" checked><label for="tone-direct">Direct & Brief</label></div>
+          <div class="checkbox-option"><input type="radio" name="sdTone" id="tone-warm" value="warm"><label for="tone-warm">Warm & Relationship</label></div>
+          <div class="checkbox-option"><input type="radio" name="sdTone" id="tone-formal" value="formal"><label for="tone-formal">Formal / Institutional</label></div>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="generateSendEmail()">Generate Email</button>
+    </div>
+    <div id="sendStep2" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);">Review & Send</div>
+        <button onclick="document.getElementById('sendStep1').style.display='block';document.getElementById('sendStep2').style.display='none';" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:3px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;">← Edit</button>
+      </div>
+      <div class="form-group"><label class="form-label">Subject</label><input type="text" class="form-input" id="sdSubject"></div>
+      <div class="form-group"><label class="form-label">Body</label><textarea class="form-textarea" id="sdBody" style="min-height:260px;font-size:12px;line-height:1.7;"></textarea></div>
+      <div id="sdGenerating" style="display:none;text-align:center;padding:16px;color:var(--muted);font-size:11px;">Writing your email...</div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="submit-btn" style="flex:2;" onclick="sdOpenMail()">Open in Mail</button>
+        <button class="action-btn primary" style="flex:1;padding:11px;" onclick="sdCopy()">Copy</button>
+      </div>
+      <div class="copy-confirm" id="sdCopyConfirm">Copied.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MATCH A DEAL MODAL -->
+<div class="modal-overlay" id="matchDealModal">
+  <div class="modal wide">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div class="step-indicator" style="flex:1;margin-bottom:0;" id="mdStepInd">
+        <div class="step-ind active" id="mdInd1"><div class="step-num">1</div><div class="step-label">Upload</div></div>
+        <div class="step-line"></div>
+        <div class="step-ind" id="mdInd2"><div class="step-num">2</div><div class="step-label">Match</div></div>
+        <div class="step-line"></div>
+        <div class="step-ind" id="mdInd3"><div class="step-num">3</div><div class="step-label">Emails</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('matchDealModal')" style="margin-left:16px;">✕</button>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="mdStep1">
+      <div class="modal-title" style="margin-bottom:6px;">Import Deal Submission</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:20px;">Drop the GHL PDF. It reads the deal, populates the fields, ranks your partners.</div>
+      <label class="pdf-dropzone">
+        <div style="font-size:28px;">📄</div>
+        <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;">Drop PDF or click to upload</div>
+        <div style="font-size:10px;color:var(--muted);">Deal submission from GoHighLevel</div>
+        <input type="file" accept=".pdf" id="mdPdfInput" style="display:none;" onchange="handleMdPdf(this)">
+      </label>
+      <div id="mdPdfName" style="display:none;margin-top:10px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;font-size:11px;color:var(--accent);"></div>
+      <div id="mdProcessing" style="display:none;text-align:center;padding:16px;color:var(--muted);font-size:11px;margin-top:10px;">Reading deal...</div>
+      <div id="mdError" style="display:none;margin-top:10px;padding:10px;background:rgba(224,92,74,0.1);border:1px solid rgba(224,92,74,0.25);border-radius:4px;font-size:11px;color:var(--red);"></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="mdStep2" style="display:none;">
+      <div class="modal-title" style="margin-bottom:4px;">Deal Extracted</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Review fields, then select partners to contact.</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:16px;">
+        <div class="form-row" style="margin-bottom:8px;">
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Deal Name</label><input type="text" class="form-input" id="mdDealName"></div>
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Submitter</label><input type="text" class="form-input" id="mdSubmitter"></div>
+        </div>
+        <div class="form-row" style="margin-bottom:8px;">
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Location</label><input type="text" class="form-input" id="mdLocation"></div>
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Capital Needed</label><input type="text" class="form-input" id="mdCapital"></div>
+        </div>
+        <div class="form-row" style="margin-bottom:8px;">
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Structure</label><input type="text" class="form-input" id="mdStructure"></div>
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Asset Type</label><input type="text" class="form-input" id="mdAssetType"></div>
+        </div>
+        <div class="form-row" style="margin-bottom:8px;">
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Timeline</label><input type="text" class="form-input" id="mdTimeline"></div>
+          <div class="form-group" style="margin-bottom:0;"><label class="form-label">Strategy</label><input type="text" class="form-input" id="mdStrategy"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:8px;"><label class="form-label">Use of Funds</label><textarea class="form-textarea" id="mdFunds" style="min-height:48px;"></textarea></div>
+        <div class="form-group" style="margin-bottom:0;"><label class="form-label">Data Room</label><input type="text" class="form-input" id="mdDataRoom"></div>
+      </div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px;">Recommended Partners</div>
+      <div id="mdMatchList" style="display:flex;flex-direction:column;gap:5px;margin-bottom:16px;max-height:240px;overflow-y:auto;"></div>
+      <button class="submit-btn" id="mdProceedBtn" onclick="mdGenerateEmails()" style="opacity:0.4;" disabled>Generate Emails</button>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="mdStep3" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div><div class="modal-title">Outreach Emails</div><div style="font-size:11px;color:var(--muted);margin-top:2px;" id="mdEmailSub"></div></div>
+        <button onclick="showMdStep(2)" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:3px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;">← Back</button>
+      </div>
+      <div id="mdEmailsContainer"></div>
+      <div id="mdGenerating" style="text-align:center;padding:24px;color:var(--muted);font-size:11px;">Writing emails...</div>
+    </div>
+  </div>
+</div>
+
+<!-- PARTNER DETAIL PANEL -->
+<div class="detail-overlay" id="detailOverlay" onclick="maybeCloseDetail(event)">
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-panel-inner" id="detailContent"></div>
+  </div>
+</div>
+
+<!-- DEAL DETAIL PANEL -->
+<div class="detail-overlay" id="dealDetailOverlay" onclick="maybeCloseDealDetail(event)">
+  <div class="detail-panel" id="dealDetailPanel">
+    <div class="detail-panel-inner" id="dealDetailContent"></div>
+  </div>
+</div>
+
+</div><!-- /#appRoot -->
+
+<script>
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
+const USERS = [
+  { username:'nick',   display:'Nick Ayala', role:'admin', salt:'51e72cd04d3b299ed1ece6d22239d0ae', hash:'8be2510e8ab2b02ec084f5438ee4821ed1de9e3a4ef2b190204fd248a9f6311f' },
+  { username:'closer', display:'Closer',     role:'staff', salt:'df85f1104c81eb6ec907109700f1094d', hash:'27228d95060ad4d4beb2945ef9bd4305ccf2823c028a572ff6c8e607753433f7' }
+];
+// Default passwords (change these):
+// nick   → Align2024!
+// closer → Close2024!
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function attemptLogin() {
+  const username = document.getElementById('loginUser').value.trim().toLowerCase();
+  const password = document.getElementById('loginPass').value;
+  const errEl    = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  const user = USERS.find(u => u.username === username);
+  if (!user) { showLoginError(); return; }
+
+  const hash = await sha256(password + user.salt);
+  if (hash !== user.hash) { showLoginError(); return; }
+
+  // Auth success
+  sessionStorage.setItem('crm_user', JSON.stringify({ username: user.username, display: user.display, role: user.role }));
+  bootApp(user);
+}
+
+function showLoginError() {
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'block';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginPass').focus();
+  // Shake animation
+  const box = document.querySelector('.login-box');
+  box.style.transform = 'translateX(-8px)';
+  setTimeout(() => box.style.transform = 'translateX(8px)', 80);
+  setTimeout(() => box.style.transform = 'translateX(0)', 160);
+}
+
+function bootApp(user) {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appRoot').style.display     = 'block';
+  document.getElementById('userPill').style.display    = 'flex';
+  document.getElementById('userPillName').textContent  = user.display;
+  switchTab('deals', document.getElementById('tab-deals'));
+  setMobileNav('deals');
+  renderAlerts();
+  updateMobileFilterCounts();
+}
+
+function doLogout() {
+  if (!confirm('Sign out?')) return;
+  sessionStorage.removeItem('crm_user');
+  document.getElementById('appRoot').style.display     = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').style.display  = 'none';
+  document.getElementById('userPill').style.display    = 'none';
+}
+
+// Check for existing session on load
+(function checkSession() {
+  const saved = sessionStorage.getItem('crm_user');
+  if (saved) {
+    try { bootApp(JSON.parse(saved)); } catch(e) { sessionStorage.removeItem('crm_user'); }
+  }
+})();
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let partners = JSON.parse(localStorage.getItem('crm_partners') || '[]');
+let deals    = JSON.parse(localStorage.getItem('crm_deals')    || '[]');
+
+// Seed example partners if empty
+if (partners.length === 0) {
+  partners = [
+    { id:1, name:"Marcus Webb", org:"Webb Family Office", phone:"(561) 888-2234", email:"marcus@webbfo.com",
+      capitalTypes:["equity","preferred","lp"], minCheck:"$500K", maxCheck:"$5M",
+      assetTypes:["Multifamily","Self Storage","Industrial"], geography:["Southeast","Florida","Texas"],
+      ltv:"", returnTarget:"14-18% IRR", status:"active", relationship:"Referral from David Lin",
+      compTypes:["Preferred Return","Carried Interest"], compDetails:"8% pref then 80/20 split",
+      notes:"Loves stabilized cash flow. Hates ground-up. Text first, then deck. 3-5 yr hold.", activity:[] },
+    { id:2, name:"David Chen", org:"Meridian Bridge Capital", phone:"(305) 441-9900", email:"dchen@meridianbridgecap.com",
+      capitalTypes:["bridge","hard-money","debt"], minCheck:"$1M", maxCheck:"$10M",
+      assetTypes:["Multifamily","Mixed Use","Retail"], geography:["Florida","Southeast","National"],
+      ltv:"70%", returnTarget:"10-13%", status:"active", relationship:"Nick personal connection",
+      compTypes:["Origination Points","Interest Rate"], compDetails:"2 pts up front + 11% interest",
+      notes:"Moves fast. Closes in 10 days if docs clean. No land, no ground-up.", activity:[] },
+    { id:3, name:"Susan Holloway", org:"Rockingham Equity Partners", phone:"(646) 774-3310", email:"s.holloway@rockinghamep.com",
+      capitalTypes:["mezz","preferred","equity"], minCheck:"$2M", maxCheck:"$15M",
+      assetTypes:["Multifamily","Office","Hotel"], geography:["Northeast","National"],
+      ltv:"", returnTarget:"15-20% IRR", status:"active", relationship:"Met at IMN conference",
+      compTypes:["Carried Interest","Management Fee"], compDetails:"20% carry above 8% pref, 1.5% mgmt",
+      notes:"Very institutional. Wants full data room before first call. 60+ day decision timeline.", activity:[] },
+    { id:4, name:"Tony Barrera", org:"Lone Star Private Lending", phone:"(214) 533-0088", email:"tony@lonestarpl.com",
+      capitalTypes:["hard-money","bridge","dscr"], minCheck:"$250K", maxCheck:"$3M",
+      assetTypes:["SFR","Multifamily","Land"], geography:["Texas","Southwest"],
+      ltv:"65%", returnTarget:"11-14%", status:"active", relationship:"Instagram DM, cold outreach",
+      compTypes:["Origination Points","Interest Rate"], compDetails:"1.5 pts + 12% interest, no prepay penalty",
+      notes:"Texas only, no exceptions. SFR fix-and-flip is his bread and butter.", activity:[] },
+    { id:5, name:"Patricia Moore", org:"Moore Capital Group", phone:"(407) 929-4422", email:"pmoore@moorecg.com",
+      capitalTypes:["lp","equity"], minCheck:"$100K", maxCheck:"$500K",
+      assetTypes:["Multifamily","Self Storage","NNN"], geography:["Florida","Southeast"],
+      ltv:"", returnTarget:"8-12% CoC", status:"paused", relationship:"TWC founding member",
+      compTypes:["Preferred Return"], compDetails:"",
+      notes:"Currently deployed. Check back Q3. Passive deals only.", activity:[], reminder:"2025-09-01" },
+    { id:6, name:"Raj Patel", org:"Patel Global Investments", phone:"(786) 344-7100", email:"raj@patelglobal.com",
+      capitalTypes:["debt","private-credit","mezz"], minCheck:"$3M", maxCheck:"$25M",
+      assetTypes:["Industrial","Mixed Use","Multifamily","Hotel"], geography:["National"],
+      ltv:"75%", returnTarget:"9-13%", status:"active", relationship:"US-UAE trade commissioner intro",
+      compTypes:["Origination Points","Interest Rate"], compDetails:"1 pt + 10-12% depending on LTV",
+      notes:"International family office. Needs $50M+ track record. Good for larger raises.", activity:[] }
+  ];
+  saveAll();
+}
+
+if (deals.length === 0) {
+  deals = [
+    { id:101, name:"Flex Space Direct Fund", sponsor:"Goran Mladen / Flex Space Direct Fund Inc", location:"Florida", assetType:"Commercial / Industrial", capital:"$5M+", structure:"Debt", returnTarget:"", timeline:"31-60 days", stage:"review", ghlLink:"", dataRoom:"https://flexspacedirectfundinc1.deal.tribexa.com/", member:"yes", notes:"Submitted via GHL form.", activity:[], createdAt: new Date().toISOString() },
+    { id:102, name:"Tanglewood MF Acquisition", sponsor:"Marcus Webb", location:"Boca Raton, FL", assetType:"Multifamily", capital:"$2,800,000", structure:"LP Equity", returnTarget:"16% IRR", timeline:"45 days", stage:"distributed", ghlLink:"", dataRoom:"", member:"yes", notes:"72 units, value-add.", activity:[], createdAt: new Date(Date.now()-7*86400000).toISOString() },
+    { id:103, name:"Dallas Self Storage Portfolio", sponsor:"TBD", location:"Dallas, TX", assetType:"Self Storage", capital:"$1,200,000", structure:"Bridge Loan", returnTarget:"12% CoC", timeline:"30 days", stage:"submitted", ghlLink:"", dataRoom:"", member:"no", notes:"3-property portfolio.", activity:[], createdAt: new Date(Date.now()-2*86400000).toISOString() }
+  ];
+  saveAll();
+}
+
+function saveAll() {
+  localStorage.setItem('crm_partners', JSON.stringify(partners));
+  localStorage.setItem('crm_deals',    JSON.stringify(deals));
+}
+
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-content-' + tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'deals')   renderDeals();
+  if (tab === 'gaps')    renderGaps();
+  if (tab === 'partners') renderPartners();
+}
+
+// ══════════════════════════════════════════
+// PARTNER HELPERS
+// ══════════════════════════════════════════
+const TYPE_CLASS = { debt:'type-debt', equity:'type-equity', 'hard-money':'type-hard-money', mezz:'type-mezz', bridge:'type-bridge', preferred:'type-preferred', lp:'type-lp', 'private-credit':'type-private-credit', dscr:'type-dscr' };
+const TYPE_LABEL = { debt:'Debt', equity:'Equity', 'hard-money':'Hard Money', mezz:'Mezz', bridge:'Bridge', preferred:'Preferred', lp:'LP/FO', 'private-credit':'Priv Credit', dscr:'DSCR' };
+const TYPE_COLOR = { debt:'var(--blue)', equity:'var(--purple)', 'hard-money':'var(--red)', mezz:'var(--orange)', bridge:'var(--teal)', preferred:'var(--accent)', lp:'var(--green)', 'private-credit':'var(--pink)', dscr:'var(--amber)' };
+
+function typeLabel(t) { return TYPE_LABEL[t] || t; }
+function typeClass(t) { return TYPE_CLASS[t] || ''; }
+function accentColor(types) { return (types && types.length) ? (TYPE_COLOR[types[0]] || 'var(--border)') : 'var(--border)'; }
+
+// ══════════════════════════════════════════
+// PARTNER FILTERS
+// ══════════════════════════════════════════
+let activeType   = 'all';
+let activeStatus = 'all';
+let searchQ      = '';
+let currentView  = 'grid';
+
+function filterType(t, btn) {
+  activeType = t;
+  document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPartners();
+}
+function filterStatus(s, btn) {
+  activeStatus = s;
+  document.querySelectorAll('[data-status]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPartners();
+}
+function searchPartners(q) { searchQ = q; renderPartners(); }
+function setView(v, btn) {
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPartners();
+}
+function toggleDF(btn, group) { btn.classList.toggle('selected'); }
+
+function getFilteredPartners() {
+  return partners.filter(p => {
+    const t = activeType === 'all' || (p.capitalTypes||[]).includes(activeType);
+    const s = activeStatus === 'all' || p.status === activeStatus;
+    const q = !searchQ || p.name.toLowerCase().includes(searchQ.toLowerCase()) || (p.org||'').toLowerCase().includes(searchQ.toLowerCase());
+    return t && s && q;
+  });
+}
+
+function updateCounts() {
+  const types = ['debt','equity','hard-money','mezz','bridge','preferred','dscr','private-credit','lp'];
+  document.getElementById('fc-all').textContent = partners.length;
+  types.forEach(t => {
+    const el = document.getElementById('fc-' + t);
+    if (el) el.textContent = partners.filter(p => (p.capitalTypes||[]).includes(t)).length;
+  });
+  const badge = document.getElementById('badge-partners');
+  badge.textContent = partners.length;
+  document.getElementById('totalCount') && (document.getElementById('totalCount').textContent = partners.length);
+}
+
+// ══════════════════════════════════════════
+// RENDER PARTNERS
+// ══════════════════════════════════════════
+function renderPartners() {
+  const grid = document.getElementById('partnerGrid');
+  const filtered = getFilteredPartners();
+  document.getElementById('visibleCount').textContent = filtered.length;
+  grid.className = 'partner-grid' + (currentView === 'list' ? ' list-view' : '');
+  updateCounts();
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>No partners match</h3><p>Adjust filters or add a partner.</p></div>`;
+    return;
+  }
+
+  const now = new Date(); now.setHours(0,0,0,0);
+  grid.innerHTML = filtered.map(p => {
+    const hasReminder = p.reminder;
+    const reminderDate = hasReminder ? new Date(p.reminder + 'T00:00:00') : null;
+    const isOverdue  = reminderDate && reminderDate < now;
+    const isUpcoming = reminderDate && !isOverdue;
+    const reminderLabel = hasReminder ? reminderDate.toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+    const lastActivity = (p.activity||[]).slice(-1)[0];
+
+    return `
+    <div class="partner-card" style="--card-accent:${accentColor(p.capitalTypes)}" onclick="openPartnerDetail(${p.id})">
+      <div class="card-header">
+        <div>
+          <div class="partner-name">${p.name}</div>
+          ${p.org ? `<div class="partner-org">${p.org}</div>` : ''}
+        </div>
+        <div class="partner-status ${p.status}">
+          <div class="status-dot"></div>${p.status.charAt(0).toUpperCase()+p.status.slice(1)}
+        </div>
+      </div>
+      <div class="capital-types">
+        ${(p.capitalTypes||[]).map(t => `<span class="type-tag ${typeClass(t)}">${typeLabel(t)}</span>`).join('')}
+      </div>
+      <div class="card-meta">
+        <div class="meta-item"><span class="meta-label">Check Range</span><span class="meta-value highlight">${p.minCheck||'—'} – ${p.maxCheck||'—'}</span></div>
+        <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${p.returnTarget||'—'}</span></div>
+        ${p.ltv ? `<div class="meta-item"><span class="meta-label">Max LTV</span><span class="meta-value">${p.ltv}</span></div>` : ''}
+        <div class="meta-item"><span class="meta-label">Geography</span><span class="meta-value">${(p.geography||[]).slice(0,2).join(', ')}${(p.geography||[]).length>2?'...':''}</span></div>
+      </div>
+      <div class="asset-tags">${(p.assetTypes||[]).map(a=>`<span class="asset-tag">${a}</span>`).join('')}</div>
+      ${(p.dealsSent && p.dealsSent.length) ? `
+      <div style="display:flex;align-items:center;gap:6px;padding:5px 9px;background:rgba(74,136,199,0.06);border:1px solid rgba(74,136,199,0.15);border-radius:4px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:10px;color:var(--blue);flex-shrink:0;">📤 ${p.dealsSent.length} deal${p.dealsSent.length>1?'s':''} sent</span>
+        <span style="font-size:9px;color:var(--muted);">${[...p.dealsSent].reverse().slice(0,2).map(d=>d.dealName).join(', ')}${p.dealsSent.length>2?' +more':''}</span>
+      </div>` : ''}
+      ${(p.compTypes&&p.compTypes.length)||p.compDetails ? `
+      <div class="comp-bar"><span class="comp-bar-icon">💰</span><div>
+        ${p.compTypes&&p.compTypes.length?`<div class="comp-types-text">${p.compTypes.join(' · ')}</div>`:''}
+        ${p.compDetails?`<div class="comp-details-text">${p.compDetails}</div>`:''}
+      </div></div>` : ''}
+      ${isOverdue  ? `<div class="reminder-bar overdue">⚠ Follow-up overdue, ${reminderLabel}</div>` : ''}
+      ${isUpcoming ? `<div class="reminder-bar upcoming">🔔 Follow-up ${reminderLabel}</div>` : ''}
+      ${lastActivity ? `<div class="card-notes">Last: ${lastActivity.type} · ${new Date(lastActivity.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}${lastActivity.notes?' · '+lastActivity.notes.substring(0,40)+'...':''}</div>` : ''}
+      ${p.notes&&!lastActivity ? `<div class="card-notes">${p.notes.length>90?p.notes.substring(0,87)+'...':p.notes}</div>` : ''}
+      <div class="card-actions" onclick="event.stopPropagation()">
+        <button class="action-btn primary" onclick="sendDeal(${p.id})">Send Deal</button>
+        <button class="action-btn" onclick="logActivity(${p.id})">Log</button>
+        <button class="action-btn" onclick="editPartner(${p.id})">Edit</button>
+        <button class="action-btn" onclick="deletePartner(${p.id})" style="flex:0.5;">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// PARTNER DETAIL PANEL
+// ══════════════════════════════════════════
+function openPartnerDetail(id) {
+  const p = partners.find(x => x.id === id);
+  if (!p) return;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const rDate = p.reminder ? new Date(p.reminder+'T00:00:00') : null;
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-panel-header">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;">${p.name}</div>
+        ${p.org?`<div style="color:var(--muted);font-size:12px;margin-top:2px;">${p.org}</div>`:''}
+        <div class="partner-status ${p.status}" style="display:inline-flex;margin-top:8px;"><div class="status-dot"></div>${p.status.charAt(0).toUpperCase()+p.status.slice(1)}</div>
+      </div>
+      <button class="modal-close" onclick="closeDetailPanel()">✕</button>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Capital Types</div>
+      <div class="capital-types">${(p.capitalTypes||[]).map(t=>`<span class="type-tag ${typeClass(t)}">${typeLabel(t)}</span>`).join('')}</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <div class="meta-item"><span class="meta-label">Min Check</span><span class="meta-value highlight">${p.minCheck||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Max Check</span><span class="meta-value highlight">${p.maxCheck||'—'}</span></div>
+      ${p.ltv?`<div class="meta-item"><span class="meta-label">Max LTV</span><span class="meta-value">${p.ltv}</span></div>`:''}
+      <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${p.returnTarget||'—'}</span></div>
+    </div>
+
+    <div class="detail-section">
+      <div class="detail-section-title">Asset Types</div>
+      <div class="asset-tags">${(p.assetTypes||[]).map(a=>`<span class="asset-tag">${a}</span>`).join('')}</div>
+    </div>
+    <div class="detail-section" style="margin-top:10px;">
+      <div class="detail-section-title">Geography</div>
+      <div class="asset-tags">${(p.geography||[]).map(g=>`<span class="asset-tag">${g}</span>`).join('')}</div>
+    </div>
+
+    ${(p.compTypes&&p.compTypes.length)||p.compDetails ? `
+    <div style="background:rgba(255,159,67,0.05);border:1px solid rgba(255,159,67,0.2);border-radius:4px;padding:12px;margin-bottom:12px;">
+      <div class="detail-section-title" style="color:var(--amber);margin-bottom:6px;">How They Get Paid</div>
+      ${p.compTypes&&p.compTypes.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:${p.compDetails?'6px':'0'};">${p.compTypes.map(c=>`<span style="background:rgba(255,159,67,0.1);border:1px solid rgba(255,159,67,0.25);color:var(--amber);padding:2px 8px;border-radius:3px;font-size:10px;">${c}</span>`).join('')}</div>`:''}
+      ${p.compDetails?`<div style="font-size:12px;color:var(--text);">${p.compDetails}</div>`:''}
+    </div>` : ''}
+
+    ${p.relationship?`
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:12px;">
+      <div class="detail-section-title" style="margin-bottom:4px;">How We Know Them</div>
+      <div style="font-size:12px;color:var(--accent);">${p.relationship}</div>
+    </div>`:''}
+
+    ${rDate?`
+    <div style="background:${rDate<now?'rgba(224,92,74,0.08)':'rgba(240,192,64,0.06)'};border:1px solid ${rDate<now?'rgba(224,92,74,0.2)':'rgba(240,192,64,0.2)'};border-radius:4px;padding:10px 12px;margin-bottom:12px;font-size:11px;color:${rDate<now?'var(--red)':'var(--yellow)'};">
+      ${rDate<now?'⚠ Follow-up overdue:':'🔔 Follow-up:'} ${rDate.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}
+    </div>`:''}
+
+    ${p.notes?`
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:12px;">
+      <div class="detail-section-title" style="margin-bottom:4px;">Notes</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.7;">${p.notes}</div>
+    </div>`:''}
+
+    ${p.phone||p.email?`
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:14px;">
+      <div class="detail-section-title" style="margin-bottom:4px;">Contact</div>
+      ${p.phone?`<div style="font-size:12px;color:var(--text);margin-bottom:4px;">📞 ${p.phone}</div>`:''}
+      ${p.email?`<div style="font-size:12px;color:var(--accent);">✉ ${p.email}</div>`:''}
+    </div>`:''}
+
+    <!-- Deals Sent -->
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div class="detail-section-title" style="margin-bottom:0;">Deals Sent</div>
+        ${(p.dealsSent&&p.dealsSent.length) ? `<span style="font-size:10px;color:var(--blue);">${p.dealsSent.length} total</span>` : ''}
+      </div>
+      ${!(p.dealsSent&&p.dealsSent.length) ? `<div class="activity-empty">No deals sent yet.</div>` :
+        `<div style="display:flex;flex-direction:column;gap:4px;">
+          ${[...p.dealsSent].reverse().map(d => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;">
+            <div style="font-size:11px;color:var(--text);font-weight:500;">📤 ${d.dealName}</div>
+            <div style="font-size:10px;color:var(--muted);">${new Date(d.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+          </div>`).join('')}
+        </div>`}
+    </div>
+
+    <!-- Activity Log -->
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div class="detail-section-title" style="margin-bottom:0;">Activity Log</div>
+        <button onclick="logActivity(${p.id})" style="background:transparent;border:1px solid var(--border2);color:var(--muted);padding:3px 8px;border-radius:3px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;">+ Log</button>
+      </div>
+      <div class="activity-log">
+        ${(p.activity||[]).length===0 ? `<div class="activity-empty">No activity logged yet.</div>` :
+          [...(p.activity||[])].reverse().map(a => `
+          <div class="activity-entry">
+            <div class="activity-dot ${a.type}"></div>
+            <div>
+              <div class="activity-text">${a.notes||'—'}</div>
+              <div class="activity-meta">${a.type.charAt(0).toUpperCase()+a.type.slice(1)} · ${new Date(a.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div style="display:flex;gap:6px;">
+      <button class="action-btn primary" style="flex:2;padding:10px;" onclick="sendDeal(${p.id});closeDetailPanel()">Send Deal</button>
+      <button class="action-btn" style="flex:1;padding:10px;" onclick="editPartner(${p.id});closeDetailPanel()">Edit</button>
+      <button class="action-btn" style="flex:0.6;padding:10px;" onclick="deletePartner(${p.id});closeDetailPanel()">✕</button>
+    </div>
+  `;
+
+  document.getElementById('detailOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('detailPanel').classList.add('open'), 10);
+}
+
+function closeDetailPanel() {
+  document.getElementById('detailPanel').classList.remove('open');
+  setTimeout(() => document.getElementById('detailOverlay').classList.remove('open'), 250);
+}
+function maybeCloseDetail(e) { if (e.target === document.getElementById('detailOverlay')) closeDetailPanel(); }
+
+// ══════════════════════════════════════════
+// ADD / EDIT PARTNER
+// ══════════════════════════════════════════
+let editingPartnerId = null;
+
+function openAddPartnerModal() {
+  editingPartnerId = null;
+  document.getElementById('partnerModalTitle').textContent = 'Add Capital Partner';
+  document.getElementById('partnerSubmitBtn').textContent = 'Add Partner';
+  clearPartnerForm();
+  openModal('partnerModal');
+}
+
+function editPartner(id) {
+  const p = partners.find(x => x.id === id);
+  if (!p) return;
+  editingPartnerId = id;
+  document.getElementById('partnerModalTitle').textContent = 'Edit Partner';
+  document.getElementById('partnerSubmitBtn').textContent = 'Save Changes';
+  document.getElementById('fName').value        = p.name;
+  document.getElementById('fOrg').value         = p.org || '';
+  document.getElementById('fPhone').value       = p.phone || '';
+  document.getElementById('fEmail').value       = p.email || '';
+  document.getElementById('fMinCheck').value    = p.minCheck || '';
+  document.getElementById('fMaxCheck').value    = p.maxCheck || '';
+  document.getElementById('fLtv').value         = p.ltv || '';
+  document.getElementById('fReturn').value      = p.returnTarget || '';
+  document.getElementById('fRelationship').value= p.relationship || '';
+  document.getElementById('fCompDetails').value = p.compDetails || '';
+  document.getElementById('fNotes').value       = p.notes || '';
+  document.getElementById('fStatus').value      = p.status;
+  document.querySelectorAll('.checkbox-option input[type=checkbox]').forEach(cb => {
+    cb.checked = (p.capitalTypes||[]).includes(cb.value)||(p.assetTypes||[]).includes(cb.value)||(p.geography||[]).includes(cb.value)||(p.compTypes||[]).includes(cb.value);
+  });
+  openModal('partnerModal');
+}
+
+function clearPartnerForm() {
+  ['fName','fOrg','fPhone','fEmail','fMinCheck','fMaxCheck','fLtv','fReturn','fRelationship','fCompDetails','fNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fStatus').value = 'active';
+  document.querySelectorAll('.checkbox-option input[type=checkbox]').forEach(cb => cb.checked = false);
+}
+
+function savePartner() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { alert('Name required.'); return; }
+  const capitalTypes = qsa('#ct-debt,#ct-equity,#ct-hard-money,#ct-mezz,#ct-bridge,#ct-preferred,#ct-dscr,#ct-private-credit,#ct-lp');
+  const assetTypes   = qsa('#at-mf,#at-ind,#at-ret,#at-off,#at-mix,#at-ss,#at-hot,#at-land,#at-nnn,#at-sfr,#at-biz');
+  const geography    = qsa('#geo-nat,#geo-fl,#geo-tx,#geo-se,#geo-sw,#geo-ne,#geo-mw');
+  const compTypes    = qsa('#comp-success,#comp-points,#comp-interest,#comp-equity,#comp-pref,#comp-carry,#comp-mgmt,#comp-referral');
+
+  const data = {
+    name, org:v('fOrg'), phone:v('fPhone'), email:v('fEmail'),
+    capitalTypes, minCheck:v('fMinCheck'), maxCheck:v('fMaxCheck'),
+    ltv:v('fLtv'), returnTarget:v('fReturn'), assetTypes, geography,
+    status:document.getElementById('fStatus').value,
+    relationship:v('fRelationship'), compTypes, compDetails:v('fCompDetails'), notes:v('fNotes')
+  };
+
+  if (editingPartnerId) {
+    const idx = partners.findIndex(p => p.id === editingPartnerId);
+    partners[idx] = { ...partners[idx], ...data };
+  } else {
+    data.id = Date.now(); data.activity = [];
+    partners.push(data);
+  }
+  saveAll(); renderPartners(); closeModal('partnerModal');
+}
+
+function deletePartner(id) {
+  if (!confirm('Remove this partner?')) return;
+  partners = partners.filter(p => p.id !== id);
+  saveAll(); renderPartners();
+}
+
+// ══════════════════════════════════════════
+// ACTIVITY LOG
+// ══════════════════════════════════════════
+let activityPartnerId = null;
+
+function logActivity(id) {
+  activityPartnerId = id;
+  const p = partners.find(x => x.id === id);
+  document.getElementById('activityModalSub').textContent = p ? p.name : '';
+  document.getElementById('actNotes').value = '';
+  document.getElementById('actReminder').value = '';
+  document.getElementById('act-call').checked = true;
+  openModal('activityModal');
+}
+
+function saveActivity() {
+  const p = partners.find(x => x.id === activityPartnerId);
+  if (!p) return;
+  if (!p.activity) p.activity = [];
+  const type = document.querySelector('input[name="actType"]:checked')?.value || 'note';
+  const notes = document.getElementById('actNotes').value.trim();
+  const reminder = document.getElementById('actReminder').value;
+  p.activity.push({ type, notes, date: new Date().toISOString() });
+  if (reminder) p.reminder = reminder; else delete p.reminder;
+  saveAll(); renderPartners(); renderAlerts(); closeModal('activityModal');
+  // Refresh detail panel if open
+  if (document.getElementById('detailPanel').classList.contains('open')) openPartnerDetail(activityPartnerId);
+}
+
+// ══════════════════════════════════════════
+// REMINDERS / ALERTS
+// ══════════════════════════════════════════
+function renderAlerts() {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const overdue  = partners.filter(p => p.reminder && new Date(p.reminder+'T00:00:00') < now);
+  const upcoming = partners.filter(p => p.reminder && new Date(p.reminder+'T00:00:00') >= now);
+  const all = [...overdue, ...upcoming];
+  const badge = document.getElementById('bellBadge');
+  badge.className = 'bell-badge' + (overdue.length ? ' show' : '');
+  const list = document.getElementById('alertsList');
+  if (!all.length) { list.innerHTML = '<div class="alerts-empty">No reminders set.</div>'; return; }
+  list.innerHTML = all.map(p => {
+    const d = new Date(p.reminder+'T00:00:00');
+    const isOD = d < now;
+    const label = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    return `<div class="alert-item ${isOD?'overdue':''}" onclick="openPartnerDetail(${p.id});toggleAlertsPanel()">
+      <div class="alert-item-title">${isOD?'⚠ OVERDUE: ':'🔔 '}${p.name}</div>
+      <div class="alert-item-sub">${p.org||''} · Follow-up ${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleAlertsPanel() {
+  document.getElementById('alertsPanel').classList.toggle('open');
+}
+
+// ══════════════════════════════════════════
+// QUICK MATCH
+// ══════════════════════════════════════════
+function runQuickMatch() {
+  const capTypes  = Array.from(document.querySelectorAll('#dfCapType .toggle-btn.selected')).map(b => b.dataset.value);
+  const assetTypes= Array.from(document.querySelectorAll('#dfAssetType .toggle-btn.selected')).map(b => b.dataset.value);
+  const geo       = document.getElementById('dfGeo').value;
+
+  const scored = partners.map(p => {
+    let score = 0;
+    const typeHit = !capTypes.length || capTypes.some(t => (p.capitalTypes||[]).includes(t));
+    const assetHit= !assetTypes.length || assetTypes.some(a => (p.assetTypes||[]).includes(a));
+    if (typeHit && capTypes.length)   score += 4;
+    if (assetHit && assetTypes.length) score += 3;
+    if (geo && ((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))) score += 2;
+    if (p.status === 'active') score += 1;
+    if (capTypes.length && !typeHit) score = 0;
+    return { ...p, score };
+  }).filter(p => p.score > 0).sort((a,b) => b.score-a.score).slice(0,6);
+
+  const el = document.getElementById('dfResults');
+  if (!scored.length) { el.innerHTML = '<div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">No matches.</div>'; return; }
+  el.innerHTML = scored.map(p => `
+    <div class="match-result-item" onclick="openPartnerDetail(${p.id})">
+      <div><div style="font-size:11px;font-weight:500;color:var(--text);">${p.name}</div><div style="font-size:9px;color:var(--muted);">${p.org||''}</div></div>
+      <span class="score-pill ${p.score>=6?'':'partial'}">${p.score>=6?'Strong':'Partial'}</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+// DEALS
+// ══════════════════════════════════════════
+const STAGES = [
+  { key:'submitted',   label:'Submitted',     cls:'stage-submitted' },
+  { key:'review',      label:'In Review',     cls:'stage-review' },
+  { key:'distributed', label:'Distributed',   cls:'stage-distributed' },
+  { key:'discussion',  label:'In Discussion', cls:'stage-discussion' },
+  { key:'funded',      label:'Funded ✓',      cls:'stage-funded' },
+  { key:'dead',        label:'Dead',          cls:'stage-dead' }
+];
+
+let editingDealId = null;
+
+function renderDeals(search='') {
+  // Stats
+  const statsEl = document.getElementById('dealStats');
+  const total   = deals.length;
+  const active  = deals.filter(d => !['funded','dead'].includes(d.stage)).length;
+  const funded  = deals.filter(d => d.stage === 'funded').length;
+  const members = deals.filter(d => d.member === 'yes').length;
+  statsEl.innerHTML = `
+    <div class="stat-box"><div class="stat-num">${total}</div><div class="stat-label">Total Deals</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--blue);">${active}</div><div class="stat-label">Active Pipeline</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--accent);">${funded}</div><div class="stat-label">Funded</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--purple);">${members}</div><div class="stat-label">TWC Members</div></div>`;
+
+  // Badge
+  const badge = document.getElementById('badge-deals');
+  badge.textContent = active;
+  badge.style.display = active ? '' : 'none';
+
+  // Pipeline
+  const filtered = search ? deals.filter(d => d.name.toLowerCase().includes(search.toLowerCase())||(d.sponsor||'').toLowerCase().includes(search.toLowerCase())) : deals;
+  const pipeline = document.getElementById('pipelineStages');
+
+  pipeline.innerHTML = STAGES.map(stage => {
+    const stageDeas = filtered.filter(d => d.stage === stage.key);
+    return `
+    <div class="stage-col ${stage.cls}">
+      <div class="stage-header">
+        <div class="stage-title">${stage.label}</div>
+        <span class="stage-count">${stageDeas.length}</span>
+      </div>
+      <div class="stage-body">
+        ${stageDeas.map(d => {
+          const flags = [];
+          if (d.member==='yes') flags.push('<span class="deal-flag member">TWC</span>');
+          return `
+          <div class="deal-card" onclick="openDealDetail(${d.id})">
+            <div class="deal-card-name">${d.name}</div>
+            <div class="deal-card-meta">${d.sponsor||''}</div>
+            <div class="deal-card-meta">${d.location||''} ${d.assetType?'· '+d.assetType:''}</div>
+            ${d.capital?`<div class="deal-card-amount">${d.capital}</div>`:''}
+            ${flags.length?`<div class="deal-card-flags">${flags.join('')}</div>`:''}
+          </div>`;
+        }).join('')}
+        <div class="add-deal-card" onclick="openAddDealModal('${stage.key}')">+ Add</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openAddDealModal(stage='submitted') {
+  editingDealId = null;
+  document.getElementById('dealModalTitle').textContent = 'Add Deal';
+  document.getElementById('dealSubmitBtn').textContent  = 'Add Deal';
+  ['dName','dSponsor','dLocation','dAssetType','dCapital','dReturn','dTimeline','dGhlLink','dDataRoom','dNotes'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('dStructure').value = '';
+  document.getElementById('dStage').value = stage;
+  document.getElementById('dMember').value = '';
+  openModal('dealModal');
+}
+
+function editDeal(id) {
+  const d = deals.find(x => x.id === id);
+  if (!d) return;
+  editingDealId = id;
+  document.getElementById('dealModalTitle').textContent = 'Edit Deal';
+  document.getElementById('dealSubmitBtn').textContent  = 'Save Changes';
+  document.getElementById('dName').value      = d.name;
+  document.getElementById('dSponsor').value   = d.sponsor||'';
+  document.getElementById('dLocation').value  = d.location||'';
+  document.getElementById('dAssetType').value = d.assetType||'';
+  document.getElementById('dCapital').value   = d.capital||'';
+  document.getElementById('dStructure').value = d.structure||'';
+  document.getElementById('dReturn').value    = d.returnTarget||'';
+  document.getElementById('dTimeline').value  = d.timeline||'';
+  document.getElementById('dStage').value     = d.stage||'submitted';
+  document.getElementById('dGhlLink').value   = d.ghlLink||'';
+  document.getElementById('dDataRoom').value  = d.dataRoom||'';
+  document.getElementById('dMember').value    = d.member||'';
+  document.getElementById('dNotes').value     = d.notes||'';
+  openModal('dealModal');
+}
+
+function saveDeal() {
+  const name = document.getElementById('dName').value.trim();
+  if (!name) { alert('Deal name required.'); return; }
+  const data = {
+    name, sponsor:v('dSponsor'), location:v('dLocation'), assetType:v('dAssetType'),
+    capital:v('dCapital'), structure:document.getElementById('dStructure').value,
+    returnTarget:v('dReturn'), timeline:v('dTimeline'), stage:document.getElementById('dStage').value,
+    ghlLink:v('dGhlLink'), dataRoom:v('dDataRoom'), member:document.getElementById('dMember').value, notes:v('dNotes')
+  };
+  if (editingDealId) {
+    const idx = deals.findIndex(d => d.id === editingDealId);
+    deals[idx] = { ...deals[idx], ...data };
+  } else {
+    data.id = Date.now(); data.activity = []; data.createdAt = new Date().toISOString();
+    deals.push(data);
+  }
+  saveAll(); renderDeals(); closeModal('dealModal');
+}
+
+function deleteDeal(id) {
+  if (!confirm('Remove this deal?')) return;
+  deals = deals.filter(d => d.id !== id);
+  saveAll(); renderDeals(); closeDealDetailPanel();
+}
+
+// ── DEAL DETAIL PANEL ──
+function openDealDetail(id) {
+  const d = deals.find(x => x.id === id);
+  if (!d) return;
+  document.getElementById('dealDetailContent').innerHTML = `
+    <div class="detail-panel-header">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;">${d.name}</div>
+        <div style="color:var(--muted);font-size:11px;margin-top:2px;">${d.sponsor||''}</div>
+        <div style="margin-top:6px;"><span style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted);font-size:10px;padding:3px 9px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;">${d.stage}</span>${d.member==='yes'?'<span style="margin-left:6px;background:rgba(57,255,133,0.08);border:1px solid rgba(57,255,133,0.2);color:var(--accent);font-size:10px;padding:3px 9px;border-radius:3px;">TWC Member</span>':''}</div>
+      </div>
+      <button class="modal-close" onclick="closeDealDetailPanel()">✕</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div class="meta-item"><span class="meta-label">Location</span><span class="meta-value">${d.location||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Asset Type</span><span class="meta-value">${d.assetType||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Capital Needed</span><span class="meta-value highlight">${d.capital||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Structure</span><span class="meta-value">${d.structure||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Return Target</span><span class="meta-value">${d.returnTarget||'—'}</span></div>
+      <div class="meta-item"><span class="meta-label">Timeline</span><span class="meta-value">${d.timeline||'—'}</span></div>
+    </div>
+
+    ${d.dataRoom?`<div style="margin-bottom:12px;"><a href="${d.dataRoom}" target="_blank" style="color:var(--accent);font-size:11px;text-decoration:none;">🔗 Open Data Room</a></div>`:''}
+    ${d.ghlLink?`<div style="margin-bottom:12px;"><a href="${d.ghlLink}" target="_blank" style="color:var(--blue);font-size:11px;text-decoration:none;">↗ View in GHL</a></div>`:''}
+    ${d.notes?`<div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--text);line-height:1.6;">${d.notes}</div>`:''}
+
+    <div style="margin-bottom:14px;">
+      <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;margin-bottom:6px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Move Stage</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;">
+        ${STAGES.map(s=>`<button onclick="moveDealStage(${d.id},'${s.key}')" style="background:${d.stage===s.key?'var(--surface2)':'transparent'};border:1px solid ${d.stage===s.key?'var(--accent)':'var(--border)'};color:${d.stage===s.key?'var(--accent)':'var(--muted)'};padding:4px 10px;border-radius:3px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;transition:all 0.15s;">${s.label}</button>`).join('')}
+      </div>
+    </div>
+
+    <div style="display:flex;gap:6px;margin-bottom:4px;">
+      <button class="action-btn primary" style="flex:2;padding:10px;" onclick="closeModal=closeModal;openMatchDealForExisting(${d.id})">Match Partners</button>
+      <button class="action-btn" style="flex:1;padding:10px;" onclick="editDeal(${d.id});closeDealDetailPanel()">Edit</button>
+      <button class="action-btn" style="flex:0.6;padding:10px;" onclick="deleteDeal(${d.id})">✕</button>
+    </div>
+  `;
+  document.getElementById('dealDetailOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('dealDetailPanel').classList.add('open'), 10);
+}
+
+function closeDealDetailPanel() {
+  document.getElementById('dealDetailPanel').classList.remove('open');
+  setTimeout(() => document.getElementById('dealDetailOverlay').classList.remove('open'), 250);
+}
+function maybeCloseDealDetail(e) { if (e.target===document.getElementById('dealDetailOverlay')) closeDealDetailPanel(); }
+
+function moveDealStage(id, stage) {
+  const d = deals.find(x => x.id === id);
+  if (d) { d.stage = stage; saveAll(); renderDeals(); openDealDetail(id); }
+}
+
+// ══════════════════════════════════════════
+// NETWORK GAPS
+// ══════════════════════════════════════════
+function renderGaps() {
+  const CAPITAL_TYPES = ['debt','equity','hard-money','mezz','bridge','preferred','dscr','private-credit','lp'];
+  const GEOS = ['Florida','Texas','Southeast','Southwest','Northeast','Midwest','National'];
+  const ASSETS = ['Multifamily','Industrial','Retail','Office','Mixed Use','Self Storage','Hotel','SFR'];
+
+  // Capital type x Geography matrix
+  let matrix = '';
+  matrix += `<table class="coverage-table"><thead><tr><th>Type \\ Geo</th>${GEOS.map(g=>`<th>${g.substring(0,4)}</th>`).join('')}</tr></thead><tbody>`;
+  CAPITAL_TYPES.forEach(type => {
+    matrix += `<tr><td style="font-size:10px;color:var(--text);font-weight:500;">${typeLabel(type)}</td>`;
+    GEOS.forEach(geo => {
+      const count = partners.filter(p => p.status==='active' && (p.capitalTypes||[]).includes(type) && ((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))).length;
+      let cls = count >= 3 ? 'strong' : count >= 1 ? 'weak' : 'none';
+      matrix += `<td><span class="coverage-dot ${cls}" title="${count} partner(s)">${count||''}</span></td>`;
+    });
+    matrix += `</tr>`;
+  });
+  matrix += `</tbody></table>`;
+
+  // Find gaps
+  const hardGaps = [];
+  const softGaps = [];
+  CAPITAL_TYPES.forEach(type => {
+    GEOS.filter(g=>g!=='National').forEach(geo => {
+      const count = partners.filter(p => p.status==='active'&&(p.capitalTypes||[]).includes(type)&&((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))).length;
+      if (count === 0) hardGaps.push(`${typeLabel(type)} in ${geo}`);
+      else if (count === 1) softGaps.push(`${typeLabel(type)} in ${geo} (1 partner)`);
+    });
+  });
+
+  // Asset coverage
+  let assetCov = '';
+  ASSETS.forEach(asset => {
+    const count = partners.filter(p => p.status==='active'&&(p.assetTypes||[]).includes(asset)).length;
+    const cls = count>=3?'strong':count>=1?'weak':'none';
+    assetCov += `<tr><td style="font-size:11px;color:var(--text);">${asset}</td><td><span class="coverage-dot ${cls}">${count||''}</span></td><td style="font-size:10px;color:var(--muted);">${count===0?'No coverage':count===1?'Single partner':count+'partners'}</td></tr>`;
+  });
+
+  // Most active partners (by activity log entries)
+  const ranked = [...partners].sort((a,b)=>(b.activity||[]).length-(a.activity||[]).length).slice(0,6);
+
+  // Partner by deal outcome (funded count)
+  const fundedDeals = deals.filter(d=>d.stage==='funded');
+
+  document.getElementById('gapsContent').innerHTML = `
+    <div class="gap-card" style="grid-column:1/-1;">
+      <div class="gap-card-title">📍 Capital Type × Geography Coverage
+        <span style="font-size:10px;font-weight:400;color:var(--muted);margin-left:8px;">
+          <span style="color:var(--accent);">●</span> 3+ partners &nbsp;
+          <span style="color:var(--yellow);">●</span> 1-2 partners &nbsp;
+          <span style="color:var(--red);">●</span> None
+        </span>
+      </div>
+      <div style="overflow-x:auto;">${matrix}</div>
+      ${hardGaps.length ? `<div class="gap-insight"><strong>Hard gaps (zero coverage):</strong> ${hardGaps.slice(0,8).join(', ')}${hardGaps.length>8?` +${hardGaps.length-8} more`:''}</div>` : ''}
+      ${softGaps.length ? `<div class="gap-insight" style="margin-top:8px;"><strong>Thin coverage (single partner):</strong> ${softGaps.slice(0,6).join(', ')}${softGaps.length>6?` +${softGaps.length-6} more`:''}</div>` : ''}
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-title">🏗 Asset Class Coverage</div>
+      <table class="coverage-table">
+        <thead><tr><th>Asset Type</th><th>Partners</th><th>Status</th></tr></thead>
+        <tbody>${assetCov}</tbody>
+      </table>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-title">📊 Partner Activity Ranking</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;">By logged interactions. Low number = relationship going cold.</div>
+      <div class="partner-activity-list">
+        ${ranked.length===0?'<div class="activity-empty">No activity logged yet.</div>':ranked.map((p,i)=>`
+        <div class="activity-rank-item" onclick="openPartnerDetail(${p.id});switchTab('partners',document.getElementById('tab-partners'))" style="cursor:pointer;">
+          <div class="activity-rank-num">${i+1}</div>
+          <div><div class="activity-rank-name">${p.name}</div><div style="font-size:10px;color:var(--muted);">${p.org||''}</div></div>
+          <div class="activity-rank-stat"><span>${(p.activity||[]).length}</span> logs</div>
+        </div>`).join('')}
+      </div>
+      <div class="gap-insight" style="margin-top:12px;">
+        <strong>Partners with zero activity:</strong> ${partners.filter(p=>!(p.activity||[]).length).map(p=>p.name).join(', ')||'None, great work.'}
+      </div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-title">💰 Pipeline Summary</div>
+      ${STAGES.map(s => {
+        const count = deals.filter(d=>d.stage===s.key).length;
+        return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+          <div style="font-size:12px;color:var(--text);">${s.label}</div>
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:${s.key==='funded'?'var(--accent)':s.key==='dead'?'var(--red)':'var(--text)'};">${count}</div>
+        </div>`;
+      }).join('')}
+      <div class="gap-insight" style="margin-top:10px;">
+        <strong>Conversion rate:</strong> ${deals.length ? Math.round(fundedDeals.length/deals.length*100)+'%' : 'No data yet'} of submitted deals reached Funded.
+      </div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════
+// SEND DEAL (manual)
+// ══════════════════════════════════════════
+let sendPartnerId = null;
+
+function sendDeal(id) {
+  sendPartnerId = id;
+  const p = partners.find(x => x.id === id);
+  document.getElementById('sendDealSub').textContent = p ? `To: ${p.name}${p.org?', '+p.org:''}` : '';
+  ['sdName','sdLocation','sdAmount','sdReturn','sdTerm','sdSummary','sdStrengths'].forEach(i => document.getElementById(i).value='');
+  document.getElementById('sdCapType').value='';
+  document.getElementById('tone-direct').checked=true;
+  document.getElementById('sendStep1').style.display='block';
+  document.getElementById('sendStep2').style.display='none';
+  openModal('sendDealModal');
+}
+
+async function generateSendEmail() {
+  const p = partners.find(x => x.id === sendPartnerId);
+  if (!p) return;
+  const toneGuides = {
+    direct:'Brief, direct, no fluff. 3-4 short paragraphs. Sounds like a deal guy texting a peer.',
+    warm:'Warm and relationship-first. Still professional but human.',
+    formal:'Institutional and professional. Formal language. For family offices and institutional LPs.'
+  };
+  const tone = document.querySelector('input[name="sdTone"]:checked')?.value||'direct';
+  const pCtx = [
+    p.capitalTypes.length?`Capital: ${p.capitalTypes.join(', ')}` : '',
+    p.assetTypes.length?`Assets: ${p.assetTypes.join(', ')}` : '',
+    p.geography.length?`Geo: ${p.geography.join(', ')}` : '',
+    p.notes?`Notes: ${p.notes}` : '',
+    p.relationship?`Relationship: ${p.relationship}` : '',
+    p.compDetails?`Comp: ${p.compDetails}` : ''
+  ].filter(Boolean).join('\n');
+
+  document.getElementById('sendStep1').style.display='none';
+  document.getElementById('sendStep2').style.display='block';
+  document.getElementById('sdSubject').value='';
+  document.getElementById('sdBody').value='';
+  document.getElementById('sdGenerating').style.display='block';
+
+  const prompt = `Write a deal outreach email from Nick Ayala, Founder of Align Equity Group, to a capital partner.
+PARTNER: ${p.name}, ${p.org||''}
+${pCtx}
+DEAL: ${v('sdName')} | ${v('sdLocation')} | ${v('sdAmount')} | ${document.getElementById('sdCapType').value} | Return: ${v('sdReturn')} | Term: ${v('sdTerm')}
+Summary: ${v('sdSummary')}
+Strengths: ${v('sdStrengths')}
+TONE: ${toneGuides[tone]}
+RULES: No em dashes. No guarantees. No fluff. Sign off as Nick Ayala, Align Equity Group. Low-friction CTA.
+First line: SUBJECT: [subject]. Then blank line. Then email body. No preamble.`;
+
+  try {
+    const res  = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data = await res.json();
+    const raw  = data.content?.map(b=>b.text||'').join('').trim();
+    const lines= raw.split('\n'); let subject='', bodyStart=0;
+    for(let i=0;i<lines.length;i++){if(lines[i].toUpperCase().startsWith('SUBJECT:')){subject=lines[i].replace(/^SUBJECT:\s*/i,'').trim();bodyStart=i+1;break;}}
+    while(bodyStart<lines.length&&!lines[bodyStart].trim())bodyStart++;
+    document.getElementById('sdSubject').value = subject||`Deal Opportunity | Align Equity Group`;
+    document.getElementById('sdBody').value    = lines.slice(bodyStart).join('\n').trim();
+  } catch(e) {
+    document.getElementById('sdBody').value = `Hi ${p.name.split(' ')[0]},\n\nI have a deal I wanted to run by you. Let me know if you'd like the details.\n\nNick Ayala\nAlign Equity Group`;
+    document.getElementById('sdSubject').value = 'Deal Opportunity | Align Equity Group';
+  } finally { document.getElementById('sdGenerating').style.display='none'; }
+}
+
+function logDealSent(partnerId, dealName) {
+  const p = partners.find(x => x.id === partnerId);
+  if (!p) return;
+  if (!p.dealsSent) p.dealsSent = [];
+  // Avoid duplicate if same deal sent within same day
+  const today = new Date().toDateString();
+  const alreadyToday = p.dealsSent.some(d => d.dealName === dealName && new Date(d.date).toDateString() === today);
+  if (!alreadyToday) {
+    p.dealsSent.push({ dealName, date: new Date().toISOString() });
+    saveAll();
+    renderPartners();
+  }
+}
+
+function sdOpenMail() {
+  const p = partners.find(x=>x.id===sendPartnerId);
+  const dealName = v('sdName') || 'Untitled Deal';
+  logDealSent(sendPartnerId, dealName);
+  window.open(`mailto:${p?.email||''}?subject=${encodeURIComponent(v('sdSubject'))}&body=${encodeURIComponent(v('sdBody'))}`);
+}
+async function sdCopy() {
+  const dealName = v('sdName') || 'Untitled Deal';
+  logDealSent(sendPartnerId, dealName);
+  try{await navigator.clipboard.writeText(`Subject: ${v('sdSubject')}\n\n${v('sdBody')}`);const c=document.getElementById('sdCopyConfirm');c.style.display='block';setTimeout(()=>c.style.display='none',2000);}catch(e){alert('Select text manually.');}
+}
+
+// ══════════════════════════════════════════
+// MATCH A DEAL (PDF import)
+// ══════════════════════════════════════════
+let mdSelectedIds = new Set();
+
+function openMatchDealModal() {
+  mdSelectedIds = new Set();
+  document.getElementById('mdPdfInput').value='';
+  document.getElementById('mdPdfName').style.display='none';
+  document.getElementById('mdProcessing').style.display='none';
+  document.getElementById('mdError').style.display='none';
+  showMdStep(1);
+  openModal('matchDealModal');
+}
+
+function showMdStep(n) {
+  [1,2,3].forEach(i=>{
+    document.getElementById('mdStep'+i).style.display=i===n?'block':'none';
+    const ind=document.getElementById('mdInd'+i);
+    ind.classList.remove('active','done');
+    if(i===n)ind.classList.add('active');
+    else if(i<n)ind.classList.add('done');
+  });
+}
+
+async function handleMdPdf(input) {
+  const file=input.files[0]; if(!file) return;
+  document.getElementById('mdPdfName').textContent='📎 '+file.name;
+  document.getElementById('mdPdfName').style.display='block';
+  document.getElementById('mdProcessing').style.display='block';
+  document.getElementById('mdError').style.display='none';
+
+  const base64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('fail'));r.readAsDataURL(file);});
+
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:'Extract deal info. Return ONLY JSON with keys: dealName, submitter, submitterEmail, organization, location, capitalNeeded, structure, assetType, strategy, timeline, useOfFunds, dataRoom. Empty string if not found. No markdown.'}]}]})});
+    const data=await res.json();
+    const raw=data.content?.map(b=>b.text||'').join('').trim().replace(/```json|```/g,'').trim();
+    const deal=JSON.parse(raw);
+    document.getElementById('mdDealName').value  = deal.dealName||'';
+    document.getElementById('mdSubmitter').value = [deal.submitter,deal.organization].filter(Boolean).join(', ');
+    document.getElementById('mdLocation').value  = deal.location||'';
+    document.getElementById('mdCapital').value   = deal.capitalNeeded||'';
+    document.getElementById('mdStructure').value = deal.structure||'';
+    document.getElementById('mdAssetType').value = deal.assetType||'';
+    document.getElementById('mdTimeline').value  = deal.timeline||'';
+    document.getElementById('mdStrategy').value  = deal.strategy||'';
+    document.getElementById('mdFunds').value     = deal.useOfFunds||'';
+    document.getElementById('mdDataRoom').value  = deal.dataRoom||'';
+    renderMdMatches();
+    document.getElementById('mdProcessing').style.display='none';
+    showMdStep(2);
+  } catch(e) {
+    document.getElementById('mdProcessing').style.display='none';
+    document.getElementById('mdError').style.display='block';
+    document.getElementById('mdError').textContent='Could not read PDF. Make sure it is a valid GHL deal submission.';
+  }
+}
+
+function scoreMdPartner(p, deal) {
+  let score=0;
+  const sl=(deal.structure||'').toLowerCase();
+  const al=(deal.assetType||'').toLowerCase();
+  const gl=(deal.location||'').toLowerCase();
+  const typeMap={debt:['debt','senior','loan'],bridge:['bridge'],'hard-money':['hard money','hard'],mezz:['mezz','mezzanine'],preferred:['preferred'],equity:['equity','lp','joint venture'],dscr:['dscr'],'private-credit':['private credit','credit facility'],lp:['lp','limited partner','family office']};
+  (p.capitalTypes||[]).forEach(ct=>{if((typeMap[ct]||[]).some(k=>sl.includes(k)))score+=4;});
+  const assetMap={Multifamily:['multifamily','apartment','units'],Industrial:['industrial','warehouse','flex'],'Mixed Use':['mixed'],'Self Storage':['storage'],Hotel:['hotel'],Land:['land'],SFR:['sfr','single family'],Business:['business']};
+  (p.assetTypes||[]).forEach(at=>{const kw=assetMap[at]||[at.toLowerCase()];if(kw.some(k=>al.includes(k)))score+=3;});
+  if((p.geography||[]).includes('National'))score+=1;
+  const geoMap={Florida:['florida','fl'],Texas:['texas','tx'],Southeast:['southeast','georgia'],Northeast:['northeast','new york'],Southwest:['southwest','arizona'],Midwest:['midwest','chicago']};
+  (p.geography||[]).forEach(geo=>{if((geoMap[geo]||[geo.toLowerCase()]).some(k=>gl.includes(k)))score+=2;});
+  if(p.status==='active')score+=1;
+  return score;
+}
+
+function renderMdMatches() {
+  const deal={structure:document.getElementById('mdStructure').value,assetType:document.getElementById('mdAssetType').value,location:document.getElementById('mdLocation').value};
+  const scored=partners.map(p=>({...p,score:scoreMdPartner(p,deal)})).filter(p=>p.score>0).sort((a,b)=>b.score-a.score);
+  const el=document.getElementById('mdMatchList');
+  if(!scored.length){el.innerHTML='<div style="text-align:center;padding:16px;font-size:11px;color:var(--muted);">No strong matches. Add more partners or adjust deal fields.</div>';return;}
+  el.innerHTML=scored.map(p=>`
+    <div class="md-partner-card" id="mdpc-${p.id}" onclick="toggleMdPartner(${p.id})">
+      <div class="md-checkbox" id="mdcb-${p.id}"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;">${p.name}</span>
+          <span style="font-size:9px;padding:1px 6px;border-radius:8px;${p.score>=5?'background:rgba(57,255,133,0.1);color:var(--accent);border:1px solid rgba(57,255,133,0.2);':'background:rgba(201,169,110,0.1);color:#c9a96e;border:1px solid rgba(201,169,110,0.2);'}">${p.score>=5?'Strong':'Partial'}</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);">${p.org||''} · ${(p.capitalTypes||[]).map(t=>typeLabel(t)).join(', ')}</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:${p.score>=5?'var(--accent)':'#c9a96e'};">${p.score}</div>
+    </div>`).join('');
+}
+
+function toggleMdPartner(id) {
+  const card=document.getElementById('mdpc-'+id);
+  const cb=document.getElementById('mdcb-'+id);
+  if(mdSelectedIds.has(id)){mdSelectedIds.delete(id);card.classList.remove('selected');cb.textContent='';}
+  else{mdSelectedIds.add(id);card.classList.add('selected');cb.textContent='✓';}
+  const btn=document.getElementById('mdProceedBtn');
+  btn.disabled=mdSelectedIds.size===0;
+  btn.style.opacity=mdSelectedIds.size===0?'0.4':'1';
+  btn.textContent=mdSelectedIds.size===0?'Generate Emails':`Generate ${mdSelectedIds.size} Email${mdSelectedIds.size>1?'s':''}`;
+}
+
+async function mdGenerateEmails() {
+  const selected=partners.filter(p=>mdSelectedIds.has(p.id));
+  if(!selected.length)return;
+  showMdStep(3);
+  document.getElementById('mdEmailSub').textContent=`Writing ${selected.length} email${selected.length>1?'s':''}...`;
+  const container=document.getElementById('mdEmailsContainer');
+  container.innerHTML='';
+  document.getElementById('mdGenerating').style.display='block';
+
+  const deal={dealName:document.getElementById('mdDealName').value,submitter:document.getElementById('mdSubmitter').value,location:document.getElementById('mdLocation').value,capital:document.getElementById('mdCapital').value,structure:document.getElementById('mdStructure').value,assetType:document.getElementById('mdAssetType').value,timeline:document.getElementById('mdTimeline').value,strategy:document.getElementById('mdStrategy').value,notes:document.getElementById('mdFunds').value,dataRoom:document.getElementById('mdDataRoom').value};
+
+  document.getElementById('mdGenerating').style.display='none';
+  document.getElementById('mdEmailSub').textContent=`${selected.length} email${selected.length>1?'s':''} ready.`;
+
+  for(const p of selected){
+    const block=document.createElement('div');
+    block.className='email-block';
+    block.innerHTML=`<div class="email-block-header"><span class="email-partner-name">${p.name}${p.org?'<span style="color:var(--muted);font-weight:400;">, '+p.org+'</span>':''}</span><div style="display:flex;gap:5px;"><button class="action-btn primary" style="padding:4px 9px;font-size:9px;" onclick="mdOpenMail('${p.email}',this,${p.id})">Open Mail</button><button class="action-btn" style="padding:4px 9px;font-size:9px;" onclick="mdCopy(this,${p.id})">Copy</button></div></div>
+    <div class="form-group" style="margin-bottom:6px;"><label class="form-label">Subject</label><input type="text" class="form-input md-subj" style="font-size:11px;" value="Generating..."></div>
+    <div class="form-group" style="margin-bottom:0;"><label class="form-label">Body</label><textarea class="form-textarea md-body" style="min-height:180px;font-size:11px;line-height:1.7;">Writing...</textarea></div>
+    <div class="copy-confirm"></div>`;
+    container.appendChild(block);
+
+    try{
+      const pCtx=[p.capitalTypes.length?`Capital: ${p.capitalTypes.join(', ')}`:'',p.assetTypes.length?`Assets: ${p.assetTypes.join(', ')}`:'',p.geography.length?`Geo: ${p.geography.join(', ')}`:'',p.notes?`Notes: ${p.notes}`:'',p.relationship?`Relationship: ${p.relationship}`:'',p.compDetails?`Comp: ${p.compDetails}`:''].filter(Boolean).join('\n');
+      const prompt=`Write a deal outreach email from Nick Ayala, Align Equity Group to ${p.name}, ${p.org||''}.
+PARTNER: ${pCtx}
+DEAL: ${deal.dealName} | ${deal.location} | ${deal.capital} | ${deal.structure} | ${deal.assetType} | Close: ${deal.timeline}
+Use of funds: ${deal.notes}
+${deal.dataRoom?'Data room: '+deal.dataRoom:''}
+RULES: No em dashes. No guarantees. Direct and confident. Drop data room link naturally if provided. End with low-friction CTA. Sign off Nick Ayala, Align Equity Group.
+First line SUBJECT: [subject]. Blank line. Email body. No preamble.`;
+      const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:prompt}]})});
+      const data=await res.json();
+      const raw=data.content?.map(b=>b.text||'').join('').trim();
+      const lines=raw.split('\n');let subject='',bs=0;
+      for(let i=0;i<lines.length;i++){if(lines[i].toUpperCase().startsWith('SUBJECT:')){subject=lines[i].replace(/^SUBJECT:\s*/i,'').trim();bs=i+1;break;}}
+      while(bs<lines.length&&!lines[bs].trim())bs++;
+      block.querySelector('.md-subj').value=subject||`Deal Opportunity | Align Equity Group`;
+      block.querySelector('.md-body').value=lines.slice(bs).join('\n').trim();
+    }catch(e){
+      block.querySelector('.md-subj').value=`Deal Opportunity, ${deal.dealName} | Align Equity Group`;
+      block.querySelector('.md-body').value=`Hi ${p.name.split(' ')[0]},\n\nI have a deal I wanted to run by you, ${deal.dealName}.\n\n${deal.notes||''}\n\n${deal.capital?'Looking for '+deal.capital+' in '+deal.structure+'.':''} ${deal.timeline?'Timeline: '+deal.timeline+'.':''}\n\n${deal.dataRoom?'Data room: '+deal.dataRoom:'Happy to send the data room if this is interesting.'}\n\nLet me know.\n\nNick Ayala\nAlign Equity Group`;
+    }
+  }
+}
+
+function openMatchDealForExisting(dealId) {
+  const d=deals.find(x=>x.id===dealId);
+  if(!d)return;
+  openMatchDealModal();
+  setTimeout(()=>{
+    document.getElementById('mdDealName').value  = d.name;
+    document.getElementById('mdSubmitter').value = d.sponsor||'';
+    document.getElementById('mdLocation').value  = d.location||'';
+    document.getElementById('mdCapital').value   = d.capital||'';
+    document.getElementById('mdStructure').value = d.structure||'';
+    document.getElementById('mdAssetType').value = d.assetType||'';
+    document.getElementById('mdTimeline').value  = d.timeline||'';
+    document.getElementById('mdFunds').value     = d.notes||'';
+    document.getElementById('mdDataRoom').value  = d.dataRoom||'';
+    renderMdMatches();
+    showMdStep(2);
+  },100);
+}
+
+function mdOpenMail(email, btn, partnerId) {
+  const b = btn.closest('.email-block');
+  const dealName = document.getElementById('mdDealName').value || 'Untitled Deal';
+  if (partnerId) logDealSent(partnerId, dealName);
+  window.open(`mailto:${email}?subject=${encodeURIComponent(b.querySelector('.md-subj').value)}&body=${encodeURIComponent(b.querySelector('.md-body').value)}`);
+}
+async function mdCopy(btn, partnerId) {
+  const b = btn.closest('.email-block');
+  const dealName = document.getElementById('mdDealName').value || 'Untitled Deal';
+  if (partnerId) logDealSent(partnerId, dealName);
+  try{await navigator.clipboard.writeText(`Subject: ${b.querySelector('.md-subj').value}\n\n${b.querySelector('.md-body').value}`);const c=b.querySelector('.copy-confirm');c.style.display='block';c.textContent='Copied.';c.style.color='var(--accent)';setTimeout(()=>c.style.display='none',2000);}catch(e){alert('Select manually.');}
+}
+
+
+// ══════════════════════════════════════════
+// UTILITY
+// ══════════════════════════════════════════
+function v(id){return document.getElementById(id).value.trim();}
+function qsa(sel){return Array.from(document.querySelectorAll(sel)).filter(cb=>cb.checked).map(cb=>cb.value);}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');});
+});
+
+// Close alerts panel on outside click
+document.addEventListener('click',e=>{
+  const panel=document.getElementById('alertsPanel');
+  const bell=document.getElementById('bellBtn');
+  if(panel.classList.contains('open')&&!panel.contains(e.target)&&!bell.contains(e.target))panel.classList.remove('open');
+});
+
+// ══════════════════════════════════════════
+// MOBILE
+// ══════════════════════════════════════════
+function setMobileNav(tab) {
+  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('mnav-' + tab);
+  if (btn) btn.classList.add('active');
+}
+
+function openSidebarDrawer() {
+  updateMobileFilterCounts();
+  document.getElementById('sidebarDrawer').classList.add('open');
+  document.getElementById('sidebarDrawerOverlay').classList.add('open');
+}
+function closeSidebarDrawer() {
+  document.getElementById('sidebarDrawer').classList.remove('open');
+  document.getElementById('sidebarDrawerOverlay').classList.remove('open');
+}
+
+function toggleDFMobile(btn, group) { btn.classList.toggle('selected'); }
+
+function runQuickMatchMobile() {
+  const capTypes   = Array.from(document.querySelectorAll('#dfCapTypeMobile .toggle-btn.selected')).map(b => b.dataset.value);
+  const assetTypes = Array.from(document.querySelectorAll('#dfAssetTypeMobile .toggle-btn.selected')).map(b => b.dataset.value);
+  const geo        = document.getElementById('dfGeoMobile').value;
+
+  const scored = partners.map(p => {
+    let score = 0;
+    const typeHit  = !capTypes.length  || capTypes.some(t  => (p.capitalTypes||[]).includes(t));
+    const assetHit = !assetTypes.length || assetTypes.some(a => (p.assetTypes||[]).includes(a));
+    if (typeHit  && capTypes.length)   score += 4;
+    if (assetHit && assetTypes.length) score += 3;
+    if (geo && ((p.geography||[]).includes(geo)||(p.geography||[]).includes('National'))) score += 2;
+    if (p.status === 'active') score += 1;
+    if (capTypes.length && !typeHit) score = 0;
+    return { ...p, score };
+  }).filter(p => p.score > 0).sort((a,b) => b.score - a.score).slice(0, 6);
+
+  const el = document.getElementById('dfResultsMobile');
+  if (!scored.length) { el.innerHTML = '<div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">No matches.</div>'; return; }
+  el.innerHTML = scored.map(p => `
+    <div class="match-result-item" onclick="openPartnerDetail(${p.id});closeSidebarDrawer()">
+      <div><div style="font-size:11px;font-weight:500;color:var(--text);">${p.name}</div><div style="font-size:9px;color:var(--muted);">${p.org||''}</div></div>
+      <span class="score-pill ${p.score>=6?'':'partial'}">${p.score>=6?'Strong':'Partial'}</span>
+    </div>`).join('');
+}
+
+function filterTypeMobile(t, btn) {
+  activeType = t;
+  document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-mtype]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Sync desktop sidebar
+  const deskBtn = document.querySelector(`[data-type="${t}"]`);
+  if (deskBtn) deskBtn.classList.add('active');
+  renderPartners();
+}
+
+function filterStatusMobile(s, btn) {
+  activeStatus = s;
+  document.querySelectorAll('[data-status]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-mstatus]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const deskBtn = document.querySelector(`[data-status="${s}"]`);
+  if (deskBtn) deskBtn.classList.add('active');
+  renderPartners();
+}
+
+function updateMobileFilterCounts() {
+  const types = ['all','debt','equity','hard-money','mezz','bridge','preferred','dscr','lp'];
+  types.forEach(t => {
+    const el = document.getElementById('mfc-' + t);
+    if (!el) return;
+    el.textContent = t === 'all' ? partners.length : partners.filter(p => (p.capitalTypes||[]).includes(t)).length;
+  });
+  // Mobile nav badges
+  const partnerBadge = document.getElementById('mnav-badge-partners');
+  partnerBadge.textContent = partners.length;
+  partnerBadge.style.display = partners.length ? '' : 'none';
+
+  const now = new Date(); now.setHours(0,0,0,0);
+  const overdueCount = partners.filter(p => p.reminder && new Date(p.reminder+'T00:00:00') < now).length;
+  const bellBadge = document.getElementById('mnav-badge-bell');
+  bellBadge.textContent = overdueCount;
+  bellBadge.classList.toggle('show', overdueCount > 0);
+
+  const activeDeals = deals.filter(d => !['funded','dead'].includes(d.stage)).length;
+  const dealBadge = document.getElementById('mnav-badge-deals');
+  dealBadge.textContent = activeDeals;
+  dealBadge.style.display = activeDeals ? '' : 'none';
+}
+
+// Patch renderPartners to also update mobile counts
+const _origRender = renderPartners;
+// Already calls updateCounts which handles desktop; mobile handled separately on drawer open
+
+// On init, update mobile too
+updateMobileFilterCounts();
+
+</script>
+</body>
+</html>
