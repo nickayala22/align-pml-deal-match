@@ -994,6 +994,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 
 <script>
 // ══════════════════════════════════════════
+// CONFIG — update this after deploying your Cloudflare Worker
+// ══════════════════════════════════════════
+const API_PROXY = 'https://restless-wildflower-1f9falign-proxy.nick-0f0.workers.dev';
+
+// ══════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════
 const USERS = [
@@ -1886,7 +1891,7 @@ RULES: No em dashes. No guarantees. No fluff. Sign off as Nick Ayala, Align Equi
 First line: SUBJECT: [subject]. Then blank line. Then email body. No preamble.`;
 
   try {
-    const res  = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const res  = await fetch(API_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
     const data = await res.json();
     const raw  = data.content?.map(b=>b.text||'').join('').trim();
     const lines= raw.split('\n'); let subject='', bodyStart=0;
@@ -1961,7 +1966,7 @@ async function handleMdPdf(input) {
   const base64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('fail'));r.readAsDataURL(file);});
 
   try {
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:'Extract deal info. Return ONLY JSON with keys: dealName, submitter, submitterEmail, organization, location, capitalNeeded, structure, assetType, strategy, timeline, useOfFunds, dataRoom. Empty string if not found. No markdown.'}]}]})});
+    const res=await fetch(API_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:'Extract deal info. Return ONLY JSON with keys: dealName, submitter, submitterEmail, organization, location, capitalNeeded, structure, assetType, strategy, timeline, useOfFunds, dataRoom. Empty string if not found. No markdown.'}]}]})});
     const data=await res.json();
     const raw=data.content?.map(b=>b.text||'').join('').trim().replace(/```json|```/g,'').trim();
     const deal=JSON.parse(raw);
@@ -2063,7 +2068,7 @@ Use of funds: ${deal.notes}
 ${deal.dataRoom?'Data room: '+deal.dataRoom:''}
 RULES: No em dashes. No guarantees. Direct and confident. Drop data room link naturally if provided. End with low-friction CTA. Sign off Nick Ayala, Align Equity Group.
 First line SUBJECT: [subject]. Blank line. Email body. No preamble.`;
-      const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:prompt}]})});
+      const res=await fetch(API_PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:prompt}]})});
       const data=await res.json();
       const raw=data.content?.map(b=>b.text||'').join('').trim();
       const lines=raw.split('\n');let subject='',bs=0;
