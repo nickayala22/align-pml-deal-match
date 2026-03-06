@@ -1312,6 +1312,7 @@ function switchTab(tab, btn) {
   if (tab === 'deals')   renderDeals();
   if (tab === 'gaps')    renderGaps();
   if (tab === 'partners') renderPartners();
+  if (tab === 'intake' && currentUser) loadIntakeApps();
 }
 
 // ══════════════════════════════════════════
@@ -2697,11 +2698,6 @@ function esc(str) {
 }
 
 // Load intake when tab is switched to
-const _origSwitchTab = switchTab;
-function switchTab(tab, btn) {
-  _origSwitchTab(tab, btn);
-  if (tab === 'intake' && currentUser) loadIntakeApps();
-}
 
 </script>
 </body>
