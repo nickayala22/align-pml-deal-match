@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engagement Request — Align Equity Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0A1628;
+  --navy2:   #0F1F3D;
+  --gold:    #C9A84C;
+  --gold2:   #E2C06A;
+  --cream:   #F8F6F1;
+  --white:   #FFFFFF;
+  --text:    #1A1A2E;
+  --muted:   #7A7A8A;
+  --border:  #E2DDD6;
+  --border2: #CDC8C0;
+  --red:     #B84040;
+  --green:   #2E7D5E;
+  --surface: #F2EFE9;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--text);font-family:'Figtree',sans-serif;font-size:15px;min-height:100vh;}
+
+/* ── PAGE LOAD ANIMATION ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.5s ease both;}
+.fade-up-1{animation-delay:0.05s;}
+.fade-up-2{animation-delay:0.12s;}
+.fade-up-3{animation-delay:0.20s;}
+.fade-up-4{animation-delay:0.28s;}
+
+/* ── HEADER ── */
+.page-header{
+  background:var(--navy);
+  padding:18px 40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid rgba(201,168,76,0.25);
+}
+.logo{
+  font-family:'Playfair Display',serif;
+  font-size:18px;
+  font-weight:700;
+  color:var(--white);
+  letter-spacing:0.2px;
+}
+.logo span{color:var(--gold);}
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.ria-badge{
+  font-size:10px;
+  color:rgba(255,255,255,0.45);
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  font-weight:500;
+}
+.header-step{
+  background:rgba(201,168,76,0.12);
+  border:1px solid rgba(201,168,76,0.3);
+  border-radius:20px;
+  padding:4px 14px;
+  font-size:10px;
+  color:var(--gold);
+  letter-spacing:0.5px;
+}
+
+/* ── HERO ── */
+.hero{
+  background:var(--navy);
+  padding:64px 40px 56px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  top:-60px;right:-60px;
+  width:380px;height:380px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  bottom:-80px;left:30%;
+  width:240px;height:240px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,0.05) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{max-width:760px;margin:0 auto;position:relative;}
+.hero-eyebrow{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:3px;
+  color:var(--gold);
+  margin-bottom:20px;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold);opacity:0.6;}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:40px;
+  font-weight:700;
+  color:var(--white);
+  line-height:1.15;
+  margin-bottom:18px;
+  max-width:560px;
+}
+.hero-title em{color:var(--gold);font-style:normal;}
+.hero-body{
+  font-size:14px;
+  color:rgba(255,255,255,0.55);
+  line-height:1.75;
+  max-width:520px;
+  font-weight:300;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap{
+  background:var(--navy2);
+  padding:16px 40px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.progress-inner{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:0;}
+.progress-step{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:1;
+  position:relative;
+}
+.progress-step:not(:last-child)::after{
+  content:'';
+  position:absolute;
+  left:calc(50% + 16px);
+  right:0;
+  top:50%;
+  height:1px;
+  background:rgba(255,255,255,0.1);
+}
+.step-dot{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+  font-weight:600;
+  color:rgba(255,255,255,0.3);
+  flex-shrink:0;
+  transition:all 0.3s;
+}
+.step-dot.active{background:rgba(201,168,76,0.2);border-color:var(--gold);color:var(--gold);}
+.step-dot.done{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.step-label{font-size:11px;color:rgba(255,255,255,0.3);font-weight:500;transition:color 0.3s;}
+.step-label.active{color:rgba(255,255,255,0.75);}
+
+/* ── MAIN BODY ── */
+.page-body{max-width:800px;margin:0 auto;padding:48px 40px 80px;}
+
+/* ── DISQUALIFIER BOX ── */
+.disq-section{margin-bottom:40px;}
+.disq-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:16px;
+}
+.disq-icon{
+  width:36px;height:36px;
+  background:rgba(184,64,64,0.1);
+  border:1px solid rgba(184,64,64,0.25);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;
+  flex-shrink:0;
+}
+.disq-title-text{
+  font-family:'Playfair Display',serif;
+  font-size:17px;
+  font-weight:600;
+  color:var(--text);
+}
+.disq-subtitle{font-size:12px;color:var(--muted);margin-top:2px;}
+.disq-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.disq-item{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:13px 16px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+.disq-x{
+  width:20px;height:20px;
+  background:rgba(184,64,64,0.1);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+  font-weight:700;
+  color:var(--red);
+  flex-shrink:0;
+  margin-top:1px;
+}
+.disq-text{font-size:13px;color:var(--text);line-height:1.45;font-weight:400;}
+
+/* ── FORM SECTIONS ── */
+.form-section{margin-bottom:40px;}
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:24px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.section-num{
+  width:30px;height:30px;
+  background:var(--navy);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:14px;
+  font-weight:700;
+  color:var(--gold);
+  flex-shrink:0;
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;
+  font-weight:600;
+  color:var(--text);
+}
+
+/* ── FIELDS ── */
+.field{margin-bottom:20px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:20px;}
+
+label{
+  display:block;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  color:var(--muted);
+  margin-bottom:7px;
+  font-weight:600;
+}
+.required-star{color:var(--gold);margin-left:2px;}
+
+input[type=text],
+input[type=email],
+input[type=tel],
+select,
+textarea{
+  width:100%;
+  background:var(--white);
+  border:1.5px solid var(--border);
+  color:var(--text);
+  padding:13px 16px;
+  border-radius:8px;
+  font-family:'Figtree',sans-serif;
+  font-size:14px;
+  outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--navy);
+  box-shadow:0 0 0 3px rgba(10,22,40,0.06);
+}
+input::placeholder,textarea::placeholder{color:#BCBCCC;font-weight:300;}
+select{
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M0 0l6 7 6-7z' fill='%237A7A8A'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+}
+textarea{resize:vertical;min-height:100px;line-height:1.65;}
+.field-hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;font-style:italic;}
+
+/* ── RAISE SLIDER ── */
+.slider-container{background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:20px 20px 16px;}
+.slider-amount{
+  font-family:'Playfair Display',serif;
+  font-size:30px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:14px;
+  line-height:1;
+}
+.slider-amount span{font-size:14px;color:var(--muted);font-family:'Figtree',sans-serif;font-weight:400;margin-left:6px;}
+input[type=range]{
+  width:100%;
+  appearance:none;
+  height:4px;
+  background:linear-gradient(to right,var(--navy) 0%,var(--navy) 20%,var(--border) 20%,var(--border) 100%);
+  border-radius:2px;
+  outline:none;
+  cursor:pointer;
+  border:none;
+  padding:0;
+  box-shadow:none;
+}
+input[type=range]:focus{box-shadow:none;border:none;}
+input[type=range]::-webkit-slider-thumb{
+  appearance:none;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:var(--navy);
+  cursor:pointer;
+  border:3px solid var(--white);
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);
+  transition:transform 0.15s;
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15);}
+.slider-range{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted);}
+.slider-min-note{
+  margin-top:10px;
+  font-size:11px;
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-style:italic;
+}
+.slider-min-note.warn{color:var(--red);}
+
+/* ── BOOLEAN TOGGLE ── */
+.bool-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.bool-opt{position:relative;}
+.bool-opt input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
+.bool-opt label{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  padding:13px 16px;
+  cursor:pointer;
+  text-align:center;
+  font-size:13px;
+  font-weight:500;
+  color:var(--muted);
+  transition:all 0.18s;
+  display:block;
+  margin:0;
+  letter-spacing:0;
+  text-transform:none;
+}
+.bool-opt input[type=radio]:checked + label{
+  background:rgba(10,22,40,0.05);
+  border-color:var(--navy);
+  color:var(--navy);
+  font-weight:600;
+}
+.bool-opt.danger input[type=radio]:checked + label{
+  background:rgba(184,64,64,0.06);
+  border-color:var(--red);
+  color:var(--red);
+}
+
+/* ── CONDITIONAL ── */
+.conditional{display:none;margin-top:12px;}
+.conditional.visible{display:block;}
+
+/* ── SUBMIT ── */
+.submit-section{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:28px 28px;
+  margin-top:8px;
+}
+.submit-disclaimer{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.75;
+  margin-bottom:22px;
+  padding-bottom:20px;
+  border-bottom:1px solid var(--border);
+}
+.submit-disclaimer strong{color:var(--text);}
+.submit-btn{
+  width:100%;
+  background:var(--navy);
+  border:none;
+  color:var(--white);
+  padding:16px 32px;
+  border-radius:8px;
+  font-family:'Figtree',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+  letter-spacing:0.3px;
+  position:relative;
+  overflow:hidden;
+}
+.submit-btn::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(201,168,76,0.15),transparent);
+  opacity:0;
+  transition:opacity 0.2s;
+}
+.submit-btn:hover{background:var(--navy2);}
+.submit-btn:hover::after{opacity:1;}
+.submit-btn:disabled{background:var(--border2);color:var(--muted);cursor:not-allowed;}
+.submit-btn:disabled::after{display:none;}
+
+.form-error{
+  background:rgba(184,64,64,0.06);
+  border:1px solid rgba(184,64,64,0.2);
+  border-radius:6px;
+  padding:11px 14px;
+  font-size:13px;
+  color:var(--red);
+  margin-top:14px;
+  display:none;
+  line-height:1.5;
+}
+
+/* ── SUCCESS ── */
+.success-screen{
+  display:none;
+  max-width:560px;
+  margin:80px auto;
+  padding:0 40px;
+  text-align:center;
+}
+.success-badge{
+  width:64px;height:64px;
+  background:rgba(46,125,94,0.1);
+  border:2px solid rgba(46,125,94,0.25);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  margin:0 auto 24px;
+}
+.success-title{
+  font-family:'Playfair Display',serif;
+  font-size:26px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:14px;
+}
+.success-body{font-size:14px;color:var(--muted);line-height:1.75;}
+.success-divider{width:40px;height:2px;background:var(--gold);margin:24px auto;}
+
+/* ── FOOTER ── */
+.page-footer{
+  background:var(--navy);
+  padding:24px 40px;
+  text-align:center;
+}
+.footer-text{font-size:11px;color:rgba(255,255,255,0.3);line-height:1.7;max-width:700px;margin:0 auto;}
+
+/* ── FILE UPLOAD ── */
+.upload-box{
+  background:var(--white);
+  border:1.5px dashed var(--border2);
+  border-radius:8px;
+  padding:24px 20px;
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.upload-box:hover{border-color:var(--navy);background:var(--surface);}
+.upload-box.has-file{border-color:var(--green);border-style:solid;background:rgba(46,125,94,0.04);}
+.upload-icon{font-size:28px;margin-bottom:8px;}
+.upload-text{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:4px;}
+.upload-text.has-file{color:var(--green);}
+.upload-hint{font-size:11px;color:var(--muted);}
+
+/* ── FILE UPLOAD ── */
+.upload-box{background:var(--white);border:1.5px dashed var(--border2);border-radius:8px;padding:24px 20px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.upload-box:hover{border-color:var(--navy);background:var(--surface);}
+.upload-box.has-file{border-color:var(--green);border-style:solid;background:rgba(46,125,94,0.04);}
+.upload-icon{font-size:28px;margin-bottom:8px;}
+.upload-text{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:4px;}
+.upload-text.has-file{color:var(--green);}
+.upload-hint{font-size:11px;color:var(--muted);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .page-header{padding:16px 20px;}
+  .ria-badge{display:none;}
+  .hero{padding:40px 20px 40px;}
+  .hero-title{font-size:28px;}
+  .progress-bar-wrap{padding:14px 20px;}
+  .step-label{display:none;}
+  .page-body{padding:32px 20px 60px;}
+  .field-row,.field-row-3,.disq-grid,.bool-group{grid-template-columns:1fr;}
+  .submit-section{padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="page-header">
+  <div class="logo">Align<span>.</span>Equity Group</div>
+  <div class="header-right">
+    <div class="ria-badge">Registered Investment Adviser</div>
+    <div class="header-step">Engagement Request</div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner fade-up fade-up-1">
+    <div class="hero-eyebrow">Capital Positioning Engagement</div>
+    <div class="hero-title">Submit Your<br><em>Engagement Request</em></div>
+    <div class="hero-body">
+      Every engagement request is reviewed before a call is scheduled. Every submission is reviewed before a call is scheduled. 
+      If your deal meets our criteria, a member of our team will reach out within 2 business days. 
+      Not every request will move forward.
+    </div>
+  </div>
+</section>
+
+<!-- ── PROGRESS ── -->
+<div class="progress-bar-wrap">
+  <div class="progress-inner">
+    <div class="progress-step">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-label active">Step 1</div>
+    </div>
+    <div class="progress-step">
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-label">Intake Review</div>
+    </div>
+    <div class="progress-step">
+      <div class="step-dot" id="dot3">3</div>
+      <div class="step-label">Intake Call</div>
+    </div>
+    <div class="progress-step">
+      <div class="step-dot" id="dot4">4</div>
+      <div class="step-label">Engagement</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN BODY ── -->
+<main class="page-body" id="formWrap">
+
+  <!-- DISQUALIFIERS -->
+  <div class="disq-section fade-up fade-up-2">
+    <div class="disq-header">
+      <div class="disq-icon">⚠</div>
+      <div>
+        <div class="disq-title-text">Review Before Applying</div>
+        <div class="disq-subtitle">The following are automatic disqualifiers. If any apply, this engagement is not the right fit at this time.</div>
+      </div>
+    </div>
+    <div class="disq-grid">
+      <div class="disq-item">
+        <div class="disq-x">✕</div>
+        <div class="disq-text">Raise amount under $10,000,000</div>
+      </div>
+      <div class="disq-item">
+        <div class="disq-x">✕</div>
+        <div class="disq-text">No prior closes as a principal on any deal</div>
+      </div>
+      <div class="disq-item">
+        <div class="disq-x">✕</div>
+        <div class="disq-text">Deal actively shopped for more than 12 months without result</div>
+      </div>
+      <div class="disq-item">
+        <div class="disq-x">✕</div>
+        <div class="disq-text">No personal capital committed to the deal</div>
+      </div>
+      <div class="disq-item">
+        <div class="disq-x">✕</div>
+        <div class="disq-text">Undisclosed litigation or default on a prior deal</div>
+      </div>
+      <div class="disq-item">
+        <div class="disq-x">✕</div>
+        <div class="disq-text">Raise at $200M+ (separate engagement, contact us directly)</div>
+      </div>
+    </div>
+  </div>
+
+  <form id="intakeForm" onsubmit="handleSubmit(event)">
+
+    <!-- SECTION 1 -->
+    <div class="form-section fade-up fade-up-3">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">About You</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Full Name <span class="required-star">*</span></label>
+          <input type="text" id="full_name" placeholder="Your full legal name" required>
+        </div>
+        <div class="field">
+          <label>Company / Entity Name</label>
+          <input type="text" id="company_name" placeholder="Operating entity name">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Email Address <span class="required-star">*</span></label>
+          <input type="email" id="email" placeholder="you@yourdomain.com" required>
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+1 (000) 000-0000">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Prior Closes as a Principal <span class="required-star">*</span></label>
+        <select id="prior_closes" required>
+          <option value="">Select number of prior closes</option>
+          <option value="0">0 — First raise</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3 — 5</option>
+          <option value="6">6 — 10</option>
+          <option value="11">11+</option>
+        </select>
+        <div class="field-hint">Applicants with zero prior closes as a principal do not meet our intake criteria.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="form-section fade-up fade-up-4">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">The Deal</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Asset Type <span class="required-star">*</span></label>
+          <select id="asset_type" required>
+            <option value="">Select asset type</option>
+            <option>Multifamily</option>
+            <option>Commercial Real Estate</option>
+            <option>Mixed-Use</option>
+            <option>Industrial / Warehouse</option>
+            <option>Self-Storage</option>
+            <option>Business Acquisition</option>
+            <option>Private Credit / Bridge</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Deal Location / Market <span class="required-star">*</span></label>
+          <input type="text" id="deal_location" placeholder="City, State" required>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Investment Strategy <span class="required-star">*</span></label>
+          <select id="strategy" required>
+            <option value="">Select strategy</option>
+            <option>Value-Add Acquisition</option>
+            <option>Stabilized / Core</option>
+            <option>Ground-Up Development</option>
+            <option>Bridge / Short-Term</option>
+            <option>Business Acquisition / Roll-Up</option>
+            <option>Distressed / Opportunistic</option>
+            <option>Fund</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Hold Period</label>
+          <select id="hold_period">
+            <option value="">Select hold period</option>
+            <option>Under 12 months</option>
+            <option>1 — 2 years</option>
+            <option>3 — 5 years</option>
+            <option>5 — 7 years</option>
+            <option>7+ years</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Current Deal Status <span class="required-star">*</span></label>
+          <select id="deal_status" required>
+            <option value="">Select current status</option>
+            <option>Under Contract — Closing scheduled</option>
+            <option>LOI Signed — Due diligence in progress</option>
+            <option>Pre-LOI — Actively underwriting</option>
+            <option>Already Owned — Raising for refinance or capex</option>
+            <option>Sourcing — Not yet under contract</option>
+          </select>
+          <div class="field-hint">Capital partners want to know where the deal stands before committing to a meeting.</div>
+        </div>
+        <div class="field">
+          <label>Existing Investor Base</label>
+          <select id="existing_investors">
+            <option value="">Select</option>
+            <option>None — starting from zero</option>
+            <option>A few friends and family</option>
+            <option>5 — 10 prior investors</option>
+            <option>10 — 25 prior investors</option>
+            <option>25+ prior investors</option>
+          </select>
+          <div class="field-hint">Existing LP relationships signal deal credibility to capital partners.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Capital Raise Amount <span class="required-star">*</span></label>
+        <div class="slider-container">
+          <div class="slider-amount" id="raiseDisplay">$10,000,000 <span>target raise</span></div>
+          <input type="range" id="raiseSlider" min="1000000" max="100000000" step="500000" value="10000000" oninput="updateRaise()">
+          <div class="slider-range">
+            <span>$1M</span>
+            <span>$100M+</span>
+          </div>
+          <div class="slider-min-note" id="raiseNote">
+            Minimum raise size for this engagement is $10,000,000.
+          </div>
+        </div>
+        <input type="hidden" id="raise_amount" value="10000000">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Total Capitalization (Debt + Equity)</label>
+          <input type="text" id="total_cap" placeholder="e.g. $25,000,000">
+        </div>
+        <div class="field">
+          <label>Target Return</label>
+          <input type="text" id="target_return" placeholder="e.g. 14% IRR / 1.8x EM">
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Qualifier Questions</div>
+      </div>
+
+      <div class="field">
+        <label>Do you have personal capital committed to this deal? <span class="required-star">*</span></label>
+        <div class="bool-group">
+          <div class="bool-opt">
+            <input type="radio" name="skin_in_game" id="skin_yes" value="true" required>
+            <label for="skin_yes">Yes — I have personal capital in this deal</label>
+          </div>
+          <div class="bool-opt danger">
+            <input type="radio" name="skin_in_game" id="skin_no" value="false">
+            <label for="skin_no">No — I do not have personal capital in this deal</label>
+          </div>
+        </div>
+        <div class="field-hint">Capital partners expect meaningful personal exposure from the operator. Deals without sponsor capital committed do not meet our intake criteria.</div>
+      </div>
+
+      <div class="field">
+        <label>How long has this deal been actively shopped for capital? <span class="required-star">*</span></label>
+        <select id="months_shopped" required>
+          <option value="">Select</option>
+          <option value="0">Not yet — this is a new raise</option>
+          <option value="1">Less than 3 months</option>
+          <option value="3">3 — 6 months</option>
+          <option value="6">6 — 12 months</option>
+          <option value="13">More than 12 months</option>
+        </select>
+        <div class="field-hint">Deals actively shopped for more than 12 months without result do not meet our intake criteria.</div>
+      </div>
+
+      <div class="field">
+        <label>Any current or prior litigation, defaults, or legal disputes related to you or your entity? <span class="required-star">*</span></label>
+        <div class="bool-group">
+          <div class="bool-opt danger">
+            <input type="radio" name="litigation" id="lit_yes" value="true" required>
+            <label for="lit_yes">Yes — there is something to disclose</label>
+          </div>
+          <div class="bool-opt">
+            <input type="radio" name="litigation" id="lit_no" value="false">
+            <label for="lit_no">No — clean record</label>
+          </div>
+        </div>
+        <div class="conditional" id="litigationDetail">
+          <textarea id="litigation_details" placeholder="Please describe the situation in full. Undisclosed issues discovered during our review are grounds for immediate termination of any engagement."></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Upload Your Deck or One-Pager (Optional)</label>
+        <div class="upload-box" id="uploadBox" onclick="document.getElementById('deckFile').click()">
+          <input type="file" id="deckFile" accept=".pdf,.pptx,.ppt" style="display:none;" onchange="handleFileSelect(this)">
+          <div class="upload-icon">📄</div>
+          <div class="upload-text" id="uploadText">Click to upload your pitch deck or one-pager</div>
+          <div class="upload-hint">PDF or PowerPoint · Max 10MB</div>
+        </div>
+        <div class="field-hint">Uploading your deck lets us review the deal before the intake call. Operators who submit materials get more out of the first conversation.</div>
+      </div>
+
+      <div class="field">
+        <label>Upload Your Deck or One-Pager (Optional)</label>
+        <div class="upload-box" id="uploadBox" onclick="document.getElementById('deckFile').click()">
+          <input type="file" id="deckFile" accept=".pdf,.pptx,.ppt" style="display:none;" onchange="handleFileSelect(this)">
+          <div class="upload-icon">&#128196;</div>
+          <div class="upload-text" id="uploadText">Click to upload your pitch deck or one-pager</div>
+          <div class="upload-hint">PDF or PowerPoint &middot; Max 10MB</div>
+        </div>
+        <div class="field-hint">Uploading your deck lets us review the deal before the intake call. Operators who submit materials get more out of the first conversation.</div>
+      </div>
+
+      <div class="field">
+        <label>Additional Notes (Optional)</label>
+        <textarea id="additional_notes" placeholder="Anything else you want us to know before we review your request. Deal background, timeline, what you've already done to raise..."></textarea>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-section">
+      <div class="submit-disclaimer">
+        By submitting this request you confirm that all information provided is accurate and complete to the best of your knowledge. 
+        <strong>Submitting an engagement request does not guarantee acceptance into the advisory engagement.</strong> 
+        All engagements are subject to a separate written Advisory Engagement Agreement through Align Equity Group, a Registered Investment Adviser. 
+        This request does not create an advisory relationship or any obligation on the part of Align Equity Group.
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Engagement Request →</button>
+      <div class="form-error" id="formError"></div>
+    </div>
+
+  </form>
+</main>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="successScreen">
+  <div class="success-badge">✓</div>
+  <div class="success-title">Request Received</div>
+  <div class="success-divider"></div>
+  <div class="success-body">
+    Every request is reviewed before a call is scheduled.<br><br>
+    If your deal meets our intake criteria, a member of our team will reach out within 2 business days.<br><br>
+    Please do not submit multiple requests for the same deal.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div class="footer-text">
+    Align Equity Group is a Registered Investment Adviser. This request is for informational and intake purposes only and does not constitute an offer of advisory services or any securities transaction. 
+    All engagements are governed by a separate written Advisory Engagement Agreement. No representation is made that capital will be raised or that any introduction will result in a completed transaction.
+  </div>
+</footer>
+
+<script>
+const WORKER = 'https://restless-wildflower-1f9falign-proxy.nick-0f0.workers.dev';
+
+// ── SLIDER ──────────────────────────────────────────────────────────────────
+function updateRaise() {
+  const val  = parseInt(document.getElementById('raiseSlider').value);
+  const note = document.getElementById('raiseNote');
+  const disp = document.getElementById('raiseDisplay');
+
+  document.getElementById('raise_amount').value = val;
+  disp.innerHTML = '$' + val.toLocaleString() + ' <span>target raise</span>';
+
+  // Update gradient
+  const pct = ((val - 1000000) / (100000000 - 1000000)) * 100;
+  document.getElementById('raiseSlider').style.background =
+    `linear-gradient(to right, var(--navy) 0%, var(--navy) ${pct}%, var(--border) ${pct}%, var(--border) 100%)`;
+
+  if (val < 10000000) {
+    note.className = 'slider-min-note warn';
+    note.textContent = '⚠ Below the $10,000,000 minimum. This amount does not meet our intake criteria.';
+  } else if (val >= 200000000) {
+    note.className = 'slider-min-note warn';
+    note.textContent = 'Raises at $200M+ are handled through a separate full advisory engagement. Contact us directly.';
+  } else {
+    note.className = 'slider-min-note';
+    note.textContent = 'Minimum raise size for this engagement is $10,000,000.';
+  }
+}
+
+// ── LITIGATION CONDITIONAL ───────────────────────────────────────────────────
+document.querySelectorAll('input[name="litigation"]').forEach(el => {
+  el.addEventListener('change', () => {
+    document.getElementById('litigationDetail').classList.toggle('visible', el.value === 'true');
+  });
+});
+
+// ── SUBMIT ──────────────────────────────────────────────────────────────────
+async function handleSubmit(e) {
+  e.preventDefault();
+  const btn   = document.getElementById('submitBtn');
+  const errEl = document.getElementById('formError');
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const skinVal  = document.querySelector('input[name="skin_in_game"]:checked')?.value;
+  const litVal   = document.querySelector('input[name="litigation"]:checked')?.value;
+  const months   = parseInt(document.getElementById('months_shopped').value);
+  const closes   = parseInt(document.getElementById('prior_closes').value);
+  const raise    = parseInt(document.getElementById('raise_amount').value);
+
+  // Auto-disqualifier flags
+  const dqNoTrack  = closes === 0;
+  const dqNoSkin   = skinVal === 'false';
+  const dqShopped  = months >= 13;
+  const dqTooSmall = raise < 10000000;
+  const isAutoDQ   = dqNoTrack || dqNoSkin || dqShopped || dqTooSmall;
+
+  const payload = {
+    full_name:               document.getElementById('full_name').value.trim(),
+    email:                   document.getElementById('email').value.trim(),
+    phone:                   document.getElementById('phone').value.trim(),
+    company_name:            document.getElementById('company_name').value.trim(),
+    asset_type:              document.getElementById('asset_type').value,
+    deal_location:           document.getElementById('deal_location').value.trim(),
+    raise_amount:            raise,
+    total_capitalization:    parseCurrency(document.getElementById('total_cap').value),
+    hold_period:             document.getElementById('hold_period').value,
+    target_return:           document.getElementById('target_return').value.trim(),
+    prior_closes:            closes,
+    personal_capital_in_deal: skinVal === 'true',
+    months_shopped:          months,
+    any_litigation:          litVal === 'true',
+    litigation_details:      document.getElementById('litigation_details').value.trim(),
+    additional_notes:        document.getElementById('additional_notes').value.trim(),
+    lead_source:             document.getElementById('lead_source').value,
+    sponsor_role:            document.getElementById('sponsor_role').value,
+    deal_status:             document.getElementById('deal_status').value,
+    existing_investors:      document.getElementById('existing_investors').value,
+    status:                  isAutoDQ ? 'Auto-Disqualified' : 'Pending Review',
+    disq_no_track_record:    dqNoTrack,
+    disq_no_skin_in_game:    dqNoSkin,
+    disq_deal_shopped:       dqShopped,
+    disq_raise_too_small:    dqTooSmall,
+    disq_litigation:         false,
+    disq_bad_market:         false,
+    disq_difficult_operator: false,
+  };
+
+  try {
+    const res = await fetch(WORKER + '/intake', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('Server error');
+
+    // Hide form, show success
+    document.getElementById('formWrap').style.display = 'none';
+    document.querySelector('.hero').style.display     = 'none';
+    document.querySelector('.progress-bar-wrap').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch(err) {
+    errEl.textContent = 'Something went wrong. Please try again or contact us directly.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Submit Engagement Request →';
+  }
+}
+
+function handleFileSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) {
+    alert('File is too large. Maximum size is 10MB.');
+    input.value = '';
+    return;
+  }
+  const box = document.getElementById('uploadBox');
+  const txt = document.getElementById('uploadText');
+  box.classList.add('has-file');
+  txt.classList.add('has-file');
+  txt.textContent = file.name;
+}
+
+function handleFileSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) {
+    alert('File too large. Max 10MB.');
+    input.value = '';
+    return;
+  }
+  document.getElementById('uploadBox').classList.add('has-file');
+  const txt = document.getElementById('uploadText');
+  txt.classList.add('has-file');
+  txt.textContent = '✓ ' + file.name;
+}
+
+function parseCurrency(str) {
+  if (!str) return null;
+  const n = parseFloat(str.replace(/[$,]/g, ''));
+  return isNaN(n) ? null : n;
+}
+</script>
+</body>
+</html>
