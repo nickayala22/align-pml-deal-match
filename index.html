@@ -1182,6 +1182,13 @@ const TYPE_COLOR = { debt:'var(--blue)', equity:'var(--purple)', 'hard-money':'v
 
 function typeLabel(t) { return TYPE_LABEL[t] || t; }
 function typeClass(t) { return TYPE_CLASS[t] || ''; }
+function daysSince(dateStr) {
+  const days = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
+  if (days === 0) return 'today';
+  if (days === 1) return '1 day ago';
+  return `${days} days ago`;
+}
+
 function accentColor(types) { return (types && types.length) ? (TYPE_COLOR[types[0]] || 'var(--border)') : 'var(--border)'; }
 
 // ══════════════════════════════════════════
@@ -1667,6 +1674,7 @@ function renderDeals(search='') {
             <div class="deal-card-meta">${d.sponsor||''}</div>
             <div class="deal-card-meta">${d.location||''} ${d.asset_type?'· '+d.asset_type:''}</div>
             ${d.capital?`<div class="deal-card-amount">${d.capital}</div>`:''}
+            ${(d.distributed_to&&d.distributed_to.length)?`<div style="font-size:9px;color:var(--muted);margin-top:4px;">📤 ${d.distributed_to.length} partner${d.distributed_to.length>1?'s':''} · ${daysSince(d.distributed_to[0].date)}</div>`:''}
             ${flags.length?`<div class="deal-card-flags">${flags.join('')}</div>`:''}
           </div>`;
         }).join('')}
@@ -1769,6 +1777,21 @@ function openDealDetail(id) {
     ${d.data_room?`<div style="margin-bottom:12px;"><a href="${d.data_room}" target="_blank" style="color:var(--accent);font-size:11px;text-decoration:none;">🔗 Open Data Room</a></div>`:''}
     ${d.ghl_link?`<div style="margin-bottom:12px;"><a href="${d.ghl_link}" target="_blank" style="color:var(--blue);font-size:11px;text-decoration:none;">↗ View in GHL</a></div>`:''}
     ${d.notes?`<div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--text);line-height:1.6;">${d.notes}</div>`:''}
+
+    ${(d.distributed_to && d.distributed_to.length) ? `
+    <div style="margin-bottom:14px;">
+      <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">📤 Distributed To (${d.distributed_to.length})</div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${d.distributed_to.map(p=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;">
+          <div>
+            <div style="font-size:11px;color:var(--text);font-weight:500;">${p.name}</div>
+            ${p.org?`<div style="font-size:10px;color:var(--muted);">${p.org}</div>`:''}
+          </div>
+          <div style="font-size:10px;color:var(--muted);">${new Date(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
 
     <div style="margin-bottom:14px;">
       <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;margin-bottom:6px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">Move Stage</div>
@@ -2169,45 +2192,48 @@ function openMatchDealForExisting(dealId) {
 }
 
 async function saveMdDealToPipeline() {
-  const btn = document.getElementById('mdSavePipelineBtn');
+  const btn  = document.getElementById('mdSavePipelineBtn');
   const name = document.getElementById('mdDealName').value.trim() || 'Untitled Deal';
 
   // Check if already saved
   const alreadySaved = deals.some(d => d.name === name);
   if (alreadySaved) {
-    btn.textContent = '✓ Already in Pipeline';
-    btn.style.background = 'var(--green)';
-    setTimeout(() => { btn.textContent = '+ Save to Pipeline'; btn.style.background = 'var(--accent)'; }, 2000);
+    if (btn) { btn.textContent = '✓ Already in Pipeline'; btn.style.background = 'var(--green)'; }
+    setTimeout(() => { if(btn){btn.textContent='+ Save to Pipeline';btn.style.background='var(--accent)';} }, 2000);
     return;
   }
 
-  btn.textContent = 'Saving...'; btn.disabled = true;
+  if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
+
+  // Capture whoever is currently selected as partners
+  const selectedPartners = partners
+    .filter(p => mdSelectedIds.has(p.id))
+    .map(p => ({ id: p.id, name: p.name, org: p.org || '', date: new Date().toISOString() }));
 
   const data = {
     name,
-    sponsor:      document.getElementById('mdSubmitter').value.trim(),
-    location:     document.getElementById('mdLocation').value.trim(),
-    asset_type:   document.getElementById('mdAssetType').value.trim(),
-    capital:      document.getElementById('mdCapital').value.trim(),
-    structure:    document.getElementById('mdStructure').value.trim(),
-    timeline:     document.getElementById('mdTimeline').value.trim(),
-    notes:        document.getElementById('mdFunds').value.trim(),
-    data_room:    document.getElementById('mdDataRoom').value.trim(),
-    stage:        'distributed', // already sent to partners
-    activity:     [],
+    sponsor:          document.getElementById('mdSubmitter').value.trim(),
+    location:         document.getElementById('mdLocation').value.trim(),
+    asset_type:       document.getElementById('mdAssetType').value.trim(),
+    capital:          document.getElementById('mdCapital').value.trim(),
+    structure:        document.getElementById('mdStructure').value.trim(),
+    timeline:         document.getElementById('mdTimeline').value.trim(),
+    notes:            document.getElementById('mdFunds').value.trim(),
+    data_room:        document.getElementById('mdDataRoom').value.trim(),
+    stage:            'distributed',
+    distributed_to:   selectedPartners,
+    activity:         [],
   };
 
   try {
     const saved = await api('POST', '/deals', data);
     deals.push(saved);
     renderDeals();
-    btn.textContent = '✓ Saved to Pipeline';
-    btn.style.background = 'var(--green)';
-    setTimeout(() => { btn.textContent = '+ Save to Pipeline'; btn.style.background = 'var(--accent)'; btn.disabled = false; }, 2500);
+    if (btn) { btn.textContent = '✓ Saved to Pipeline'; btn.style.background = 'var(--green)'; }
+    setTimeout(() => { if(btn){btn.textContent='+ Save to Pipeline';btn.style.background='var(--accent)';btn.disabled=false;} }, 2500);
   } catch(e) {
     alert('Save failed. Check your connection.');
-    btn.textContent = '+ Save to Pipeline';
-    btn.disabled = false;
+    if (btn) { btn.textContent = '+ Save to Pipeline'; btn.disabled = false; }
   }
 }
 
