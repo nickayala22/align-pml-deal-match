@@ -392,57 +392,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
 .user-pill{display:flex;align-items:center;gap:8px;padding:4px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;font-size:10px;color:var(--muted);}
 .user-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
-/* ── INTAKE TAB ── */
-.intake-filter-btn{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;transition:all 0.15s;}
-.intake-filter-btn:hover{color:var(--text);border-color:var(--border2);}
-.intake-filter-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--accent);}
-.intake-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;}
-.intake-card:hover{border-color:var(--border2);background:var(--surface2);}
-.intake-card.status-accepted{border-left:3px solid var(--green);}
-.intake-card.status-declined{border-left:3px solid var(--red);}
-.intake-card.status-pending{border-left:3px solid var(--gold, #c9a84c);}
-.intake-card.status-needs{border-left:3px solid var(--amber);}
-.intake-card.status-autodq{border-left:3px solid #444;}
-.intake-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.intake-meta{font-size:10px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;}
-.intake-meta span{display:flex;align-items:center;gap:4px;}
-.intake-status-pill{padding:3px 10px;border-radius:20px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;}
-.pill-pending{background:rgba(201,168,76,0.12);color:#c9a84c;border:1px solid rgba(201,168,76,0.25);}
-.pill-accepted{background:rgba(74,173,138,0.12);color:var(--green);border:1px solid rgba(74,173,138,0.25);}
-.pill-declined{background:rgba(224,92,74,0.12);color:var(--red);border:1px solid rgba(224,92,74,0.25);}
-.pill-needs{background:rgba(255,159,67,0.12);color:var(--amber);border:1px solid rgba(255,159,67,0.25);}
-.pill-autodq{background:rgba(102,102,102,0.12);color:#666;border:1px solid rgba(102,102,102,0.2);}
-.intake-score-badge{font-size:10px;color:var(--muted);text-align:right;}
-.intake-score-num{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);}
-/* Score rows */
-.score-row{display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
-.score-row:last-child{border-bottom:none;}
-.score-label{font-size:11px;color:var(--text);}
-.score-desc{font-size:10px;color:var(--muted);margin-top:2px;}
-.score-pips{display:flex;gap:5px;}
-.score-pip{width:30px;height:30px;border-radius:4px;border:1px solid var(--border2);background:var(--surface);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
-.score-pip:hover{border-color:var(--accent);color:var(--accent);}
-.score-pip.selected-1,.score-pip.selected-2{background:rgba(224,92,74,0.15);border-color:var(--red);color:var(--red);}
-.score-pip.selected-3{background:rgba(201,168,76,0.15);border-color:#c9a84c;color:#c9a84c;}
-.score-pip.selected-4,.score-pip.selected-5{background:rgba(74,173,138,0.15);border-color:var(--green);color:var(--green);}
-/* Disq checks */
-.disq-check{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);cursor:pointer;padding:8px 10px;border-radius:4px;border:1px solid var(--border);transition:all 0.15s;}
-.disq-check:hover{border-color:var(--red);color:var(--text);}
-.disq-check input{cursor:pointer;accent-color:var(--red);}
-/* Decision buttons */
-.decision-btn{padding:11px;border-radius:5px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all 0.15s;}
-.decision-btn.accept{background:rgba(74,173,138,0.15);color:var(--green);border:1px solid rgba(74,173,138,0.3);}
-.decision-btn.accept:hover{background:var(--green);color:#000;}
-.decision-btn.review{background:rgba(255,159,67,0.12);color:var(--amber);border:1px solid rgba(255,159,67,0.25);}
-.decision-btn.review:hover{background:var(--amber);color:#000;}
-.decision-btn.decline{background:rgba(224,92,74,0.1);color:var(--red);border:1px solid rgba(224,92,74,0.25);}
-.decision-btn.decline:hover{background:var(--red);color:#fff;}
-/* Summary grid */
-.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
-.summary-cell{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px 12px;}
-.summary-cell-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px;}
-.summary-cell-val{font-size:12px;color:var(--text);}
-@media(max-width:600px){.summary-grid{grid-template-columns:1fr 1fr;}.score-row{grid-template-columns:1fr auto;}.score-label{grid-column:1/-1;}}
 </style>
 </head>
 <body>
@@ -480,10 +429,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
     <button class="tab-btn" onclick="switchTab('gaps',this)" id="tab-gaps">
       🗺 Network Gaps
     </button>
-    <button class="tab-btn" onclick="switchTab('intake',this)" id="tab-intake">
-      📥 Intake
-      <span class="tab-badge" id="badge-intake" style="display:none;"></span>
-    </button>
   </div>
   <div class="header-right">
     <div class="user-pill" id="userPill" style="display:none;">
@@ -513,10 +458,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
     </button>
     <button class="mobile-nav-btn" id="mnav-gaps" onclick="switchTab('gaps',document.getElementById('tab-gaps'));setMobileNav('gaps')">
       <span class="nav-icon">🗺</span>Gaps
-    </button>
-    <button class="mobile-nav-btn" id="mnav-intake" onclick="switchTab('intake',document.getElementById('tab-intake'));setMobileNav('intake')">
-      <span class="nav-icon">📥</span>Intake
-      <span class="mobile-nav-badge" id="mnav-badge-intake"></span>
     </button>
     <button class="mobile-nav-btn" id="mnav-filter" onclick="openSidebarDrawer()">
       <span class="nav-icon">⚙</span>Filter
@@ -742,95 +683,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
   </div>
 </div>
 
-<!-- ════════ INTAKE TAB ════════ -->
-<div class="tab-content" id="tab-content-intake">
-  <div style="padding:24px 28px;max-width:1100px;margin:0 auto;">
-
-    <!-- Header row -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px;">Intake Applications</div>
-        <div style="font-size:11px;color:var(--muted);">Advisory engagement applicants. Score on the call. Decide before they leave.</div>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="intake-filter-btn active" onclick="filterIntake('all',this)">All</button>
-        <button class="intake-filter-btn" onclick="filterIntake('Pending Review',this)">Pending</button>
-        <button class="intake-filter-btn" onclick="filterIntake('Accepted',this)">Accepted</button>
-        <button class="intake-filter-btn" onclick="filterIntake('Declined',this)">Declined</button>
-        <button class="intake-filter-btn" onclick="filterIntake('Needs Nick Review',this)">Needs Review</button>
-        <button class="intake-filter-btn" onclick="filterIntake('Auto-Disqualified',this)">Auto-DQ</button>
-      </div>
-    </div>
-
-    <!-- Applications list -->
-    <div id="intakeList"></div>
-
-  </div>
-</div>
-
-<!-- ════════ SCORECARD MODAL ════════ -->
-<div class="modal-overlay" id="scorecardModal" style="display:none;" onclick="if(event.target===this)closeScorecard()">
-  <div class="modal" style="max-width:680px;max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="scorecardName">Intake Scorecard</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px;" id="scorecardSub"></div>
-      </div>
-      <button class="modal-close" onclick="closeScorecard()">✕</button>
-    </div>
-
-    <!-- Applicant summary -->
-    <div id="scorecardSummary" style="margin-bottom:20px;"></div>
-
-    <!-- Hard disqualifiers -->
-    <div style="margin-bottom:20px;">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--red);margin-bottom:10px;font-weight:500;">Hard Disqualifiers — Check Any That Apply</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="disqChecks">
-        <label class="disq-check"><input type="checkbox" id="dq_track_record"> No verifiable track record</label>
-        <label class="disq-check"><input type="checkbox" id="dq_skin"> No personal capital in deal</label>
-        <label class="disq-check"><input type="checkbox" id="dq_shopped"> Deal shopped 12+ months</label>
-        <label class="disq-check"><input type="checkbox" id="dq_litigation"> Undisclosed litigation / default</label>
-        <label class="disq-check"><input type="checkbox" id="dq_market"> Bad market fundamentals</label>
-        <label class="disq-check"><input type="checkbox" id="dq_operator"> Difficult / uncoachable operator</label>
-      </div>
-      <div id="disqWarning" style="display:none;margin-top:10px;background:rgba(224,92,74,0.08);border:1px solid rgba(224,92,74,0.25);border-radius:4px;padding:10px 12px;font-size:11px;color:var(--red);">
-        ⚠ One or more hard disqualifiers checked. This deal should be declined regardless of score.
-      </div>
-    </div>
-
-    <!-- Score categories -->
-    <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px;font-weight:500;">Scored Criteria — Rate 1 to 5</div>
-    <div id="scoreCategories"></div>
-
-    <!-- Score total -->
-    <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:14px 16px;margin:16px 0;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);">Total Score</div>
-        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);" id="scoreTotalDisplay">0 / 40</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:4px;">Threshold</div>
-        <div style="font-size:12px;color:var(--muted);">28+ to proceed</div>
-        <div id="scoreVerdict" style="font-size:11px;font-weight:600;margin-top:4px;"></div>
-      </div>
-    </div>
-
-    <!-- Notes -->
-    <div style="margin-bottom:16px;">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;">Call Notes</div>
-      <textarea id="scorecardNotes" style="width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:11px 13px;border-radius:5px;font-family:'DM Mono',monospace;font-size:12px;outline:none;resize:vertical;min-height:80px;line-height:1.6;" placeholder="What came up on the call. Gut check. Anything the score doesn't capture..."></textarea>
-    </div>
-
-    <!-- Decision buttons -->
-    <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Decision</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
-      <button class="decision-btn accept" onclick="saveScorecard('Accepted')">✓ Accept</button>
-      <button class="decision-btn review" onclick="saveScorecard('Needs Nick Review')">⏸ Needs Nick</button>
-      <button class="decision-btn decline" onclick="saveScorecard('Declined')">✕ Decline</button>
-    </div>
-
-  </div>
-</div>
+<!-- ════════════════ MODALS ════════════════ -->
 
 <!-- ADD/EDIT PARTNER -->
 <div class="modal-overlay" id="partnerModal">
@@ -1109,14 +962,20 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
       </div>
       <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px;">Recommended Partners</div>
       <div id="mdMatchList" style="display:flex;flex-direction:column;gap:5px;margin-bottom:16px;max-height:240px;overflow-y:auto;"></div>
-      <button class="submit-btn" id="mdProceedBtn" onclick="mdGenerateEmails()" style="opacity:0.4;" disabled>Generate Emails</button>
+      <div style="display:flex;gap:8px;">
+        <button class="submit-btn" id="mdProceedBtn" onclick="mdGenerateEmails()" style="opacity:0.4;flex:2;" disabled>Generate Emails</button>
+        <button onclick="saveMdDealToPipeline()" style="flex:1;background:transparent;border:1px solid var(--accent);color:var(--accent);padding:11px;border-radius:6px;cursor:pointer;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;white-space:nowrap;">+ Pipeline</button>
+      </div>
     </div>
 
     <!-- Step 3 -->
     <div id="mdStep3" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap;">
         <div><div class="modal-title">Outreach Emails</div><div style="font-size:11px;color:var(--muted);margin-top:2px;" id="mdEmailSub"></div></div>
-        <button onclick="showMdStep(2)" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:3px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;">← Back</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button onclick="showMdStep(2)" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:3px;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;">← Back</button>
+          <button id="mdSavePipelineBtn" onclick="saveMdDealToPipeline()" style="background:var(--accent);border:none;color:#000;padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;">+ Save to Pipeline</button>
+        </div>
       </div>
       <div id="mdEmailsContainer"></div>
       <div id="mdGenerating" style="text-align:center;padding:24px;color:var(--muted);font-size:11px;">Writing emails...</div>
@@ -1312,7 +1171,6 @@ function switchTab(tab, btn) {
   if (tab === 'deals')   renderDeals();
   if (tab === 'gaps')    renderGaps();
   if (tab === 'partners') renderPartners();
-  if (tab === 'intake' && currentUser) loadIntakeApps();
 }
 
 // ══════════════════════════════════════════
@@ -2310,6 +2168,49 @@ function openMatchDealForExisting(dealId) {
   },100);
 }
 
+async function saveMdDealToPipeline() {
+  const btn = document.getElementById('mdSavePipelineBtn');
+  const name = document.getElementById('mdDealName').value.trim() || 'Untitled Deal';
+
+  // Check if already saved
+  const alreadySaved = deals.some(d => d.name === name);
+  if (alreadySaved) {
+    btn.textContent = '✓ Already in Pipeline';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => { btn.textContent = '+ Save to Pipeline'; btn.style.background = 'var(--accent)'; }, 2000);
+    return;
+  }
+
+  btn.textContent = 'Saving...'; btn.disabled = true;
+
+  const data = {
+    name,
+    sponsor:      document.getElementById('mdSubmitter').value.trim(),
+    location:     document.getElementById('mdLocation').value.trim(),
+    asset_type:   document.getElementById('mdAssetType').value.trim(),
+    capital:      document.getElementById('mdCapital').value.trim(),
+    structure:    document.getElementById('mdStructure').value.trim(),
+    timeline:     document.getElementById('mdTimeline').value.trim(),
+    notes:        document.getElementById('mdFunds').value.trim(),
+    data_room:    document.getElementById('mdDataRoom').value.trim(),
+    stage:        'distributed', // already sent to partners
+    activity:     [],
+  };
+
+  try {
+    const saved = await api('POST', '/deals', data);
+    deals.push(saved);
+    renderDeals();
+    btn.textContent = '✓ Saved to Pipeline';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => { btn.textContent = '+ Save to Pipeline'; btn.style.background = 'var(--accent)'; btn.disabled = false; }, 2500);
+  } catch(e) {
+    alert('Save failed. Check your connection.');
+    btn.textContent = '+ Save to Pipeline';
+    btn.disabled = false;
+  }
+}
+
 function mdOpenMail(email, btn, partnerId) {
   const b = btn.closest('.email-block');
   const dealName = document.getElementById('mdDealName').value || 'Untitled Deal';
@@ -2442,262 +2343,6 @@ const _origRender = renderPartners;
 
 // On init, update mobile too
 updateMobileFilterCounts();
-
-// ══════════════════════════════════════════
-// INTAKE MODULE
-// ══════════════════════════════════════════
-
-let intakeApps = [];
-let currentIntakeApp = null;
-let currentIntakeFilter = 'all';
-
-const SCORE_CATS = [
-  { key: 'track_record',       label: 'Track Record',         desc: 'Prior closes, deal history, credibility as a principal' },
-  { key: 'deal_quality',       label: 'Deal Quality',         desc: 'Asset, location, fundamentals, realistic upside' },
-  { key: 'market_fundamentals',label: 'Market Fundamentals',  desc: 'Demand, liquidity, institutional interest in this market' },
-  { key: 'capital_structure',  label: 'Capital Structure',    desc: 'Debt/equity split, waterfall, LP alignment, no red flags' },
-  { key: 'operator_readiness', label: 'Operator Readiness',   desc: 'Materials quality, raise timeline, urgency, organized' },
-  { key: 'communication',      label: 'Communication',        desc: 'Clarity, professionalism, how they represent themselves' },
-  { key: 'urgency',            label: 'Urgency / Timing',     desc: 'Real timeline, not just shopping, motivated to close' },
-  { key: 'coachability',       label: 'Coachability',         desc: 'Open to feedback, doesn\'t push back on every note' },
-];
-
-const scoreState = {};
-
-async function loadIntakeApps() {
-  try {
-    const data = await api('GET', '/intake');
-    intakeApps = Array.isArray(data) ? data : [];
-    renderIntakeList();
-    updateIntakeBadge();
-  } catch(e) {
-    console.warn('Intake load failed', e);
-    intakeApps = [];
-  }
-}
-
-function updateIntakeBadge() {
-  const pending = intakeApps.filter(a => a.status === 'Pending Review').length;
-  const badge = document.getElementById('badge-intake');
-  if (pending > 0) {
-    badge.textContent = pending;
-    badge.style.display = '';
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
-function filterIntake(filter, btn) {
-  currentIntakeFilter = filter;
-  document.querySelectorAll('.intake-filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderIntakeList();
-}
-
-function renderIntakeList() {
-  const container = document.getElementById('intakeList');
-  if (!container) return;
-
-  let apps = intakeApps;
-  if (currentIntakeFilter !== 'all') {
-    apps = apps.filter(a => a.status === currentIntakeFilter);
-  }
-
-  if (apps.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted);font-size:12px;">No applications in this category.</div>';
-    return;
-  }
-
-  container.innerHTML = apps.map(a => {
-    const statusClass = {
-      'Pending Review':    'status-pending',
-      'Accepted':          'status-accepted',
-      'Declined':          'status-declined',
-      'Needs Nick Review': 'status-needs',
-      'Auto-Disqualified': 'status-autodq',
-    }[a.status] || 'status-pending';
-
-    const pillClass = {
-      'Pending Review':    'pill-pending',
-      'Accepted':          'pill-accepted',
-      'Declined':          'pill-declined',
-      'Needs Nick Review': 'pill-needs',
-      'Auto-Disqualified': 'pill-autodq',
-    }[a.status] || 'pill-pending';
-
-    const raise = a.raise_amount ? '$' + Number(a.raise_amount).toLocaleString() : '—';
-    const date  = a.created_at ? new Date(a.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
-    const score = a.score_total ? `${a.score_total}/40` : '—';
-
-    return `<div class="intake-card ${statusClass}" onclick="openScorecard('${a.id}')">
-      <div>
-        <div class="intake-name">${esc(a.full_name)}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:1px;">${esc(a.company_name || '')}${a.company_name && a.asset_type ? ' · ' : ''}${esc(a.asset_type || '')}</div>
-        <div class="intake-meta">
-          <span>📍 ${esc(a.deal_location || '—')}</span>
-          <span>💰 ${raise}</span>
-          <span>📅 ${date}</span>
-          ${a.email ? `<span>✉ ${esc(a.email)}</span>` : ''}
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-        <span class="intake-status-pill ${pillClass}">${a.status}</span>
-        ${a.score_total ? `<div class="intake-score-badge">Score<br><span class="intake-score-num">${score}</span></div>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function openScorecard(id) {
-  const app = intakeApps.find(a => a.id === id);
-  if (!app) return;
-  currentIntakeApp = app;
-
-  // Reset score state
-  Object.keys(scoreState).forEach(k => delete scoreState[k]);
-
-  // Populate name/sub
-  document.getElementById('scorecardName').textContent = app.full_name;
-  document.getElementById('scorecardSub').textContent  =
-    [app.company_name, app.asset_type, app.deal_location].filter(Boolean).join(' · ');
-
-  // Summary grid
-  const raise = app.raise_amount ? '$' + Number(app.raise_amount).toLocaleString() : '—';
-  const cap   = app.total_capitalization ? '$' + Number(app.total_capitalization).toLocaleString() : '—';
-  document.getElementById('scorecardSummary').innerHTML = `
-    <div class="summary-grid">
-      <div class="summary-cell"><div class="summary-cell-label">Asset Type</div><div class="summary-cell-val">${esc(app.asset_type||'—')}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Location</div><div class="summary-cell-val">${esc(app.deal_location||'—')}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Raise Amount</div><div class="summary-cell-val">${raise}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Total Cap</div><div class="summary-cell-val">${cap}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Target Return</div><div class="summary-cell-val">${esc(app.target_return||'—')}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Hold Period</div><div class="summary-cell-val">${esc(app.hold_period||'—')}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Prior Closes</div><div class="summary-cell-val">${app.prior_closes ?? '—'}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Skin in Game</div><div class="summary-cell-val">${app.personal_capital_in_deal === true ? '✓ Yes' : app.personal_capital_in_deal === false ? '✗ No' : '—'}</div></div>
-      <div class="summary-cell"><div class="summary-cell-label">Months Shopped</div><div class="summary-cell-val">${app.months_shopped ?? '—'}</div></div>
-    </div>
-    ${app.additional_notes ? `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px 12px;margin-bottom:12px;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;">Applicant Notes</div><div style="font-size:11px;color:var(--text);line-height:1.6;">${esc(app.additional_notes)}</div></div>` : ''}
-    ${app.any_litigation && app.litigation_details ? `<div style="background:rgba(224,92,74,0.06);border:1px solid rgba(224,92,74,0.2);border-radius:4px;padding:10px 12px;margin-bottom:12px;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:4px;">Litigation Details</div><div style="font-size:11px;color:var(--text);line-height:1.6;">${esc(app.litigation_details)}</div></div>` : ''}
-  `;
-
-  // Pre-check disqualifiers from application
-  document.getElementById('dq_track_record').checked = app.disq_no_track_record || false;
-  document.getElementById('dq_skin').checked          = app.disq_no_skin_in_game || false;
-  document.getElementById('dq_shopped').checked       = app.disq_deal_shopped || false;
-  document.getElementById('dq_litigation').checked    = app.disq_litigation || false;
-  document.getElementById('dq_market').checked        = app.disq_bad_market || false;
-  document.getElementById('dq_operator').checked      = app.disq_difficult_operator || false;
-
-  // Disq warning toggle
-  document.querySelectorAll('#disqChecks input[type=checkbox]').forEach(cb => {
-    cb.addEventListener('change', updateDisqWarning);
-  });
-  updateDisqWarning();
-
-  // Build score rows
-  const cats = document.getElementById('scoreCategories');
-  cats.innerHTML = SCORE_CATS.map(cat => {
-    const existing = app[`score_${cat.key}`] || 0;
-    if (existing) scoreState[cat.key] = existing;
-    return `<div class="score-row">
-      <div>
-        <div class="score-label">${cat.label}</div>
-        <div class="score-desc">${cat.desc}</div>
-      </div>
-      <div class="score-pips" id="pips-${cat.key}">
-        ${[1,2,3,4,5].map(n => `<button class="score-pip${existing===n?' selected-'+n:''}" onclick="setScore('${cat.key}',${n},this)">${n}</button>`).join('')}
-      </div>
-    </div>`;
-  }).join('');
-
-  // Notes
-  document.getElementById('scorecardNotes').value = app.score_notes || '';
-
-  updateScoreTotal();
-
-  document.getElementById('scorecardModal').style.display = 'flex';
-}
-
-function closeScorecard() {
-  document.getElementById('scorecardModal').style.display = 'none';
-  currentIntakeApp = null;
-}
-
-function updateDisqWarning() {
-  const anyChecked = ['dq_track_record','dq_skin','dq_shopped','dq_litigation','dq_market','dq_operator']
-    .some(id => document.getElementById(id).checked);
-  document.getElementById('disqWarning').style.display = anyChecked ? 'block' : 'none';
-}
-
-function setScore(key, val, btn) {
-  scoreState[key] = val;
-  const pips = document.getElementById('pips-' + key);
-  pips.querySelectorAll('.score-pip').forEach((p, i) => {
-    p.className = 'score-pip' + (i + 1 === val ? ' selected-' + val : '');
-  });
-  updateScoreTotal();
-}
-
-function updateScoreTotal() {
-  const total = Object.values(scoreState).reduce((s, v) => s + v, 0);
-  const max   = SCORE_CATS.length * 5;
-  document.getElementById('scoreTotalDisplay').textContent = `${total} / ${max}`;
-  const verdict = document.getElementById('scoreVerdict');
-  if (total === 0) { verdict.textContent = ''; return; }
-  if (total >= 28) {
-    verdict.textContent  = '✓ Meets threshold';
-    verdict.style.color  = 'var(--green)';
-  } else {
-    verdict.textContent  = '✗ Below threshold';
-    verdict.style.color  = 'var(--red)';
-  }
-}
-
-async function saveScorecard(decision) {
-  if (!currentIntakeApp) return;
-
-  const total = Object.values(scoreState).reduce((s, v) => s + v, 0);
-  const payload = {
-    status:                    decision,
-    score_track_record:        scoreState['track_record']        || null,
-    score_deal_quality:        scoreState['deal_quality']        || null,
-    score_market_fundamentals: scoreState['market_fundamentals'] || null,
-    score_capital_structure:   scoreState['capital_structure']   || null,
-    score_operator_readiness:  scoreState['operator_readiness']  || null,
-    score_communication:       scoreState['communication']       || null,
-    score_urgency:             scoreState['urgency']             || null,
-    score_coachability:        scoreState['coachability']        || null,
-    score_total:               total || null,
-    score_notes:               document.getElementById('scorecardNotes').value.trim(),
-    scored_by:                 currentUser?.display || currentUser?.username || 'Unknown',
-    scored_at:                 new Date().toISOString(),
-    disq_no_track_record:      document.getElementById('dq_track_record').checked,
-    disq_no_skin_in_game:      document.getElementById('dq_skin').checked,
-    disq_deal_shopped:         document.getElementById('dq_shopped').checked,
-    disq_litigation:           document.getElementById('dq_litigation').checked,
-    disq_bad_market:           document.getElementById('dq_market').checked,
-    disq_difficult_operator:   document.getElementById('dq_operator').checked,
-  };
-
-  try {
-    await api('PATCH', `/intake/${currentIntakeApp.id}`, payload);
-    // Update local
-    const idx = intakeApps.findIndex(a => a.id === currentIntakeApp.id);
-    if (idx > -1) intakeApps[idx] = { ...intakeApps[idx], ...payload };
-    closeScorecard();
-    renderIntakeList();
-    updateIntakeBadge();
-  } catch(e) {
-    alert('Save failed. Try again.');
-  }
-}
-
-function esc(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// Load intake when tab is switched to
 
 </script>
 </body>
